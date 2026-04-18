@@ -1,4 +1,4 @@
-﻿# Thyimpaler - Web3 Community Operations
+# Thyimpaler - Web3 Community Operations
 
 ## Hero Section
 * **Name:** Thyimpaler
@@ -21,8 +21,14 @@
 
 
 ### Moderator | Klein Funding Crypto
-* **Timeline:** Apr 2026 - Present
+* **Timeline:** Apr 2026 – Till Date
 * **Community Operations:** Active moderation support for day-to-day ecosystem discussions and escalations.
+
+### Developer & Admin | Phantom CTO
+* **Timeline:** 2026 – Present
+* **Bot Development:** Built and maintained the Phantom Bot, a Telegram-based automated bridging and trading tool.
+* **Administrative Ops:** Full admin oversight of the Phantom CTO ecosystem, managing deployments, user support, and operational strategy.
+
 
 ## Technical Toolkit
 * **Moderation Stack:** Discord (Carl-bot, Wick, RBAC), Telegram (Rose, Raidder, Safeguard).
