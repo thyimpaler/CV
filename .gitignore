@@ -12,5 +12,15 @@ desktop.ini
 
 # Local tooling
 tools/
+scratch/
 
+# Backup of the pre-React static site (preserved in git history)
+legacy/
+
+# Node / Vite
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vercel
 
