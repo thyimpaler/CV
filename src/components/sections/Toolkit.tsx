@@ -10,22 +10,54 @@ function jitter(seed: string, spread: number) {
   return ((Math.abs(h) % 1000) / 1000 - 0.5) * 2 * spread
 }
 
-function PillRow({ items }: { items: string[] }) {
+type PillItem = string | { label: string; href?: string }
+
+/**
+ * Pills straighten and lift on hover. Ones with a destination also get an
+ * arrow, so a linked pill is distinguishable from an inert one before you
+ * click — the scatter already makes them look interactive, and a pill that
+ * looks clickable but isn't is a small lie repeated across the section.
+ */
+function PillRow({ items }: { items: PillItem[] }) {
   return (
     <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-3.5">
-      {items.map((pill, i) => (
-        <li
-          key={pill}
-          className="rounded-full border border-[var(--line)] bg-[#0d0d10] px-[clamp(13px,1.4vw,20px)] py-[clamp(7px,0.8vw,12px)] text-[clamp(12px,1.1vw,15px)] text-[var(--ink)] transition-all duration-500 [transition-timing-function:var(--ease-core)] hover:!rotate-0 hover:border-[var(--brand-gold)]/45 hover:text-[var(--ink-strong)]"
-          style={{
-            rotate: `${jitter(pill, 6)}deg`,
-            translate: `0 ${jitter(pill + "y", 4)}px`,
-            animation: `fade-rise 0.7s var(--ease-core) ${i * 0.035}s both`,
-          }}
-        >
-          {pill}
-        </li>
-      ))}
+      {items.map((item, i) => {
+        const label = typeof item === "string" ? item : item.label
+        const href = typeof item === "string" ? undefined : item.href
+
+        const base =
+          "inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[#0d0d10] px-[clamp(13px,1.4vw,20px)] py-[clamp(7px,0.8vw,12px)] text-[clamp(12px,1.1vw,15px)] text-[var(--ink)] transition-all duration-500 [transition-timing-function:var(--ease-core)]"
+        const style = {
+          rotate: `${jitter(label, 6)}deg`,
+          translate: `0 ${jitter(label + "y", 4)}px`,
+          animation: `fade-rise 0.7s var(--ease-core) ${i * 0.035}s both`,
+        } as React.CSSProperties
+
+        // The jitter lives on the inner element only — applying it to the <li>
+        // as well would compound both rotations.
+        return (
+          <li key={label} className="flex">
+            {href ? (
+              <a
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                style={style}
+                className={`${base} group/pill hover:!rotate-0 hover:!translate-y-0 hover:border-[var(--brand-gold)]/50 hover:text-[var(--ink-strong)]`}
+              >
+                {label}
+                <span className="text-[0.7em] text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover/pill:translate-x-0.5 group-hover/pill:text-[var(--brand-gold)]">
+                  ↗
+                </span>
+              </a>
+            ) : (
+              <span style={style} className={`${base} hover:!rotate-0`}>
+                {label}
+              </span>
+            )}
+          </li>
+        )
+      })}
     </ul>
   )
 }

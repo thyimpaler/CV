@@ -1,5 +1,4 @@
 import { Backdrop } from "@/components/Backdrop"
-import { RotatingBadge } from "@/components/Furniture"
 import { ScrollProgress } from "@/components/ScrollProgress"
 import { Nav } from "@/components/sections/Nav"
 import { Hero } from "@/components/sections/Hero"
@@ -18,7 +17,6 @@ function App() {
       <ScrollProgress />
       <Backdrop />
       <Nav />
-      <RotatingBadge />
 
       {/* Sections carry their own rules and rhythm, so no divider elements
           between them — a page stitched together with <hr>s reads as blocks

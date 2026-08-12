@@ -2,40 +2,48 @@ export type Experience = {
   role: string
   project: string
   sub?: string
+  /** Where the project itself lives. Row becomes a link when present. */
+  href?: string
+  /** Where `sub` points, when the chain/parent has its own site. */
+  subHref?: string
   period: string
   status: "Active" | "Closed" | "Ended"
   dev?: boolean
-  /** The single thing worth knowing about this role. Kept to one line. */
+  /** The single thing worth knowing. One line, no padding. */
   impact: string
-  /** Optional second line of plain context. No jargon. */
-  detail?: string
   tags?: string[]
 }
 
 /**
- * Roles are deliberately short. Each carries one impact line and at most one
- * line of context — the previous version listed three or four bullets per
- * role in marketing language ("Signal Integrity", "Viral Growth Ops"), which
- * nobody reads and which made real achievements harder to find.
+ * One line per role, and only lines that are actually true.
+ *
+ * An earlier version padded each role with a second sentence of invented
+ * detail — "removes scam links and coordinated FUD aimed at funded traders"
+ * for a job nobody described that way. Generic moderation filler reads as
+ * either trivial or fabricated, and it buries the one fact per role that is
+ * genuinely worth reading. A thin true line beats a padded false one.
+ *
+ * Where a line looks sparse, that is a prompt to supply the real detail — not
+ * licence to invent it.
  */
 export const experiences: Experience[] = [
   {
     role: "Head Moderator",
     project: "$HENNY",
     sub: "BESC Hyperchain",
+    subHref: "https://bescfinancial.com",
     period: "Jan 2026 — Present",
     status: "Active",
-    impact: "Held the community through a $105K all-time high — the project's highest.",
-    detail: "Ran security through bot raids, phishing waves and two CTO transitions.",
+    impact: "Held the room through a $105K all-time high — the project's peak.",
     tags: ["Safeguard", "Rose", "BESC"],
   },
   {
     role: "Moderator",
     project: "Klein Funding",
+    href: "https://kleinfunding.com",
     period: "Apr 2026 — Present",
     status: "Active",
-    impact: "8 hours of daily coverage across Discord and Telegram.",
-    detail: "Removes scam links and coordinated FUD aimed at funded traders.",
+    impact: "Eight hours of moderation coverage, daily.",
     tags: ["Discord", "Telegram"],
   },
   {
@@ -43,9 +51,8 @@ export const experiences: Experience[] = [
     project: "$CHAD",
     period: "Feb 2026 — Present",
     status: "Active",
-    impact: "Kept the room steady through peak trading volatility.",
-    detail: "Built the role structure and onboarding path for new members.",
-    tags: ["Carl-bot", "Onboarding"],
+    impact: "Day-to-day moderation and new-member onboarding.",
+    tags: ["Carl-bot", "Discord"],
   },
   {
     role: "Developer & Admin",
@@ -53,8 +60,7 @@ export const experiences: Experience[] = [
     period: "Apr 2026 — Jun 2026",
     status: "Ended",
     dev: true,
-    impact: "Built Phantom Bot — Telegram-based bridging and trading.",
-    detail: "Also handled deployments and day-to-day admin for the ecosystem.",
+    impact: "Built Phantom Bot — Telegram bridging and trading.",
     tags: ["Telegraf", "ethers.js", "SQLite"],
   },
   {
@@ -63,8 +69,7 @@ export const experiences: Experience[] = [
     period: "Jun 2026 — Aug 2026",
     status: "Closed",
     dev: true,
-    impact: "Led the development team and shipped the product suite.",
-    detail: "Owned technical direction and release cadence until the studio closed.",
+    impact: "Led the development team until the studio closed.",
     tags: ["Next.js", "Team lead"],
   },
 ]
@@ -86,15 +91,21 @@ export const stats: Stat[] = [
   { value: "2024", label: "Trading since", hint: "Live markets" },
 ]
 
-/** Chains and asset types worked in. */
-export const chains = [
-  "Ethereum",
-  "Solana",
-  "Base",
-  "BESC Hyperchain",
-  "Liquid NFT Finance",
-  "NFTs",
-  "Memecoin launches",
+export type Pill = { label: string; href?: string }
+
+/**
+ * Chains and asset types worked in. Only the ones with a canonical home get a
+ * link — "Memecoin launches" has no official website and inventing one would
+ * be worse than leaving it inert.
+ */
+export const chains: Pill[] = [
+  { label: "Ethereum", href: "https://ethereum.org" },
+  { label: "Solana", href: "https://solana.com" },
+  { label: "Base", href: "https://base.org" },
+  { label: "BESC Hyperchain", href: "https://bescfinancial.com" },
+  { label: "Liquid NFT Finance" },
+  { label: "NFTs" },
+  { label: "Memecoin launches" },
 ]
 
 /**
