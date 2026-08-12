@@ -31,16 +31,19 @@ export function Footer() {
         />
       </h2>
 
-      <div className="mt-[clamp(56px,8vw,110px)] border-t border-[var(--line-soft)]">
+      {/* Two columns rather than four stacked rows, at half the type size.
+          The section was running nearly a full screen for four links — the
+          headline earns display scale, a list of handles does not. */}
+      <div className="mt-[clamp(32px,4.5vw,60px)] grid border-t border-[var(--line-soft)] sm:grid-cols-2">
         {contacts.map((contact) => (
           <RevealOnScroll key={contact.id}>
             <a
               href={contact.href}
               target={contact.href.startsWith("mailto:") ? undefined : "_blank"}
               rel="noreferrer"
-              className="group flex items-center justify-between gap-6 border-b border-[var(--line-soft)] py-[clamp(18px,2.4vw,30px)] outline-none focus-visible:ring-1 focus-visible:ring-[var(--brand-gold)]/50"
+              className="group flex h-full items-center justify-between gap-5 border-b border-[var(--line-soft)] py-[clamp(14px,1.6vw,20px)] pr-2 outline-none focus-visible:ring-1 focus-visible:ring-[var(--brand-gold)]/50"
             >
-              <span className="flex min-w-0 items-center gap-[clamp(14px,2.5vw,32px)]">
+              <span className="flex min-w-0 items-center gap-4">
                 <svg
                   viewBox="0 0 24 24"
                   aria-hidden
@@ -48,19 +51,13 @@ export function Footer() {
                 >
                   <path d={contact.path} />
                 </svg>
-                <span className="truncate font-[family-name:var(--font-display)] text-[clamp(20px,2.6vw,38px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-gold)]">
+                <span className="truncate text-[clamp(14px,1.3vw,17px)] text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-gold)]">
                   {contact.label}
                 </span>
               </span>
 
-              {/* Arrow slides out and back in from the left on hover. */}
-              <span className="relative h-5 w-5 shrink-0 overflow-hidden">
-                <span className="absolute inset-0 flex items-center justify-center text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-5 group-hover:opacity-0">
-                  ↗
-                </span>
-                <span className="absolute inset-0 flex -translate-x-5 items-center justify-center text-[var(--brand-gold)] opacity-0 transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-0 group-hover:opacity-100">
-                  ↗
-                </span>
+              <span className="shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--brand-gold)]">
+                ↗
               </span>
             </a>
           </RevealOnScroll>

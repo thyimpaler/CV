@@ -8,6 +8,16 @@ export type Experience = {
   subHref?: string
   /** Project mascot / token art, shown as a small plate on the row. */
   art?: string
+  /**
+   * The person who ran the project, and what they said about working here.
+   *
+   * `quote` is intentionally empty until a real one arrives. These are
+   * identifiable people and a recruiter reads a testimonial as genuine, so an
+   * invented line here is a fabricated endorsement, not placeholder copy. The
+   * card renders without a quote and simply shows the lead — fill `quote` in
+   * once you have their actual words.
+   */
+  lead?: { name: string; quote?: string }
   period: string
   status: "Active" | "Closed" | "Ended"
   dev?: boolean
@@ -28,12 +38,18 @@ export type Experience = {
  * Where a line looks sparse, that is a prompt to supply the real detail — not
  * licence to invent it.
  */
+/*
+ * Ordered oldest first, by start date — the order things actually happened,
+ * so the board reads as a run of chapters rather than a shuffled list.
+ */
 export const experiences: Experience[] = [
   {
     role: "Head Moderator",
     project: "$HENNY",
     sub: "BESC Hyperchain",
     subHref: "https://bescfinancial.com",
+    art: "/art-henny.jpg",
+    lead: { name: "Frontman" },
     period: "Jan 2026 — Present",
     status: "Active",
     impact: "Held the room through a $105K all-time high — the project's peak.",
@@ -41,19 +57,11 @@ export const experiences: Experience[] = [
   },
   {
     role: "Moderator",
-    project: "Klein Funding",
-    href: "https://kleinfunding.com",
-    period: "Apr 2026 — Present",
-    status: "Active",
-    impact: "Eight hours of moderation coverage, daily.",
-    tags: ["Discord", "Telegram"],
-  },
-  {
-    role: "Moderator",
     project: "$CHAD",
     sub: "Memecoin · BESC Hyperchain",
     subHref: "https://bescfinancial.com",
     art: "/art-chad.jpg",
+    lead: { name: "Chad" },
     period: "Feb 2026 — Present",
     status: "Active",
     impact: "Day-to-day moderation and new-member onboarding.",
@@ -63,11 +71,21 @@ export const experiences: Experience[] = [
     role: "Developer & Admin",
     project: "Phantom CTO",
     art: "/art-phantom.jpg",
+    lead: { name: "Balthazar" },
     period: "Apr 2026 — Jun 2026",
     status: "Ended",
     dev: true,
     impact: "Built Phantom Bot — Telegram bridging and trading.",
     tags: ["Telegraf", "ethers.js", "SQLite"],
+  },
+  {
+    role: "Moderator",
+    project: "Klein Funding",
+    href: "https://kleinfunding.com",
+    period: "Apr 2026 — Present",
+    status: "Active",
+    impact: "Eight hours of moderation coverage, daily.",
+    tags: ["Discord", "Telegram"],
   },
   {
     role: "Head of Development",

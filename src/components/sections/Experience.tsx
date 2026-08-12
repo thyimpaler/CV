@@ -1,18 +1,19 @@
+import { useEffect, useRef, useState } from "react"
 import { experiences } from "@/data/cv"
 import { SectionHeader } from "@/components/SectionHeader"
 import { RevealOnScroll } from "@/components/LineReveal"
 
 /**
- * Experience rows, linked out where the project has somewhere to go.
+ * Experience as a horizontal board — one role in focus at a time.
  *
- * The micro-interaction is deliberately tied to the page's own idea rather
- * than borrowed: hovering nudges the row *up and to the right*, along the
- * same incline the scroll marker climbs. Rows that link somewhere also
- * surface their destination host on hover, so the reader knows where a click
- * lands before making it — an external link that doesn't announce itself is
- * just a trap.
+ * A vertical list gives every role equal weight and the reader skims all five
+ * at once. Advancing sideways forces them to arrive one at a time, which is
+ * the "drumroll": the card in focus sits at full contrast and scale while its
+ * neighbours dim and shrink, so attention has somewhere to be.
  *
- * Rows without a URL stay inert. No fake affordances.
+ * Built on CSS scroll-snap rather than a carousel library — native momentum
+ * on touch, real keyboard and scrollbar behaviour, and it degrades to a plain
+ * scrollable row if anything about the JS fails.
  */
 
 function host(url: string) {
@@ -24,49 +25,138 @@ function host(url: string) {
 }
 
 export function Experience() {
-  return (
-    <section id="experience" className="section-shell">
-      <SectionHeader
-        index="01"
-        label="Experience"
-        title="Where I've operated"
-        className="heading-gap"
-      />
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [active, setActive] = useState(0)
 
-      <div className="border-t border-[var(--line-soft)]">
+  // Track which card is nearest the centre of the viewport.
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    let frame = 0
+    const measure = () => {
+      frame = 0
+      const mid = track.scrollLeft + track.clientWidth / 2
+      let best = 0
+      let bestDist = Infinity
+      Array.from(track.children).forEach((child, i) => {
+        const el = child as HTMLElement
+        const c = el.offsetLeft + el.offsetWidth / 2
+        const d = Math.abs(c - mid)
+        if (d < bestDist) {
+          bestDist = d
+          best = i
+        }
+      })
+      setActive(best)
+    }
+
+    const onScroll = () => {
+      if (frame) return
+      frame = requestAnimationFrame(measure)
+    }
+
+    measure()
+    track.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", onScroll, { passive: true })
+    return () => {
+      track.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", onScroll)
+      cancelAnimationFrame(frame)
+    }
+  }, [])
+
+  const goTo = (i: number) => {
+    const track = trackRef.current
+    if (!track) return
+    const el = track.children[i] as HTMLElement | undefined
+    if (!el) return
+    track.scrollTo({
+      left: el.offsetLeft - (track.clientWidth - el.offsetWidth) / 2,
+      behavior: "smooth",
+    })
+  }
+
+  return (
+    <section id="experience" className="section-shell !px-0">
+      <div className="px-[var(--section-edge)]">
+        <SectionHeader
+          index="01"
+          label="Experience"
+          title="Where I've operated"
+          className="heading-gap"
+        />
+      </div>
+
+      {/* Track. Padding on the inline edges lets the first and last card
+          reach the centre of the viewport when snapped. */}
+      <div
+        ref={trackRef}
+        className="hide-scrollbar flex snap-x snap-mandatory gap-[clamp(16px,2vw,28px)] overflow-x-auto scroll-smooth px-[max(var(--section-edge),calc(50vw-var(--card-w)/2))] pb-4"
+        style={{ "--card-w": "clamp(280px, 34vw, 460px)" } as React.CSSProperties}
+        role="group"
+        aria-label="Experience, scroll sideways"
+      >
         {experiences.map((exp, i) => {
+          const isActive = i === active
           const linked = Boolean(exp.href)
 
-          const row = (
-            <div
-              className={`group/row grid gap-x-[clamp(20px,4vw,56px)] gap-y-4 border-b border-[var(--line-soft)] py-[clamp(24px,3.2vw,42px)] transition-transform duration-500 [transition-timing-function:var(--ease-core)] md:grid-cols-[minmax(130px,0.65fr)_1.45fr_minmax(150px,0.9fr)] ${
-                linked ? "hover:-translate-y-0.5 hover:translate-x-1" : ""
-              }`}
+          return (
+            <article
+              key={`${exp.project}-${i}`}
+              className="group/card relative flex w-[var(--card-w)] shrink-0 snap-center flex-col justify-between rounded-[4px] border p-[clamp(20px,2.2vw,32px)] transition-all duration-700 [transition-timing-function:var(--ease-core)]"
+              style={{
+                // The focused card is brighter, larger and lifted; the rest
+                // recede rather than disappear, so the run stays legible.
+                borderColor: isActive ? "var(--line)" : "var(--line-soft)",
+                background: isActive ? "#0c0c0f" : "transparent",
+                opacity: isActive ? 1 : 0.38,
+                scale: isActive ? "1" : "0.94",
+                minHeight: "clamp(320px, 38vw, 420px)",
+              }}
             >
-              {/* Period + status */}
-              <div className="order-2 md:order-none">
-                <span className="font-mono-ui block text-[12px] tabular-nums text-[var(--ink-mute)]">
-                  {exp.period}
-                </span>
-                <span
-                  className={`font-mono-ui mt-2 inline-block text-[10px] uppercase tracking-[0.14em] ${
-                    exp.status === "Active"
-                      ? "text-[var(--brand-gold)]"
-                      : "text-[var(--ink-mute)] opacity-60"
-                  }`}
-                >
-                  {exp.status}
-                  {exp.dev ? " · Dev" : ""}
-                </span>
-              </div>
+              <div>
+                <div className="flex items-start justify-between gap-4">
+                  <span className="font-mono-ui text-[11px] tabular-nums text-[var(--ink-mute)]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className={`font-mono-ui text-[10px] uppercase tracking-[0.14em] ${
+                      exp.status === "Active"
+                        ? "text-[var(--brand-gold)]"
+                        : "text-[var(--ink-mute)] opacity-60"
+                    }`}
+                  >
+                    {exp.status}
+                    {exp.dev ? " · Dev" : ""}
+                  </span>
+                </div>
 
-              {/* The one line that matters */}
-              <div className="order-3 md:order-none">
-                <p className="text-[clamp(16px,1.5vw,20px)] leading-snug text-[var(--ink-strong)]">
+                <div className="mt-[clamp(24px,3vw,40px)] flex items-center gap-4">
+                  {exp.art ? (
+                    <img
+                      src={exp.art}
+                      alt=""
+                      loading="lazy"
+                      className="h-12 w-12 shrink-0 rounded-[3px] object-cover grayscale transition-all duration-700 [transition-timing-function:var(--ease-core)] group-hover/card:grayscale-0"
+                    />
+                  ) : null}
+                  <div className="min-w-0">
+                    <h3 className="font-[family-name:var(--font-display)] text-[clamp(24px,2.4vw,36px)] leading-none text-[var(--ink-strong)]">
+                      {exp.project}
+                    </h3>
+                    <p className="mt-2 text-[13px] text-[var(--ink-mute)]">{exp.role}</p>
+                  </div>
+                </div>
+
+                <p className="mt-[clamp(20px,2.4vw,30px)] text-[clamp(15px,1.4vw,19px)] leading-snug text-[var(--ink-strong)]">
                   {exp.impact}
                 </p>
+              </div>
+
+              <div className="mt-6">
                 {exp.tags?.length ? (
-                  <ul className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-2">
+                  <ul className="mb-5 flex flex-wrap items-center gap-x-2 gap-y-2">
                     {exp.tags.map((tag) => (
                       <li
                         key={tag}
@@ -77,86 +167,77 @@ export function Experience() {
                     ))}
                   </ul>
                 ) : null}
-              </div>
 
-              {/* Project + role */}
-              <div className="order-1 md:order-none md:text-right">
-                {/* Token art as a small plate. Desaturated at rest so five of
-                    them down the page stay quiet, resolving to full colour on
-                    hover — the same treatment the avatar gets, so the page has
-                    one way of handling images rather than three. */}
-                {exp.art ? (
-                  <img
-                    src={exp.art}
-                    alt=""
-                    loading="lazy"
-                    className="mb-3 h-11 w-11 rounded-[3px] object-cover grayscale transition-all duration-700 [transition-timing-function:var(--ease-core)] group-hover/row:grayscale-0 md:ml-auto"
-                  />
-                ) : null}
-
-                <span className="inline-flex items-baseline gap-2">
-                  <span className="font-[family-name:var(--font-display)] text-[clamp(21px,2.2vw,32px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover/row:text-[var(--brand-gold)]">
-                    {exp.project}
-                  </span>
-                  {linked ? (
-                    <span className="text-[0.62em] text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover/row:-translate-y-0.5 group-hover/row:translate-x-0.5 group-hover/row:text-[var(--brand-gold)]">
-                      ↗
+                <div className="flex items-end justify-between gap-4 border-t border-[var(--line-soft)] pt-4">
+                  <div className="min-w-0">
+                    <span className="font-mono-ui block text-[11px] tabular-nums text-[var(--ink-mute)]">
+                      {exp.period}
                     </span>
-                  ) : null}
-                </span>
+                    {exp.sub ? (
+                      exp.subHref ? (
+                        <a
+                          href={exp.subHref}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-mono-ui mt-1.5 inline-block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--brand-gold)]"
+                        >
+                          {exp.sub} ↗
+                        </a>
+                      ) : (
+                        <span className="font-mono-ui mt-1.5 block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)]">
+                          {exp.sub}
+                        </span>
+                      )
+                    ) : null}
+                  </div>
 
-                <span className="mt-2.5 block text-[13px] text-[var(--ink-mute)]">
-                  {exp.role}
-                </span>
-
-                {/* The chain gets its own link — it is a different destination
-                    from the project that ran on it. */}
-                {exp.sub ? (
-                  exp.subHref ? (
+                  {linked ? (
                     <a
-                      href={exp.subHref}
+                      href={exp.href}
                       target="_blank"
                       rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="font-mono-ui relative z-10 mt-1.5 inline-block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] opacity-60 transition-all duration-300 hover:text-[var(--brand-gold)] hover:opacity-100"
+                      className="group/link font-mono-ui inline-flex shrink-0 items-center gap-2 text-[10px] uppercase tracking-[0.12em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--brand-gold)]"
                     >
-                      {exp.sub} ↗
+                      {host(exp.href!)}
+                      <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">
+                        ↗
+                      </span>
                     </a>
-                  ) : (
-                    <span className="font-mono-ui mt-1.5 block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] opacity-60">
-                      {exp.sub}
-                    </span>
-                  )
-                ) : null}
-
-                {/* Destination, revealed only on hover. */}
-                {linked ? (
-                  <span className="font-mono-ui mt-2 block text-[10px] tracking-[0.1em] text-[var(--brand-gold)] opacity-0 transition-opacity duration-500 group-hover/row:opacity-70">
-                    {host(exp.href!)}
-                  </span>
-                ) : null}
+                  ) : null}
+                </div>
               </div>
-            </div>
-          )
-
-          return (
-            <RevealOnScroll key={`${exp.project}-${i}`}>
-              {linked ? (
-                <a
-                  href={exp.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block outline-none focus-visible:ring-1 focus-visible:ring-[var(--brand-gold)]/50"
-                >
-                  {row}
-                </a>
-              ) : (
-                row
-              )}
-            </RevealOnScroll>
+            </article>
           )
         })}
       </div>
+
+      {/* Position indicator — segments, not dots, so the run reads as a
+          timeline with length rather than a slideshow. */}
+      <div className="mt-[clamp(24px,3vw,44px)] flex items-center justify-center gap-2 px-[var(--section-edge)]">
+        {experiences.map((exp, i) => (
+          <button
+            key={exp.project}
+            onClick={() => goTo(i)}
+            aria-label={`Go to ${exp.project}`}
+            aria-current={i === active}
+            className="group/seg -my-3 py-3 outline-none focus-visible:ring-1 focus-visible:ring-[var(--brand-gold)]/50"
+          >
+            <span
+              className="block h-px transition-all duration-500 [transition-timing-function:var(--ease-core)]"
+              style={{
+                width: i === active ? "clamp(34px,4vw,56px)" : "clamp(16px,2vw,24px)",
+                background: i === active ? "var(--brand-gold)" : "var(--line)",
+              }}
+            />
+          </button>
+        ))}
+      </div>
+
+      <RevealOnScroll className="mt-6 px-[var(--section-edge)] text-center">
+        <span className="font-mono-ui text-[10px] uppercase tracking-[0.16em] text-[var(--ink-mute)] opacity-60">
+          Scroll sideways
+        </span>
+      </RevealOnScroll>
     </section>
   )
 }

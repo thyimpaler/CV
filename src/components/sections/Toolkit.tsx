@@ -1,6 +1,7 @@
 import { chains, codingStack, moderationStack, trading } from "@/data/cv"
 import { SectionHeader } from "@/components/SectionHeader"
 import { RevealOnScroll } from "@/components/LineReveal"
+import { chainIcons } from "@/components/ChainIcons"
 
 // Deterministic pseudo-random from the pill's own text, so the scatter is
 // stable across renders and reloads instead of reshuffling on every mount.
@@ -89,8 +90,43 @@ export function Toolkit() {
       <SectionHeader index="03" label="Capabilities" title="What I bring" className="heading-gap" />
 
       <div className="mx-auto flex max-w-[1150px] flex-col gap-[clamp(44px,6vw,80px)]">
+        {/* Chains carry marks rather than words. This row was the longest on
+            the page and most of that length was spelling out things with a
+            recognisable shape. */}
         <Group title="Chains & ecosystems">
-          <PillRow items={chains} />
+          <ul className="flex flex-wrap items-center justify-center gap-x-[clamp(18px,3vw,44px)] gap-y-7">
+            {chains.map((chain, i) => {
+              const Icon = chainIcons[chain.label]
+              const body = (
+                <>
+                  {Icon ? (
+                    <Icon className="h-7 w-7 text-[var(--ink)] transition-colors duration-500 group-hover/chain:text-[var(--brand-gold)]" />
+                  ) : null}
+                  <span className="text-[12px] text-[var(--ink-mute)] transition-colors duration-500 group-hover/chain:text-[var(--ink-strong)]">
+                    {chain.label}
+                  </span>
+                </>
+              )
+
+              const cls =
+                "group/chain flex w-[clamp(74px,9vw,104px)] flex-col items-center gap-2.5 text-center transition-transform duration-500 [transition-timing-function:var(--ease-core)] hover:-translate-y-1"
+
+              return (
+                <li
+                  key={chain.label}
+                  style={{ animation: `fade-rise 0.7s var(--ease-core) ${i * 0.05}s both` }}
+                >
+                  {chain.href ? (
+                    <a href={chain.href} target="_blank" rel="noreferrer" className={cls}>
+                      {body}
+                    </a>
+                  ) : (
+                    <span className={cls}>{body}</span>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
         </Group>
 
         {codingStack.map((group) => (

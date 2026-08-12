@@ -315,6 +315,14 @@
   background-size: 200px 200px;
 }
 
+/* Horizontal tracks keep their scrollability but lose the bar — the segment
+   indicator underneath already communicates position. */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
 /* Hairline rule that draws itself in on scroll */
 .rule-draw {
   height: 1px;
