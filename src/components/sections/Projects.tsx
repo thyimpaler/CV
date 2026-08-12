@@ -1,6 +1,7 @@
 import { projects, githubUrl } from "@/data/cv"
 import { SectionHeader } from "@/components/SectionHeader"
 import { RevealOnScroll } from "@/components/LineReveal"
+import { Link } from "@/lib/router"
 
 /**
  * Pinned repositories.
@@ -22,27 +23,30 @@ export function Projects() {
             // Offset every second card so the grid reads as composed.
             className={i % 2 === 1 ? "md:mt-[clamp(32px,6vw,90px)]" : ""}
           >
-            <a
-              href={project.href}
-              target="_blank"
-              rel="noreferrer"
+            {/* Routes to the project's own page rather than jumping straight
+                to GitHub — the case study is the point, the repo is one link
+                on it. */}
+            <Link
+              to={`/work/${project.slug}`}
               className="group flex h-full flex-col border-t border-[var(--line)] pt-7 outline-none transition-colors duration-500 hover:border-[var(--brand-gold)]/50 focus-visible:border-[var(--brand-gold)]"
             >
               <div className="flex items-start justify-between gap-5">
                 <h3 className="font-[family-name:var(--font-display)] text-[clamp(26px,3vw,44px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-gold)]">
                   {project.name}
                 </h3>
-                <span className="mt-1 shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--brand-gold)]">
-                  ↗
+                <span className="mt-1 shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-1 group-hover:text-[var(--brand-gold)]">
+                  →
                 </span>
               </div>
 
               <p className="t-body mt-5 max-w-[46ch] text-[var(--ink)]">{project.blurb}</p>
 
-              <span className="font-mono-ui mt-6 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)]">
+              <span className="font-mono-ui mt-6 flex items-center gap-3 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)]">
                 {project.language}
+                <span className="opacity-40">/</span>
+                {project.status}
               </span>
-            </a>
+            </Link>
           </RevealOnScroll>
         ))}
       </div>

@@ -6,18 +6,19 @@ export type Experience = {
   href?: string
   /** Where `sub` points, when the chain/parent has its own site. */
   subHref?: string
-  /** Project mascot / token art, shown as a small plate on the row. */
-  art?: string
   /**
-   * The person who ran the project, and what they said about working here.
+   * The person who ran the project, their picture, and what they said.
    *
-   * `quote` is intentionally empty until a real one arrives. These are
-   * identifiable people and a recruiter reads a testimonial as genuine, so an
-   * invented line here is a fabricated endorsement, not placeholder copy. The
-   * card renders without a quote and simply shows the lead — fill `quote` in
-   * once you have their actual words.
+   * These images are the leads' own avatars, not project logos. Rendering
+   * them beside the project title read as "this is the token's mark", which
+   * is wrong — so they only ever appear round, captioned with a name, and
+   * attached to the quote. Shape and placement carry the distinction between
+   * a person and a brand.
+   *
+   * Quotes are supplied by the leads themselves. Nothing here is written on
+   * their behalf.
    */
-  lead?: { name: string; quote?: string }
+  lead?: { name: string; role?: string; avatar?: string; quote?: string }
   period: string
   status: "Active" | "Closed" | "Ended"
   dev?: boolean
@@ -48,8 +49,13 @@ export const experiences: Experience[] = [
     project: "$HENNY",
     sub: "BESC Hyperchain",
     subHref: "https://bescfinancial.com",
-    art: "/art-henny.jpg",
-    lead: { name: "Frontman" },
+    lead: {
+      name: "Frontman",
+      role: "Project lead, $HENNY",
+      avatar: "/lead-frontman.jpg",
+      quote:
+        "Impaler really held the team together, from the days we started and till we got the attention on CT, he never showed any lack in his work.",
+    },
     period: "Jan 2026 — Present",
     status: "Active",
     impact: "Held the room through a $105K all-time high — the project's peak.",
@@ -60,8 +66,7 @@ export const experiences: Experience[] = [
     project: "$CHAD",
     sub: "Memecoin · BESC Hyperchain",
     subHref: "https://bescfinancial.com",
-    art: "/art-chad.jpg",
-    lead: { name: "Chad" },
+    lead: { name: "Chad", role: "Project lead, $CHAD", avatar: "/lead-chad.jpg" },
     period: "Feb 2026 — Present",
     status: "Active",
     impact: "Day-to-day moderation and new-member onboarding.",
@@ -70,8 +75,12 @@ export const experiences: Experience[] = [
   {
     role: "Developer & Admin",
     project: "Phantom CTO",
-    art: "/art-phantom.jpg",
-    lead: { name: "Balthazar" },
+    lead: {
+      name: "Balthazar",
+      role: "Project lead, Phantom CTO",
+      avatar: "/lead-balthazar.jpg",
+      quote: "One word for you — all-rounder.",
+    },
     period: "Apr 2026 — Jun 2026",
     status: "Ended",
     dev: true,
@@ -95,6 +104,14 @@ export const experiences: Experience[] = [
     dev: true,
     impact: "Led the development team until the studio closed.",
     tags: ["Next.js", "Team lead"],
+    lead: {
+      name: "Aazy",
+      role: "CEO, Axyom Sites",
+      // "made maintained" in the original was a slip; the duplicated verb is
+      // the only edit. Wording is otherwise theirs.
+      quote:
+        "The dude maintained the websites so well, all our customers were truly satisfied by his work and his quality.",
+    },
   },
 ]
 
@@ -178,41 +195,84 @@ export const trading = {
 }
 
 export type Project = {
+  /** URL segment: /work/<slug> */
+  slug: string
   name: string
   blurb: string
   language: string
+  /** Source repository. */
   href: string
+  /** Deployed instance, where one exists. */
+  live?: string
+  year: string
+  status: "Shipped" | "In progress" | "Archived"
+  /** Longer description for the project page. Still one paragraph. */
+  detail?: string
+  /** What it is actually built with. */
+  stack?: string[]
+  /**
+   * Screenshots for the project page. Empty until real captures exist — the
+   * page renders a labelled placeholder rather than a stock mock-up, because
+   * a fake screenshot misrepresents what was built.
+   */
+  shots?: { src: string; caption?: string }[]
 }
 
 /** Pinned from github.com/thyimpaler. */
 export const projects: Project[] = [
   {
+    slug: "cipv1",
     name: "CIPV1",
     blurb:
       "Turns crypto research into automated trades — AI-assisted analysis, multi-exchange aggregation and real-time execution.",
+    detail:
+      "A research-to-execution pipeline: pull signals from across exchanges, score them, and route the resulting orders without leaving the tool. Built to compress the gap between spotting something and acting on it.",
     language: "JavaScript",
+    stack: ["JavaScript", "Node.js", "Exchange APIs"],
+    year: "2026",
+    status: "Shipped",
     href: "https://github.com/thyimpaler/CIPV1",
   },
   {
+    slug: "csc1",
     name: "csc1",
     blurb:
       "Crypto dashboard on live Binance data: probability scoring, correlation analysis and order-book depth tracking.",
+    detail:
+      "A live market dashboard built around order flow rather than candles — depth, correlation between pairs, and a probability score per setup, all streaming from Binance.",
     language: "JavaScript",
+    stack: ["JavaScript", "Binance API", "WebSockets"],
+    year: "2026",
+    status: "Shipped",
     href: "https://github.com/thyimpaler/csc1",
   },
   {
+    slug: "zencode",
     name: "ZenCode",
     blurb: "Voice your code, watch it stream to your phone, approve with a glow.",
+    detail:
+      "Speak a change, watch it stream to your phone, approve it with a glance. An experiment in moving code review off the desk and onto the device already in your hand.",
     language: "HTML",
+    stack: ["HTML", "JavaScript", "Web APIs"],
+    year: "2026",
+    status: "Shipped",
     href: "https://github.com/thyimpaler/ZenCode",
   },
   {
+    slug: "omni-sync",
     name: "omni-sync",
     blurb: "Cross-platform sync tooling. In progress.",
+    detail:
+      "Keeping state consistent across platforms that were never designed to agree with each other. Still being built.",
     language: "JavaScript",
+    stack: ["JavaScript", "Node.js"],
+    year: "2026",
+    status: "In progress",
     href: "https://github.com/thyimpaler/omni-sync",
   },
 ]
+
+export const projectBySlug = (slug: string) => projects.find((p) => p.slug === slug)
 
 export const githubUrl = "https://github.com/thyimpaler"
 

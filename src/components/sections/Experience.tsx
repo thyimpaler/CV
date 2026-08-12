@@ -4,16 +4,16 @@ import { SectionHeader } from "@/components/SectionHeader"
 import { RevealOnScroll } from "@/components/LineReveal"
 
 /**
- * Experience as a horizontal board — one role in focus at a time.
+ * Experience as a vertical focus table.
  *
- * A vertical list gives every role equal weight and the reader skims all five
- * at once. Advancing sideways forces them to arrive one at a time, which is
- * the "drumroll": the card in focus sits at full contrast and scale while its
- * neighbours dim and shrink, so attention has somewhere to be.
+ * One continuous rectangle of rows. The row nearest the centre of the
+ * viewport takes focus as you scroll normally — it expands to reveal its
+ * detail and testimonial, sits sharp and at full contrast, while the rows
+ * above and below blur and compress. No sideways scrolling, no clicking: the
+ * focus follows the reader down the page.
  *
- * Built on CSS scroll-snap rather than a carousel library — native momentum
- * on touch, real keyboard and scrollbar behaviour, and it degrades to a plain
- * scrollable row if anything about the JS fails.
+ * Blur scales with distance from centre rather than switching on and off, so
+ * neighbours soften gradually instead of snapping between two states.
  */
 
 function host(url: string) {
@@ -25,29 +25,38 @@ function host(url: string) {
 }
 
 export function Experience() {
-  const trackRef = useRef<HTMLDivElement>(null)
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([])
   const [active, setActive] = useState(0)
+  // Distance of each row from viewport centre, 0 (centred) to 1 (far).
+  const [distances, setDistances] = useState<number[]>(() =>
+    experiences.map((_, i) => (i === 0 ? 0 : 1)),
+  )
 
-  // Track which card is nearest the centre of the viewport.
   useEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     let frame = 0
+
     const measure = () => {
       frame = 0
-      const mid = track.scrollLeft + track.clientWidth / 2
+      const mid = window.innerHeight / 2
       let best = 0
       let bestDist = Infinity
-      Array.from(track.children).forEach((child, i) => {
-        const el = child as HTMLElement
-        const c = el.offsetLeft + el.offsetWidth / 2
-        const d = Math.abs(c - mid)
-        if (d < bestDist) {
-          bestDist = d
+
+      const next = rowRefs.current.map((el, i) => {
+        if (!el) return 1
+        const r = el.getBoundingClientRect()
+        const centre = r.top + r.height / 2
+        const raw = Math.abs(centre - mid)
+        if (raw < bestDist) {
+          bestDist = raw
           best = i
         }
+        // Normalise against half the viewport — a row a full half-screen away
+        // is fully receded.
+        return Math.min(1, raw / (window.innerHeight * 0.5))
       })
+
+      setDistances(reduce ? next.map((_, i) => (i === best ? 0 : 0.4)) : next)
       setActive(best)
     }
 
@@ -57,71 +66,59 @@ export function Experience() {
     }
 
     measure()
-    track.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("scroll", onScroll, { passive: true })
     window.addEventListener("resize", onScroll, { passive: true })
     return () => {
-      track.removeEventListener("scroll", onScroll)
+      window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onScroll)
       cancelAnimationFrame(frame)
     }
   }, [])
 
-  const goTo = (i: number) => {
-    const track = trackRef.current
-    if (!track) return
-    const el = track.children[i] as HTMLElement | undefined
-    if (!el) return
-    track.scrollTo({
-      left: el.offsetLeft - (track.clientWidth - el.offsetWidth) / 2,
-      behavior: "smooth",
-    })
-  }
-
   return (
-    <section id="experience" className="section-shell !px-0">
-      <div className="px-[var(--section-edge)]">
-        <SectionHeader
-          index="01"
-          label="Experience"
-          title="Where I've operated"
-          className="heading-gap"
-        />
-      </div>
+    <section id="experience" className="section-shell">
+      <SectionHeader
+        index="01"
+        label="Experience"
+        title="Where I've operated"
+        className="heading-gap"
+      />
 
-      {/* Track. Padding on the inline edges lets the first and last card
-          reach the centre of the viewport when snapped. */}
-      <div
-        ref={trackRef}
-        className="hide-scrollbar flex snap-x snap-mandatory gap-[clamp(16px,2vw,28px)] overflow-x-auto scroll-smooth px-[max(var(--section-edge),calc(50vw-var(--card-w)/2))] pb-4"
-        style={{ "--card-w": "clamp(280px, 34vw, 460px)" } as React.CSSProperties}
-        role="group"
-        aria-label="Experience, scroll sideways"
-      >
+      <div className="border-t border-[var(--line-soft)]">
         {experiences.map((exp, i) => {
           const isActive = i === active
-          const linked = Boolean(exp.href)
+          const d = distances[i] ?? 1
 
           return (
-            <article
+            <div
               key={`${exp.project}-${i}`}
-              className="group/card relative flex w-[var(--card-w)] shrink-0 snap-center flex-col justify-between rounded-[4px] border p-[clamp(20px,2.2vw,32px)] transition-all duration-700 [transition-timing-function:var(--ease-core)]"
+              ref={(el) => {
+                rowRefs.current[i] = el
+              }}
+              className="border-b border-[var(--line-soft)] transition-[filter,opacity] duration-500 [transition-timing-function:var(--ease-core)]"
               style={{
-                // The focused card is brighter, larger and lifted; the rest
-                // recede rather than disappear, so the run stays legible.
-                borderColor: isActive ? "var(--line)" : "var(--line-soft)",
-                background: isActive ? "#0c0c0f" : "transparent",
-                opacity: isActive ? 1 : 0.38,
-                scale: isActive ? "1" : "0.94",
-                minHeight: "clamp(320px, 38vw, 420px)",
+                // Softens with distance instead of toggling — the whole point
+                // of the effect is the gradient between states.
+                filter: `blur(${(d * 3.2).toFixed(2)}px)`,
+                opacity: 1 - d * 0.62,
               }}
             >
-              <div>
-                <div className="flex items-start justify-between gap-4">
-                  <span className="font-mono-ui text-[11px] tabular-nums text-[var(--ink-mute)]">
-                    {String(i + 1).padStart(2, "0")}
+              <div
+                className="grid gap-x-[clamp(20px,4vw,56px)] gap-y-4 transition-[padding] duration-700 [transition-timing-function:var(--ease-core)] md:grid-cols-[minmax(120px,0.55fr)_1.45fr_minmax(150px,0.85fr)]"
+                style={{
+                  // The focused row stretches top and bottom.
+                  paddingBlock: isActive
+                    ? "clamp(38px, 5vw, 68px)"
+                    : "clamp(18px, 2.2vw, 26px)",
+                }}
+              >
+                {/* Period + status */}
+                <div className="order-2 md:order-none">
+                  <span className="font-mono-ui block text-[12px] tabular-nums text-[var(--ink-mute)]">
+                    {exp.period}
                   </span>
                   <span
-                    className={`font-mono-ui text-[10px] uppercase tracking-[0.14em] ${
+                    className={`font-mono-ui mt-2 inline-block text-[10px] uppercase tracking-[0.14em] ${
                       exp.status === "Active"
                         ? "text-[var(--brand-gold)]"
                         : "text-[var(--ink-mute)] opacity-60"
@@ -132,73 +129,119 @@ export function Experience() {
                   </span>
                 </div>
 
-                <div className="mt-[clamp(24px,3vw,40px)] flex items-center gap-4">
-                  {exp.art ? (
-                    <img
-                      src={exp.art}
-                      alt=""
-                      loading="lazy"
-                      className="h-12 w-12 shrink-0 rounded-[3px] object-cover grayscale transition-all duration-700 [transition-timing-function:var(--ease-core)] group-hover/card:grayscale-0"
-                    />
+                {/* Impact, then the testimonial once focused */}
+                <div className="order-3 md:order-none">
+                  <p
+                    className="leading-snug text-[var(--ink-strong)] transition-[font-size] duration-700 [transition-timing-function:var(--ease-core)]"
+                    style={{
+                      fontSize: isActive
+                        ? "clamp(18px, 1.9vw, 25px)"
+                        : "clamp(15px, 1.4vw, 18px)",
+                    }}
+                  >
+                    {exp.impact}
+                  </p>
+
+                  {exp.tags?.length ? (
+                    <ul className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-2">
+                      {exp.tags.map((tag) => (
+                        <li
+                          key={tag}
+                          className="font-mono-ui rounded-full border border-[var(--line-soft)] px-2.5 py-1 text-[10px] uppercase tracking-[0.1em] text-[var(--ink-mute)]"
+                        >
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
                   ) : null}
-                  <div className="min-w-0">
-                    <h3 className="font-[family-name:var(--font-display)] text-[clamp(24px,2.4vw,36px)] leading-none text-[var(--ink-strong)]">
-                      {exp.project}
-                    </h3>
-                    <p className="mt-2 text-[13px] text-[var(--ink-mute)]">{exp.role}</p>
-                  </div>
+
+                  {/* Testimonial expands with the row. grid-rows 0fr→1fr
+                      animates to auto height without measuring. */}
+                  {exp.lead?.quote ? (
+                    <div
+                      className="grid transition-[grid-template-rows,opacity] duration-700 [transition-timing-function:var(--ease-core)]"
+                      style={{
+                        gridTemplateRows: isActive ? "1fr" : "0fr",
+                        opacity: isActive ? 1 : 0,
+                      }}
+                    >
+                      <div className="overflow-hidden">
+                        <figure className="mt-7 border-l border-[var(--brand-gold)]/35 pl-5">
+                          <blockquote className="font-[family-name:var(--font-display)] text-[clamp(17px,1.8vw,23px)] italic leading-snug text-[var(--ink-strong)]">
+                            “{exp.lead.quote}”
+                          </blockquote>
+                          <figcaption className="mt-4 flex items-center gap-3">
+                            {/* Round, name-captioned — a person, not a token
+                                mark. Square art beside the project title read
+                                as the coin's logo, which it never was. */}
+                            {exp.lead.avatar ? (
+                              <img
+                                src={exp.lead.avatar}
+                                alt=""
+                                loading="lazy"
+                                className="h-8 w-8 shrink-0 rounded-full object-cover"
+                              />
+                            ) : null}
+                            <span className="font-mono-ui text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)]">
+                              {exp.lead.name}
+                              {exp.lead.role ? (
+                                <span className="opacity-60"> · {exp.lead.role}</span>
+                              ) : null}
+                            </span>
+                          </figcaption>
+                        </figure>
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
 
-                <p className="mt-[clamp(20px,2.4vw,30px)] text-[clamp(15px,1.4vw,19px)] leading-snug text-[var(--ink-strong)]">
-                  {exp.impact}
-                </p>
-              </div>
-
-              <div className="mt-6">
-                {exp.tags?.length ? (
-                  <ul className="mb-5 flex flex-wrap items-center gap-x-2 gap-y-2">
-                    {exp.tags.map((tag) => (
-                      <li
-                        key={tag}
-                        className="font-mono-ui rounded-full border border-[var(--line-soft)] px-2.5 py-1 text-[10px] uppercase tracking-[0.1em] text-[var(--ink-mute)]"
-                      >
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-
-                <div className="flex items-end justify-between gap-4 border-t border-[var(--line-soft)] pt-4">
-                  <div className="min-w-0">
-                    <span className="font-mono-ui block text-[11px] tabular-nums text-[var(--ink-mute)]">
-                      {exp.period}
+                {/* Project */}
+                <div className="order-1 md:order-none md:text-right">
+                  <span className="inline-flex items-baseline gap-2">
+                    <span
+                      className="font-[family-name:var(--font-display)] leading-none transition-[font-size,color] duration-700 [transition-timing-function:var(--ease-core)]"
+                      style={{
+                        fontSize: isActive
+                          ? "clamp(26px, 2.8vw, 42px)"
+                          : "clamp(20px, 2vw, 28px)",
+                        color: isActive ? "var(--brand-gold)" : "var(--ink-strong)",
+                      }}
+                    >
+                      {exp.project}
                     </span>
-                    {exp.sub ? (
-                      exp.subHref ? (
-                        <a
-                          href={exp.subHref}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="font-mono-ui mt-1.5 inline-block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--brand-gold)]"
-                        >
-                          {exp.sub} ↗
-                        </a>
-                      ) : (
-                        <span className="font-mono-ui mt-1.5 block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)]">
-                          {exp.sub}
-                        </span>
-                      )
-                    ) : null}
-                  </div>
+                  </span>
 
-                  {linked ? (
+                  <span className="mt-2.5 block text-[13px] text-[var(--ink-mute)]">
+                    {exp.role}
+                  </span>
+
+                  {exp.sub ? (
+                    exp.subHref ? (
+                      <a
+                        href={exp.subHref}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-mono-ui mt-1.5 inline-block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--brand-gold)]"
+                      >
+                        {exp.sub} ↗
+                      </a>
+                    ) : (
+                      <span className="font-mono-ui mt-1.5 block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)]">
+                        {exp.sub}
+                      </span>
+                    )
+                  ) : null}
+
+                  {exp.href ? (
                     <a
                       href={exp.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group/link font-mono-ui inline-flex shrink-0 items-center gap-2 text-[10px] uppercase tracking-[0.12em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--brand-gold)]"
+                      className="group/link font-mono-ui mt-2 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.12em] text-[var(--brand-gold)] transition-opacity duration-500"
+                      style={{ opacity: isActive ? 0.85 : 0 }}
+                      tabIndex={isActive ? 0 : -1}
                     >
-                      {host(exp.href!)}
+                      {host(exp.href)}
                       <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">
                         ↗
                       </span>
@@ -206,36 +249,14 @@ export function Experience() {
                   ) : null}
                 </div>
               </div>
-            </article>
+            </div>
           )
         })}
       </div>
 
-      {/* Position indicator — segments, not dots, so the run reads as a
-          timeline with length rather than a slideshow. */}
-      <div className="mt-[clamp(24px,3vw,44px)] flex items-center justify-center gap-2 px-[var(--section-edge)]">
-        {experiences.map((exp, i) => (
-          <button
-            key={exp.project}
-            onClick={() => goTo(i)}
-            aria-label={`Go to ${exp.project}`}
-            aria-current={i === active}
-            className="group/seg -my-3 py-3 outline-none focus-visible:ring-1 focus-visible:ring-[var(--brand-gold)]/50"
-          >
-            <span
-              className="block h-px transition-all duration-500 [transition-timing-function:var(--ease-core)]"
-              style={{
-                width: i === active ? "clamp(34px,4vw,56px)" : "clamp(16px,2vw,24px)",
-                background: i === active ? "var(--brand-gold)" : "var(--line)",
-              }}
-            />
-          </button>
-        ))}
-      </div>
-
-      <RevealOnScroll className="mt-6 px-[var(--section-edge)] text-center">
-        <span className="font-mono-ui text-[10px] uppercase tracking-[0.16em] text-[var(--ink-mute)] opacity-60">
-          Scroll sideways
+      <RevealOnScroll className="mt-8 text-center">
+        <span className="font-mono-ui text-[10px] uppercase tracking-[0.16em] text-[var(--ink-mute)] opacity-50">
+          Keep scrolling
         </span>
       </RevealOnScroll>
     </section>

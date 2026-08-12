@@ -1,0 +1,218 @@
+import { useEffect } from "react"
+import { projectBySlug, projects } from "@/data/cv"
+import { LineReveal, RevealOnScroll } from "@/components/LineReveal"
+import { ProgressiveText } from "@/components/ProgressiveText"
+import { Link, navigate } from "@/lib/router"
+
+/**
+ * A project's own page, at /work/<slug>.
+ *
+ * Same type system and rhythm as the CV so it reads as one site rather than a
+ * subpage bolted on. Screenshots are not in yet, so the gallery renders
+ * labelled empty plates at the correct aspect ratio: the layout is finished
+ * and the images drop straight in, and nothing pretends to be a screenshot
+ * that isn't one.
+ */
+export function ProjectPage({ slug }: { slug: string }) {
+  const project = projectBySlug(slug)
+
+  // Keep the tab title in step with the route.
+  useEffect(() => {
+    document.title = project
+      ? `${project.name} — ThyImpaler`
+      : "Not found — ThyImpaler"
+    return () => {
+      document.title = "Thyimpaler — Web3 Community Architect"
+    }
+  }, [project])
+
+  if (!project) {
+    return (
+      <main className="section-shell relative z-10 flex min-h-[70svh] flex-col items-center justify-center text-center">
+        <p className="t-eyebrow">404</p>
+        <h1 className="t-h2 mt-6 text-[var(--ink-strong)]">No such project.</h1>
+        <Link
+          to="/"
+          className="group mt-10 inline-flex items-center gap-3 text-[15px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+        >
+          <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-x-1">
+            ←
+          </span>
+          Back to the CV
+        </Link>
+      </main>
+    )
+  }
+
+  const others = projects.filter((p) => p.slug !== project.slug)
+
+  return (
+    <main className="relative z-10">
+      <section className="section-shell !pt-[clamp(120px,15vh,180px)]">
+        <RevealOnScroll>
+          <Link
+            to="/"
+            className="group t-eyebrow inline-flex items-center gap-3 transition-colors duration-300 hover:text-[var(--ink-strong)]"
+          >
+            <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-x-1">
+              ←
+            </span>
+            Work
+          </Link>
+        </RevealOnScroll>
+
+        <LineReveal
+          as="h1"
+          text={project.name}
+          className="t-h1 mt-[clamp(28px,4vw,52px)] block text-[var(--ink-strong)]"
+          immediate
+          stagger={0.05}
+          delay={0.15}
+        />
+
+        <ProgressiveText
+          text={project.blurb}
+          className="t-lead measure mt-[clamp(22px,3vw,38px)] text-[var(--ink)]"
+          stagger={0.014}
+          delay={0.4}
+        />
+
+        {/* Facts as a ruled strip rather than a card — same treatment the CV
+            uses for capabilities, so the two pages share a vocabulary. */}
+        <RevealOnScroll className="mt-[clamp(40px,6vw,80px)]">
+          <dl className="grid gap-px border-y border-[var(--line-soft)] bg-[var(--line-soft)] sm:grid-cols-4">
+            {[
+              ["Year", project.year],
+              ["Status", project.status],
+              ["Language", project.language],
+              ["Stack", project.stack?.join(", ") ?? "—"],
+            ].map(([label, value]) => (
+              <div key={label} className="bg-[var(--background)] px-1 py-5 sm:px-4">
+                <dt className="t-eyebrow">{label}</dt>
+                <dd className="mt-2.5 text-[14px] text-[var(--ink-strong)]">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </RevealOnScroll>
+
+        <div className="mt-[clamp(32px,4vw,52px)] flex flex-wrap items-center gap-x-8 gap-y-4">
+          <a
+            href={project.href}
+            target="_blank"
+            rel="noreferrer"
+            className="group inline-flex items-center gap-3 rounded-full bg-[var(--ink-strong)] px-6 py-3 text-[14px] font-medium text-[#08080a] transition-transform duration-500 [transition-timing-function:var(--ease-core)] hover:-translate-y-0.5"
+          >
+            Source
+            <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-1">
+              ↗
+            </span>
+          </a>
+          {project.live ? (
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noreferrer"
+              className="group relative -my-3 inline-flex items-center py-3 text-[14px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+            >
+              Live site
+              <span className="absolute bottom-2 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:origin-left group-hover:scale-x-100" />
+            </a>
+          ) : null}
+        </div>
+      </section>
+
+      {project.detail ? (
+        <section className="section-shell !pt-0">
+          <ProgressiveText
+            text={project.detail}
+            className="measure text-[clamp(18px,2vw,26px)] leading-[1.45] text-[var(--ink-strong)]"
+            stagger={0.012}
+          />
+        </section>
+      ) : null}
+
+      {/* Gallery */}
+      <section className="section-shell !pt-0">
+        <RevealOnScroll>
+          <div className="flex items-baseline justify-between gap-6">
+            <span className="t-eyebrow">Screens</span>
+            {!project.shots?.length ? (
+              <span className="font-mono-ui text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] opacity-60">
+                Captures pending
+              </span>
+            ) : null}
+          </div>
+          <div className="rule-draw mt-5" />
+        </RevealOnScroll>
+
+        <div className="mt-[clamp(28px,4vw,52px)] grid gap-[clamp(14px,2vw,26px)] md:grid-cols-2">
+          {(project.shots?.length
+            ? project.shots
+            : [{ src: "", caption: "" }, { src: "", caption: "" }]
+          ).map((shot, i) =>
+            shot.src ? (
+              <RevealOnScroll key={shot.src}>
+                <figure>
+                  <img
+                    src={shot.src}
+                    alt={shot.caption ?? `${project.name} screenshot`}
+                    loading="lazy"
+                    className="w-full rounded-[3px] border border-[var(--line-soft)] object-cover"
+                  />
+                  {shot.caption ? (
+                    <figcaption className="t-eyebrow mt-3">{shot.caption}</figcaption>
+                  ) : null}
+                </figure>
+              </RevealOnScroll>
+            ) : (
+              // Correct aspect ratio, no invented content.
+              <RevealOnScroll key={i}>
+                <div className="flex aspect-[16/10] items-center justify-center rounded-[3px] border border-dashed border-[var(--line-soft)] bg-[#0a0a0c]">
+                  <span className="font-mono-ui text-[10px] uppercase tracking-[0.16em] text-[var(--ink-mute)] opacity-50">
+                    Screenshot
+                  </span>
+                </div>
+              </RevealOnScroll>
+            ),
+          )}
+        </div>
+      </section>
+
+      {/* Next projects */}
+      <section className="section-shell !pt-0">
+        <RevealOnScroll>
+          <span className="t-eyebrow">More work</span>
+          <div className="rule-draw mt-5" />
+        </RevealOnScroll>
+
+        <div className="mt-[clamp(20px,3vw,36px)] border-t border-[var(--line-soft)]">
+          {others.map((p) => (
+            <RevealOnScroll key={p.slug}>
+              <Link
+                to={`/work/${p.slug}`}
+                className="group flex items-center justify-between gap-6 border-b border-[var(--line-soft)] py-[clamp(18px,2.4vw,30px)]"
+              >
+                <span className="font-[family-name:var(--font-display)] text-[clamp(20px,2.4vw,34px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-gold)]">
+                  {p.name}
+                </span>
+                <span className="shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-1 group-hover:text-[var(--brand-gold)]">
+                  →
+                </span>
+              </Link>
+            </RevealOnScroll>
+          ))}
+        </div>
+
+        <button
+          onClick={() => navigate("/")}
+          className="group mt-[clamp(40px,6vw,72px)] inline-flex items-center gap-3 text-[15px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+        >
+          <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-x-1">
+            ←
+          </span>
+          Back to the CV
+        </button>
+      </section>
+    </main>
+  )
+}

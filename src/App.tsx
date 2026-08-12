@@ -10,28 +10,38 @@ import { Projects } from "@/components/sections/Projects"
 import { Toolkit } from "@/components/sections/Toolkit"
 import { Footer } from "@/components/sections/Footer"
 import { Coda } from "@/components/sections/Coda"
+import { ProjectPage } from "@/pages/ProjectPage"
+import { usePath } from "@/lib/router"
+
+function Home() {
+  return (
+    // Sections carry their own rules and rhythm, so no divider elements
+    // between them — a page stitched together with <hr>s reads as blocks
+    // stacked rather than a continuous document.
+    <main className="relative z-10">
+      <Hero />
+      <Ticker />
+      <About />
+      <Experience />
+      <Stats />
+      <Projects />
+      <Toolkit />
+      <Footer />
+      <Coda />
+    </main>
+  )
+}
 
 function App() {
+  const path = usePath()
+  const projectMatch = path.match(/^\/work\/([^/]+)\/?$/)
+
   return (
     <>
       <ScrollProgress />
       <Backdrop />
       <Nav />
-
-      {/* Sections carry their own rules and rhythm, so no divider elements
-          between them — a page stitched together with <hr>s reads as blocks
-          stacked rather than a continuous document. */}
-      <main className="relative z-10">
-        <Hero />
-        <Ticker />
-        <About />
-        <Experience />
-        <Stats />
-        <Projects />
-        <Toolkit />
-        <Footer />
-        <Coda />
-      </main>
+      {projectMatch ? <ProjectPage slug={projectMatch[1]} /> : <Home />}
     </>
   )
 }
