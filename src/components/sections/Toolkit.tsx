@@ -1,95 +1,90 @@
-import { motion } from "motion/react"
+import { chains, codingStack, moderationStack, trading } from "@/data/cv"
 import { SectionHeader } from "@/components/SectionHeader"
-import { Badge } from "@/components/ui/badge"
-import { toolkit, devCard } from "@/data/cv"
-import { onSpotlightMove } from "@/lib/spotlight"
+import { RevealOnScroll } from "@/components/LineReveal"
 
-const cardMotion = {
-  initial: { opacity: 0, y: 32 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.2 },
+// Deterministic pseudo-random from the pill's own text, so the scatter is
+// stable across renders and reloads instead of reshuffling on every mount.
+function jitter(seed: string, spread: number) {
+  let h = 0
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0
+  return ((Math.abs(h) % 1000) / 1000 - 0.5) * 2 * spread
 }
 
-function Pill({ children, dev }: { children: React.ReactNode; dev?: boolean }) {
+function PillRow({ items }: { items: string[] }) {
   return (
-    <Badge
-      variant="outline"
-      className={
-        dev
-          ? "rounded-full border-primary/30 bg-primary/[0.05] px-3.5 py-1 text-[0.8rem] font-medium text-primary/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:text-primary"
-          : "rounded-full border-border px-3.5 py-1 text-[0.8rem] font-medium text-[#aaa] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-primary/[0.07] hover:text-primary"
-      }
-    >
-      {children}
-    </Badge>
+    <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-3.5">
+      {items.map((pill, i) => (
+        <li
+          key={pill}
+          className="rounded-full border border-[var(--line)] bg-[#0d0d10] px-[clamp(13px,1.4vw,20px)] py-[clamp(7px,0.8vw,12px)] text-[clamp(12px,1.1vw,15px)] text-[var(--ink)] transition-all duration-500 [transition-timing-function:var(--ease-core)] hover:!rotate-0 hover:border-[var(--brand-gold)]/45 hover:text-[var(--ink-strong)]"
+          style={{
+            rotate: `${jitter(pill, 6)}deg`,
+            translate: `0 ${jitter(pill + "y", 4)}px`,
+            animation: `fade-rise 0.7s var(--ease-core) ${i * 0.035}s both`,
+          }}
+        >
+          {pill}
+        </li>
+      ))}
+    </ul>
   )
 }
 
+function Group({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <RevealOnScroll>
+      <div className="flex flex-col items-center gap-6 text-center">
+        <h3 className="font-mono-ui text-[10px] uppercase tracking-[0.18em] text-[var(--ink-mute)]">
+          {title}
+        </h3>
+        {children}
+      </div>
+    </RevealOnScroll>
+  )
+}
+
+/**
+ * Capabilities, grouped by kind rather than dumped in one heap.
+ *
+ * The coding stack is taken from the dependency manifests of the actual
+ * projects in this portfolio — Next.js, Three.js, ethers, Telegraf,
+ * Postgres and the rest are all things that ship in real repos here, not a
+ * list of technologies worth being seen with.
+ */
 export function Toolkit() {
   return (
-    <section id="toolkit" className="relative z-1 py-30 max-[768px]:py-20">
-      <div className="mx-auto max-w-[1100px] px-7">
-        <SectionHeader label="Technical Toolkit">
-          Tools of the <span className="gradient-text">Trade</span>
-        </SectionHeader>
+    <section id="toolkit" className="section-shell">
+      <SectionHeader index="03" label="Capabilities" title="What I bring" className="heading-gap" />
 
-        <div className="grid grid-cols-2 gap-4 max-[900px]:grid-cols-1">
-          {toolkit.map((card, i) => (
-            <motion.div
-              key={card.title}
-              {...cardMotion}
-              transition={{ duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -5 }}
-              onMouseMove={onSpotlightMove}
-              className="card-spotlight group relative overflow-hidden rounded-[18px] border border-border bg-card p-9 transition-colors duration-300 hover:border-primary/20 max-[480px]:p-6"
-            >
-              <div className="relative">
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-primary/15 bg-primary/10 text-[1.4rem] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-                  {card.icon}
-                </div>
-                <h3 className="font-display mb-4 text-[1.1rem] font-bold tracking-tight text-foreground">
-                  {card.title}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {card.pills.map((p) => (
-                    <Pill key={p}>{p}</Pill>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+      <div className="mx-auto flex max-w-[1150px] flex-col gap-[clamp(44px,6vw,80px)]">
+        <Group title="Chains & ecosystems">
+          <PillRow items={chains} />
+        </Group>
 
-          {/* Dev card */}
-          <motion.a
-            href={devCard.href}
-            target="_blank"
-            rel="noopener"
-            {...cardMotion}
-            transition={{ duration: 0.55, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            whileHover={{ y: -6 }}
-            onMouseMove={onSpotlightMove}
-            className="card-spotlight card-spotlight--dev group relative block overflow-hidden rounded-[18px] border border-primary/25 bg-[linear-gradient(145deg,#090910_0%,#0e0916_100%)] p-9 transition-shadow duration-300 hover:shadow-[0_12px_60px_rgba(255,196,0,0.18)] max-[480px]:p-6"
-          >
-            <div className="relative">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-primary/25 bg-[linear-gradient(135deg,rgba(255,196,0,0.2),rgba(139,92,246,0.2))] text-[1.4rem] shadow-[0_0_20px_rgba(255,196,0,0.15)] transition-transform duration-300 group-hover:scale-110">
-                {devCard.icon}
-              </div>
-              <h3 className="font-display gradient-text mb-4 text-[1.1rem] font-bold tracking-tight">
-                {devCard.title}{" "}
-                <span className="inline-block opacity-60 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100">
-                  ↗
-                </span>
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {devCard.pills.map((p) => (
-                  <Pill key={p} dev>
-                    {p}
-                  </Pill>
-                ))}
-              </div>
-            </div>
-          </motion.a>
-        </div>
+        {codingStack.map((group) => (
+          <Group key={group.title} title={group.title}>
+            <PillRow items={group.pills} />
+          </Group>
+        ))}
+
+        <Group title="Moderation stack">
+          <PillRow items={moderationStack} />
+        </Group>
+
+        {/* Trading gets its own treatment — the retired methods are listed
+            plainly, because dropping a model reads as more credible than
+            claiming every one ever touched. */}
+        <RevealOnScroll>
+          <div className="flex flex-col items-center gap-6 text-center">
+            <h3 className="font-mono-ui text-[10px] uppercase tracking-[0.18em] text-[var(--ink-mute)]">
+              Trading — since {trading.since}
+            </h3>
+            <PillRow items={[...trading.primary, ...trading.methods]} />
+            <p className="font-mono-ui mt-1 text-[11px] text-[var(--ink-mute)] opacity-70">
+              Previously: {trading.retired.join(", ")} — no longer in use
+            </p>
+          </div>
+        </RevealOnScroll>
       </div>
     </section>
   )

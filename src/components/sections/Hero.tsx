@@ -1,119 +1,122 @@
-import { motion } from "motion/react"
-import { Button } from "@/components/ui/button"
+import { LineReveal } from "@/components/LineReveal"
+import { ProgressiveText } from "@/components/ProgressiveText"
+import { useMagnetic, usePointerOffset } from "@/lib/interactions"
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as const },
-  }),
-}
-
+/**
+ * Hero built on Kaos's structure rather than pxnz3r's.
+ *
+ * pxnz3r opens with a commissioned Icarus illustration; there is no CSS
+ * substitute for that. Kaos gets the same presence from a heavy-grain
+ * luminance ramp plus its wordmark set enormous and bleeding off the bottom
+ * edge — all type and gradient, no art assets. That is the version we can
+ * actually execute.
+ *
+ * Layout follows theirs too: statement left, supporting copy right, one
+ * small CTA. The bleeding wordmark anchors the bottom.
+ */
 export function Hero() {
+  const cta = useMagnetic<HTMLAnchorElement>(0.28, 80)
+  const pointer = usePointerOffset()
+
   return (
     <section
       id="hero"
-      className="relative flex min-h-[100svh] items-center overflow-hidden pb-28 pt-28 max-[480px]:pb-16"
+      className="relative flex min-h-[100svh] flex-col overflow-hidden pt-[clamp(120px,16vh,190px)]"
     >
-      <div className="mx-auto w-full max-w-[1100px] px-7">
-        <div className="grid items-center gap-20 max-[900px]:gap-9 md:grid-cols-[1fr_auto]">
-          {/* LEFT: text */}
-          <div className="max-w-[680px] max-[900px]:text-center">
-            <motion.p
-              custom={0}
-              variants={fadeUp}
-              initial="hidden"
-              animate="show"
-              className="font-mono-ui mb-6 text-xs uppercase tracking-[0.25em] text-muted-foreground max-[900px]:mx-auto"
-            >
-              <span className="text-primary">/</span> web3 community architect
-            </motion.p>
+      <div className="grain-field" aria-hidden />
 
-            <motion.h1
-              custom={1}
-              variants={fadeUp}
-              initial="hidden"
-              animate="show"
-              className="font-display text-[clamp(3.2rem,7vw,5.8rem)] font-bold leading-[1] tracking-[-0.045em] text-foreground"
-            >
-              Thy<span className="gradient-text-anim">Impaler</span>
-            </motion.h1>
+      <div className="relative z-10 flex flex-1 flex-col px-[var(--section-edge)]">
+        <div className="grid gap-[clamp(28px,5vw,80px)] lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+          {/* Statement */}
+          <div>
+            <LineReveal
+              as="p"
+              text="Web3 Community Architect — Head of Development"
+              className="t-eyebrow t-eyebrow--bright block"
+              immediate
+              stagger={0.018}
+              delay={0.15}
+            />
+            <h1 className="t-h1 mt-[clamp(22px,3vw,40px)] text-[var(--ink-strong)]">
+              <LineReveal
+                as="span"
+                text="Order held under"
+                className="block"
+                immediate
+                stagger={0.055}
+                delay={0.32}
+              />
+              <LineReveal
+                as="span"
+                text="pressure."
+                className="block italic text-[var(--brand-gold)]"
+                immediate
+                stagger={0.055}
+                delay={0.44}
+              />
+            </h1>
 
-            <motion.p
-              custom={2}
-              variants={fadeUp}
-              initial="hidden"
-              animate="show"
-              className="mt-3 text-[clamp(1rem,2.2vw,1.3rem)] font-medium tracking-tight text-[#aaa]"
+            <div
+              className="mt-[clamp(28px,4vw,44px)] flex flex-wrap items-center gap-x-8 gap-y-4"
+              style={{ animation: "fade-rise 0.9s var(--ease-core) 0.95s both" }}
             >
-              Discord &amp; Telegram Operations · DeFi Ecosystems
-            </motion.p>
-
-            <motion.p
-              custom={3}
-              variants={fadeUp}
-              initial="hidden"
-              animate="show"
-              className="mt-6 max-w-[560px] text-[1.05rem] leading-[1.85] text-muted-foreground max-[900px]:mx-auto"
-            >
-              The operational backbone behind some of DeFi's fastest-moving
-              communities. I kill FUD before it spreads, neutralize bot raids
-              before they land, and coordinate viral growth that actually moves
-              charts.
-            </motion.p>
-
-            <motion.div
-              custom={4}
-              variants={fadeUp}
-              initial="hidden"
-              animate="show"
-              className="mt-10 flex flex-wrap gap-3.5 max-[900px]:justify-center max-[480px]:flex-col"
-            >
-              <Button
-                asChild
-                size="lg"
-                className="bg-gradient-hero btn-shimmer group relative overflow-hidden rounded-full px-8 py-6 text-[0.95rem] font-semibold text-black outline-none transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_26px_rgba(255,196,0,0.28)] focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              {/* Magnetic: drifts toward the cursor as it approaches. One
+                  element on the page gets this — it marks the primary action
+                  as the thing worth reaching for. */}
+              <a
+                ref={cta}
+                href="#contact"
+                className="group inline-flex items-center gap-3 rounded-full bg-[var(--ink-strong)] px-6 py-3 text-[14px] font-medium text-[#08080a] [transition:translate_0.45s_var(--ease-core)]"
               >
-                <a href="#contact">
-                  Get in Touch
-                  <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
-                </a>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="rounded-full border-white/15 bg-transparent px-8 py-6 text-[0.95rem] font-semibold text-foreground outline-none transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:bg-primary/[0.07] hover:text-primary focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                Start a conversation
+                <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-1">
+                  →
+                </span>
+              </a>
+              <a
+                href="#experience"
+                className="group relative text-[14px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
               >
-                <a href="#experience">View Experience</a>
-              </Button>
-            </motion.div>
+                Selected work
+                <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:origin-left group-hover:scale-x-100" />
+              </a>
+            </div>
           </div>
 
-          {/* RIGHT: avatar */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative shrink-0 max-[900px]:order-first max-[900px]:mx-auto"
-          >
-            <motion.div
-              animate={{ y: [0, -14, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="bg-gradient-hero animate-glow-pulse relative h-[340px] w-[340px] max-w-full rounded-[18px] p-[3px] max-[900px]:h-[200px] max-[900px]:w-[200px] max-[900px]:rounded-full max-[768px]:h-[160px] max-[768px]:w-[160px] max-[480px]:h-[140px] max-[480px]:w-[140px]"
-            >
-              <img
-                src="/avatar.jpg"
-                alt="Thyimpaler"
-                className="h-full w-full rounded-[15px] object-cover max-[900px]:rounded-full"
-              />
-            </motion.div>
-            <span className="animate-ring-expand absolute -inset-2 rounded-[26px] border border-primary/15 max-[900px]:rounded-full" />
-          </motion.div>
+          {/* Supporting copy, brightening as it resolves */}
+          <div className="lg:pt-[clamp(6px,2vw,28px)]">
+            <ProgressiveText
+              text="I keep fast-moving crypto communities calm, secure and shipping. Five ecosystems across Ethereum, Solana, Base and BESC — plus the bots and role structures that hold them together, and a trading desk that never really closes."
+              className="t-lead measure text-[var(--ink)]"
+              stagger={0.016}
+              delay={0.7}
+            />
+            {/* The availability/channels strip lived here and is gone — the
+                hero says more by saying less, and "available for work" still
+                appears once, at the contact section, where it is actionable. */}
+          </div>
         </div>
+      </div>
+
+      {/* Wordmark bleeding off the bottom edge. Clipped by the section's
+          overflow-hidden, which is the whole point — an image or word that
+          runs past the frame implies the composition continues. */}
+      <div
+        className="pointer-events-none relative z-0 mt-auto select-none"
+        style={{ animation: "fade-rise 1.4s var(--ease-core) 0.55s both" }}
+        aria-hidden
+      >
+        {/* Drifts a few pixels against the cursor. Far too small to notice
+            directly — it registers as the page having depth rather than as
+            an effect, which is the point. */}
+        <span
+          className="block whitespace-nowrap text-center font-[family-name:var(--font-display)] text-[19.5vw] leading-[0.8] tracking-[-0.055em] text-[var(--ink-strong)] opacity-[0.11]"
+          style={{
+            translate: `${pointer.x * -26}px calc(26% + ${pointer.y * -10}px)`,
+          }}
+        >
+          ThyImpaler
+        </span>
       </div>
     </section>
   )

@@ -7,7 +7,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-display: 'Space Grotesk', sans-serif;
+    --font-display: 'Instrument Serif', 'Times New Roman', serif;
     --font-sans: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
     --font-heading: var(--font-display);
@@ -60,10 +60,49 @@
 
 /* ── Dark amber theme (default & only theme) ──────────── */
 :root {
-    --brand-gold: #FFD000;
+    /* ---- Motion ------------------------------------------------------
+       One core ease for everything (easeOutQuint) and one spring for
+       elements that morph size/position. Using two curves site-wide is
+       what makes motion read as designed rather than assembled.        */
+    --ease-core: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring: linear(
+        0, .0014, .0055 1.03%, .0239, .053 3.44%, .0961 4.81%, .1957 7.39%,
+        .4354 12.88%, .5484, .6494, .7362, .8083 23.88%, .8696, .9168 29.72%,
+        .9368, .9536 32.81%, .9793 35.9%, .997 39.17%, 1.0084 42.77%,
+        1.0142 47.07%, 1.0144 53.43%, 1.0054 68.37%, 1.0019 77.3%, .9998 99.98%
+    );
+    --dur-reveal: 0.9s;
+
+    /* ---- Spatial rhythm ----------------------------------------------
+       Negative space is the primary premium signal. These are deliberately
+       far larger than a default Tailwind section rhythm.               */
+    --section-edge: clamp(24px, 6vw, 92px);
+    /* Asymmetric, because adjacent sections stack their padding: a symmetric
+       260px block becomes a 520px dead zone at every boundary. Splitting it
+       144 top / 260 bottom lands at ~404px between sections, which is what
+       the reference sites actually use. */
+    --section-gap-top: clamp(88px, 9vw, 144px);
+    --section-gap-bottom: clamp(120px, 16vw, 260px);
+    --heading-gap: clamp(56px, 9vw, 144px);
+    --measure: 62ch;
+
+    /* ---- Colour -------------------------------------------------------
+       Near-monochrome with a single accent. The accent is a highlight,
+       never a fill for large areas — that restraint is the whole trick. */
+    --brand-gold: #FFC400;
     --brand-orange: #FF8C00;
     --brand-red: #E85D04;
     --brand-purple: #8B5CF6;
+
+    --ink-strong: #F4F4F5;
+    --ink: #B2B2BA;
+    /* Raised from #6E6E76: at mono 10–11px with 0.18em tracking, the old
+       value sat near 2.6:1 on the background and dropped further over the
+       lifted grain field in the hero. Small tracked-out type needs more
+       contrast than body copy, not less. */
+    --ink-mute: #8C8C96;
+    --line: rgba(255, 255, 255, 0.10);
+    --line-soft: rgba(255, 255, 255, 0.055);
 
     --gradient-hero: linear-gradient(135deg, #FFD000 0%, #FF8C00 55%, #E85D04 100%);
     --gradient-subtle: linear-gradient(135deg, #FFD000 0%, #FF8C00 40%, #E85D04 70%, #8B5CF6 100%);
@@ -131,9 +170,160 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
+    font-weight: 400;      /* Instrument Serif ships one weight — never fake-bold it */
     letter-spacing: -0.03em;
+    line-height: 0.92;     /* display type is set tight; this is the editorial tell */
+    text-wrap: balance;
   }
+  p { text-wrap: pretty; }
 }
+
+/* ── Editorial type scale ──────────────────────────────
+   Display sizes run far larger than a typical site. The upper bound
+   matters more than the lower one: a headline that reaches 150px reads
+   as art direction, one that stops at 90px reads as a template.       */
+@layer utilities {
+  .t-display  { font-size: clamp(58px, 11vw, 156px); letter-spacing: -0.05em; line-height: 0.86; }
+  .t-h1       { font-size: clamp(44px, 8vw, 108px);  letter-spacing: -0.045em; line-height: 0.9; }
+  .t-h2       { font-size: clamp(34px, 5.4vw, 76px); letter-spacing: -0.04em; line-height: 0.94; }
+  .t-h3       { font-size: clamp(22px, 2.4vw, 34px); letter-spacing: -0.03em; line-height: 1.05; }
+  .t-lead     { font-size: clamp(17px, 1.7vw, 22px); line-height: 1.55; letter-spacing: -0.015em; }
+  .t-body     { font-size: clamp(15px, 1.1vw, 17px); line-height: 1.7; }
+  .t-eyebrow  {
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 1vw, 11px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  /* For eyebrows sitting over the hero's lifted grain field, where the muted
+     tone loses too much separation from the background. */
+  .t-eyebrow--bright { color: var(--ink-strong); opacity: 0.82; }
+
+  /* Section shell: the generous rhythm, applied consistently. */
+  .section-shell {
+    padding-inline: var(--section-edge);
+    padding-top: var(--section-gap-top);
+    padding-bottom: var(--section-gap-bottom);
+  }
+  .heading-gap { margin-bottom: var(--heading-gap); }
+  .measure { max-width: var(--measure); }
+}
+
+/* ── Line reveal ───────────────────────────────────────
+   Each word sits in its own clipping mask and rises from below with a
+   staggered delay. This is the single highest-leverage motion technique
+   for premium feel — it makes text arrive rather than merely appear.
+   `overflow-clip-margin` keeps descenders (g, y, p) from being shaved. */
+.reveal-word {
+  display: inline-block;
+  overflow: clip;
+  overflow-clip-margin: 0.22em;
+  vertical-align: bottom;
+}
+.reveal-word > span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(110%);
+  will-change: transform, opacity;
+  transition:
+    transform var(--dur-reveal) var(--ease-core),
+    opacity var(--dur-reveal) var(--ease-core);
+  transition-delay: var(--reveal-delay, 0s);
+}
+[data-revealed="true"] .reveal-word > span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Progressive line brightening ──────────────────────
+   Body copy sits dim and resolves to full as it enters the viewport, a word
+   at a time. Distinct from the word mask: masking is for headlines, this is
+   for paragraphs. It turns reading into playback.                         */
+.dim-word {
+  opacity: 0.22;
+  transition: opacity 0.55s var(--ease-core);
+  transition-delay: var(--reveal-delay, 0s);
+}
+[data-revealed="true"] .dim-word { opacity: 1; }
+
+/* ── Hand-drawn annotation ─────────────────────────────
+   Marker highlight / circle / underline over a key phrase. The stroke draws
+   itself via dasharray once in view. Two or three per page maximum — the
+   effect dies instantly from repetition.                                  */
+.annot { position: relative; display: inline-block; white-space: nowrap; }
+.annot > svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 116%;
+  height: 150%;
+  overflow: visible;
+  pointer-events: none;
+  color: var(--brand-gold);
+}
+.annot > svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: var(--len, 600);
+  stroke-dashoffset: var(--len, 600);
+  transition: stroke-dashoffset 1.1s var(--ease-core) 0.25s;
+}
+[data-revealed="true"] .annot > svg path { stroke-dashoffset: 0; }
+
+/* Marker highlight sits behind the text rather than over it. */
+.annot--mark > svg { z-index: -1; width: 106%; height: 108%; }
+.annot--mark > svg path {
+  stroke-width: 22;
+  stroke-linecap: square;
+  opacity: 0.22;
+}
+
+/* ── Rotating circular badge ───────────────────────────
+   Small persistent furniture. Reads as a brand system operating in the
+   margins rather than another content block.                             */
+@keyframes badge-spin { to { transform: rotate(360deg); } }
+.badge-spin { animation: badge-spin 22s linear infinite; }
+
+/* ── Grain gradient field ──────────────────────────────
+   Kaos's hero is a heavy-grain luminance ramp, not an illustration — which
+   is why it works without commissioned art. Grain is what stops a CSS
+   gradient reading as a CSS gradient.                                     */
+.grain-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Kept low: Kaos runs a light field with black text, we run a dark field
+     with light text. Lifting the top too far washes out muted text that has
+     to stay legible against it. */
+  background:
+    radial-gradient(120% 90% at 50% 6%, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.028) 34%, transparent 62%),
+    radial-gradient(90% 70% at 50% 0%, rgba(255,196,0,0.055), transparent 58%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 88%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 88%);
+}
+.grain-field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* Hairline rule that draws itself in on scroll */
+.rule-draw {
+  height: 1px;
+  background: var(--line);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.1s var(--ease-core);
+}
+[data-revealed="true"] .rule-draw { transform: scaleX(1); }
 
 /* ── Brand utilities ──────────────────────────────────── */
 @layer utilities {
@@ -196,6 +386,11 @@
 }
 
 /* ── Keyframes ────────────────────────────────────────── */
+@keyframes fade-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes float {
   0%, 100% { transform: translate(0, 0) scale(1); }
   25%       { transform: translate(40px, -30px) scale(1.06); }

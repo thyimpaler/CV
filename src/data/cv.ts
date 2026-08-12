@@ -1,182 +1,203 @@
 export type Experience = {
   role: string
   project: string
-  token?: string
   sub?: string
   period: string
-  current?: boolean
+  status: "Active" | "Closed" | "Ended"
   dev?: boolean
-  achievement?: string
-  items: { label: string; text: string }[]
+  /** The single thing worth knowing about this role. Kept to one line. */
+  impact: string
+  /** Optional second line of plain context. No jargon. */
+  detail?: string
+  tags?: string[]
 }
 
+/**
+ * Roles are deliberately short. Each carries one impact line and at most one
+ * line of context — the previous version listed three or four bullets per
+ * role in marketing language ("Signal Integrity", "Viral Growth Ops"), which
+ * nobody reads and which made real achievements harder to find.
+ */
 export const experiences: Experience[] = [
   {
-    role: "Head of Development",
-    project: "Axyom Sites",
-    token: "Axyom Sites",
-    period: "Jun 2026 — Present",
-    current: true,
-    dev: true,
-    items: [
-      {
-        label: "Engineering Leadership",
-        text: "Lead the development team end-to-end — owning technical direction, build quality, and the shipping cadence across the Axyom product suite.",
-      },
-      {
-        label: "Architecture & Delivery",
-        text: "Define standards for the web and bot infrastructure, review code, and keep releases fast, stable, and on schedule.",
-      },
-      {
-        label: "Roadmap & Team",
-        text: "Coordinate developers, prioritise the roadmap, and translate community and client needs into shipped features.",
-      },
-    ],
+    role: "Head Moderator",
+    project: "$HENNY",
+    sub: "BESC Hyperchain",
+    period: "Jan 2026 — Present",
+    status: "Active",
+    impact: "Held the community through a $105K all-time high — the project's highest.",
+    detail: "Ran security through bot raids, phishing waves and two CTO transitions.",
+    tags: ["Safeguard", "Rose", "BESC"],
   },
   {
     role: "Moderator",
-    project: "Klein Funding Crypto",
-    period: "Apr 2026 — Now",
-    current: true,
-    items: [
-      {
-        label: "Community Operations",
-        text: "Active moderation support for day-to-day ecosystem discussions and escalations across Discord and Telegram.",
-      },
-      {
-        label: "Trust & Safety",
-        text: "Enforced community standards by identifying and removing bad actors, scam links, and coordinated FUD campaigns targeting funded traders.",
-      },
-      {
-        label: "Trader Support",
-        text: "Assisted members with funding-programme queries, prop-firm processes, and account escalations in real time.",
-      },
-      {
-        label: "Signal Integrity",
-        text: "Maintained a clean, high-signal environment by filtering noise and keeping announcements and alpha uncontaminated.",
-      },
-    ],
-  },
-  {
-    role: "Developer & Admin",
-    project: "Phantom CTO",
-    token: "Phantom CTO",
-    period: "Apr 2026 — Jun 2026",
-    dev: true,
-    items: [
-      {
-        label: "Bot Development",
-        text: "Built and maintained the Phantom Bot — a Telegram-based automated bridging and trading tool.",
-      },
-      {
-        label: "Administrative Ops",
-        text: "Full admin oversight of the Phantom CTO ecosystem: deployments, user support, and operational strategy.",
-      },
-    ],
+    project: "Klein Funding",
+    period: "Apr 2026 — Present",
+    status: "Active",
+    impact: "8 hours of daily coverage across Discord and Telegram.",
+    detail: "Removes scam links and coordinated FUD aimed at funded traders.",
+    tags: ["Discord", "Telegram"],
   },
   {
     role: "Moderator",
     project: "$CHAD",
-    token: "$CHAD",
     period: "Feb 2026 — Present",
-    items: [
-      {
-        label: "Real-Time Ops",
-        text: "Executed 24/7 FUD mitigation and conflict resolution during peak trading volatility.",
-      },
-      {
-        label: "Onboarding & Education",
-        text: "Streamlined the entry pipeline for new members, breaking down project mechanics and utility.",
-      },
-      {
-        label: "Environment Control",
-        text: "Used Carl-bot and advanced Discord role structures to maintain a clean, high-energy space.",
-      },
-    ],
+    status: "Active",
+    impact: "Kept the room steady through peak trading volatility.",
+    detail: "Built the role structure and onboarding path for new members.",
+    tags: ["Carl-bot", "Onboarding"],
   },
   {
-    role: "Head Moderator",
-    project: "$HENNY",
-    token: "$HENNY",
-    sub: "Besc Hyperchain",
-    period: "Jan 2026 — Present",
-    achievement: "Community held strong through a $105K ATH — the highest the project ever reached.",
-    items: [
-      {
-        label: "Security Architecture",
-        text: "Deployed Safeguard and Rose to systematically neutralize bot raids and phishing attempts.",
-      },
-      {
-        label: "Viral Growth Ops",
-        text: "Orchestrated coordinated X (Twitter) raids via Raidder to maintain ecosystem visibility.",
-      },
-      {
-        label: "Sentiment Management",
-        text: "Navigated complex CTO transitions and high-volatility events while preserving investor trust.",
-      },
-    ],
+    role: "Developer & Admin",
+    project: "Phantom CTO",
+    period: "Apr 2026 — Jun 2026",
+    status: "Ended",
+    dev: true,
+    impact: "Built Phantom Bot — Telegram-based bridging and trading.",
+    detail: "Also handled deployments and day-to-day admin for the ecosystem.",
+    tags: ["Telegraf", "ethers.js", "SQLite"],
+  },
+  {
+    role: "Head of Development",
+    project: "Axyom Sites",
+    period: "Jun 2026 — Aug 2026",
+    status: "Closed",
+    dev: true,
+    impact: "Led the development team and shipped the product suite.",
+    detail: "Owned technical direction and release cadence until the studio closed.",
+    tags: ["Next.js", "Team lead"],
   },
 ]
 
 export type Stat = {
   value: string
   label: string
-  icon: string
   hint: string
-  count?: number
-  prefix?: string
-  suffix?: string
 }
 
+/**
+ * "24/7" and "100% uptime" were removed — nobody moderates 24 hours a day and
+ * claiming it undercuts the numbers that are real.
+ */
 export const stats: Stat[] = [
-  { value: "4", count: 4, suffix: "+", label: "DeFi Ecosystems", icon: "⛓️", hint: "Communities operated" },
-  { value: "24/7", label: "Active Moderation", icon: "🛡️", hint: "Always on watch" },
-  { value: "$105K", count: 105, prefix: "$", suffix: "K", label: "ATH Under Watch", icon: "📈", hint: "Peak held strong" },
-  { value: "100%", count: 100, suffix: "%", label: "Uptime Commitment", icon: "⚡", hint: "No gaps, ever" },
+  { value: "5", label: "Ecosystems", hint: "Communities operated" },
+  { value: "8H", label: "Daily coverage", hint: "Consistent, not claimed" },
+  { value: "$105K", label: "ATH held", hint: "Peak under watch" },
+  { value: "2024", label: "Trading since", hint: "Live markets" },
 ]
 
-export const toolkit = [
+/** Chains and asset types worked in. */
+export const chains = [
+  "Ethereum",
+  "Solana",
+  "Base",
+  "BESC Hyperchain",
+  "Liquid NFT Finance",
+  "NFTs",
+  "Memecoin launches",
+]
+
+/**
+ * Stack pulled from the actual dependency manifests across the projects in
+ * this portfolio, not from a list of things worth mentioning.
+ */
+export const codingStack = [
   {
-    icon: "🛡️",
-    title: "Moderation Stack",
-    pills: ["Carl-bot", "Wick", "RBAC", "Rose", "Raidder", "Safeguard", "Discord", "Telegram"],
+    title: "Frontend",
+    pills: ["React", "Next.js", "Vite", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js", "React Three Fiber", "Zustand"],
   },
   {
-    icon: "⛓️",
-    title: "Ecosystem Expertise",
-    pills: ["Solana", "Besc Hyperchain", "Liquid NFT Finance", "DeFi"],
+    title: "Backend & data",
+    pills: ["Node.js", "Express", "PostgreSQL", "SQLite", "Prisma", "Zod", "Python"],
   },
   {
-    icon: "🎯",
-    title: "Strategic Operations",
-    pills: ["Anti-FUD Frameworks", "Viral Raid Coordination", "Sentiment Analytics", "Community Growth"],
+    title: "Web3",
+    pills: ["ethers.js", "@solana/web3.js", "bs58", "Wallet integrations"],
+  },
+  {
+    title: "Bots & automation",
+    pills: ["Telegraf", "Telegram Bot API", "Discord", "Proxy rotation", "Encrypted storage"],
   },
 ]
 
-export const devCard = {
-  icon: "🧠",
-  title: "Development & Build",
-  href: "https://github.com/thyimpaler",
-  pills: ["Phantom Bot Developer", "Head of NFT Dev ($CHAD)", "OmniSync (In Progress)"],
+export const moderationStack = [
+  "Carl-bot",
+  "Wick",
+  "Rose",
+  "Safeguard",
+  "Raidder",
+  "RBAC",
+  "Discord",
+  "Telegram",
+]
+
+/**
+ * Trading. Stated plainly, including the models no longer in use — dropping
+ * a method is more credible than listing every one ever touched.
+ */
+export const trading = {
+  since: "2024",
+  primary: ["Memecoins", "Perpetuals"],
+  methods: ["Chart reading", "Orderflow", "Liquidity-based strategy"],
+  retired: ["ICT", "SMT models"],
 }
+
+export type Project = {
+  name: string
+  blurb: string
+  language: string
+  href: string
+}
+
+/** Pinned from github.com/thyimpaler. */
+export const projects: Project[] = [
+  {
+    name: "CIPV1",
+    blurb:
+      "Turns crypto research into automated trades — AI-assisted analysis, multi-exchange aggregation and real-time execution.",
+    language: "JavaScript",
+    href: "https://github.com/thyimpaler/CIPV1",
+  },
+  {
+    name: "csc1",
+    blurb:
+      "Crypto dashboard on live Binance data: probability scoring, correlation analysis and order-book depth tracking.",
+    language: "JavaScript",
+    href: "https://github.com/thyimpaler/csc1",
+  },
+  {
+    name: "ZenCode",
+    blurb: "Voice your code, watch it stream to your phone, approve with a glow.",
+    language: "HTML",
+    href: "https://github.com/thyimpaler/ZenCode",
+  },
+  {
+    name: "omni-sync",
+    blurb: "Cross-platform sync tooling. In progress.",
+    language: "JavaScript",
+    href: "https://github.com/thyimpaler/omni-sync",
+  },
+]
+
+export const githubUrl = "https://github.com/thyimpaler"
 
 export const tickerItems = [
-  "Community Architecture",
-  "Anti-FUD Operations",
-  "Bot Security",
-  "Viral Growth Coordination",
-  "DeFi Moderation",
-  "Sentiment Management",
-  "Discord Strategy",
-  "Telegram Operations",
-  "Signal Architecture",
-  "24/7 Uptime",
+  "Community Operations",
+  "Bot Development",
+  "Anti-FUD",
+  "Memecoin Trading",
+  "Discord Security",
+  "Telegram Bots",
+  "Orderflow",
+  "Perps",
+  "NFT Ecosystems",
+  "Shipping",
 ]
 
 export const contacts = [
   {
     id: "email",
-    label: "Gmail",
+    label: "thyimpal3r@gmail.com",
     href: "mailto:thyimpal3r@gmail.com",
     path: "M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z",
   },
@@ -197,5 +218,11 @@ export const contacts = [
     label: "@Thy_Impaler",
     href: "https://x.com/Thy_Impaler",
     path: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
+  },
+  {
+    id: "github",
+    label: "github.com/thyimpaler",
+    href: "https://github.com/thyimpaler",
+    path: "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12",
   },
 ]

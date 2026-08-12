@@ -9,9 +9,11 @@ export function ScrollProgress() {
   })
 
   return (
+    // A hairline, not a 3px gradient bar — the indicator should be findable
+    // when looked for and invisible otherwise.
     <motion.div
       style={{ scaleX }}
-      className="bg-gradient-hero fixed inset-x-0 top-0 z-200 h-[3px] origin-left"
+      className="fixed inset-x-0 top-0 z-200 h-px origin-left bg-[var(--brand-gold)]/70"
     />
   )
 }
