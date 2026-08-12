@@ -52,7 +52,7 @@ export function Projects() {
           href={githubUrl}
           target="_blank"
           rel="noreferrer"
-          className="group inline-flex items-center gap-3 text-[15px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+          className="group -my-3 inline-flex items-center gap-3 py-3 text-[15px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
         >
           <span className="relative">
             Everything else on GitHub

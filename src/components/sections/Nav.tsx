@@ -29,7 +29,10 @@ export function Nav() {
       <nav className="flex items-center justify-between px-[var(--section-edge)] py-[clamp(14px,1.8vw,22px)]">
         <a
           href="#hero"
-          className="font-[family-name:var(--font-display)] text-[17px] leading-none text-[var(--ink-strong)] transition-colors duration-300 hover:text-[var(--brand-gold)]"
+          /* py/-my pairs expand the touch area to ~44px without moving
+             anything — small text links are otherwise ~17px tall, well under
+             the minimum comfortable tap size on a phone. */
+          className="font-[family-name:var(--font-display)] -my-3 inline-flex items-center py-3 text-[17px] leading-none text-[var(--ink-strong)] transition-colors duration-300 hover:text-[var(--brand-gold)]"
         >
           Thy<span className="italic">Impaler</span>
         </a>
@@ -47,17 +50,17 @@ export function Nav() {
             <a
               key={item.href}
               href={item.href}
-              className="font-mono-ui hidden text-[11px] uppercase tracking-[0.16em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)] sm:block"
+              className="font-mono-ui -my-3 hidden items-center py-3 text-[11px] uppercase tracking-[0.16em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)] sm:inline-flex"
             >
               <ScrambleText text={item.label} />
             </a>
           ))}
           <a
             href="#contact"
-            className="group font-mono-ui relative text-[11px] uppercase tracking-[0.16em] text-[var(--ink-strong)]"
+            className="group font-mono-ui relative -my-3 inline-flex items-center py-3 text-[11px] uppercase tracking-[0.16em] text-[var(--ink-strong)]"
           >
             <ScrambleText text="Contact" />
-            <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-[var(--brand-gold)] transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:origin-left group-hover:scale-x-100" />
+            <span className="absolute bottom-2 left-0 h-px w-full origin-right scale-x-0 bg-[var(--brand-gold)] transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:origin-left group-hover:scale-x-100" />
           </a>
         </div>
       </nav>

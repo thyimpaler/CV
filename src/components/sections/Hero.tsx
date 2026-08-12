@@ -75,7 +75,7 @@ export function Hero() {
               </a>
               <a
                 href="#experience"
-                className="group relative text-[14px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+                className="group relative -my-3 inline-flex items-center py-3 text-[14px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
               >
                 Selected work
                 <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:origin-left group-hover:scale-x-100" />
@@ -109,8 +109,12 @@ export function Hero() {
         {/* Drifts a few pixels against the cursor. Far too small to notice
             directly — it registers as the page having depth rather than as
             an effect, which is the point. */}
+        {/* 19.5vw is ~250px on desktop but only ~76px on a phone, where it
+            read as a small clipped word rather than a deliberate bleed. Phones
+            get a much larger ratio so the wordmark still fills the base of the
+            composition and absorbs the vertical space short copy leaves. */}
         <span
-          className="block whitespace-nowrap text-center font-[family-name:var(--font-display)] text-[19.5vw] leading-[0.8] tracking-[-0.055em] text-[var(--ink-strong)] opacity-[0.11]"
+          className="block whitespace-nowrap text-center font-[family-name:var(--font-display)] text-[26vw] leading-[0.8] tracking-[-0.055em] text-[var(--ink-strong)] opacity-[0.11] sm:text-[19.5vw]"
           style={{
             translate: `${pointer.x * -26}px calc(26% + ${pointer.y * -10}px)`,
           }}

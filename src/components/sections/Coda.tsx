@@ -102,13 +102,13 @@ export function Coda() {
           href="https://giphy.com/gifs/loop-infinite-xT0BKumCMrUb0dCypa"
           target="_blank"
           rel="noreferrer"
-          className="font-mono-ui text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] opacity-70 transition-opacity duration-300 hover:opacity-100"
+          className="font-mono-ui -my-3 inline-flex min-h-[44px] items-center py-3 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] opacity-70 transition-opacity duration-300 hover:opacity-100"
         >
           Artwork — Doze Studio
         </a>
         <a
           href="#hero"
-          className="font-mono-ui group inline-flex items-center gap-2 text-[11px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+          className="font-mono-ui group -my-3 inline-flex items-center gap-2 py-3 text-[11px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
         >
           <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5">
             ↑
