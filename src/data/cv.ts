@@ -6,6 +6,8 @@ export type Experience = {
   href?: string
   /** Where `sub` points, when the chain/parent has its own site. */
   subHref?: string
+  /** Project mascot / token art, shown as a small plate on the row. */
+  art?: string
   period: string
   status: "Active" | "Closed" | "Ended"
   dev?: boolean
@@ -49,6 +51,9 @@ export const experiences: Experience[] = [
   {
     role: "Moderator",
     project: "$CHAD",
+    sub: "Memecoin · BESC Hyperchain",
+    subHref: "https://bescfinancial.com",
+    art: "/art-chad.jpg",
     period: "Feb 2026 — Present",
     status: "Active",
     impact: "Day-to-day moderation and new-member onboarding.",
@@ -57,6 +62,7 @@ export const experiences: Experience[] = [
   {
     role: "Developer & Admin",
     project: "Phantom CTO",
+    art: "/art-phantom.jpg",
     period: "Apr 2026 — Jun 2026",
     status: "Ended",
     dev: true,

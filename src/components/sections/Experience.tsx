@@ -81,6 +81,19 @@ export function Experience() {
 
               {/* Project + role */}
               <div className="order-1 md:order-none md:text-right">
+                {/* Token art as a small plate. Desaturated at rest so five of
+                    them down the page stay quiet, resolving to full colour on
+                    hover — the same treatment the avatar gets, so the page has
+                    one way of handling images rather than three. */}
+                {exp.art ? (
+                  <img
+                    src={exp.art}
+                    alt=""
+                    loading="lazy"
+                    className="mb-3 h-11 w-11 rounded-[3px] object-cover grayscale transition-all duration-700 [transition-timing-function:var(--ease-core)] group-hover/row:grayscale-0 md:ml-auto"
+                  />
+                ) : null}
+
                 <span className="inline-flex items-baseline gap-2">
                   <span className="font-[family-name:var(--font-display)] text-[clamp(21px,2.2vw,32px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover/row:text-[var(--brand-gold)]">
                     {exp.project}
