@@ -27,6 +27,15 @@ export function useMagnetic<T extends HTMLElement>(strength = 0.32, radius = 90)
     const el = ref.current
     if (!el || prefersReducedMotion()) return
 
+    // Give the element its own compositing layer up front. Without this the
+    // browser re-rasterises it (and anything blended beneath it) on every
+    // frame of movement, which shows up as smearing/ghost trails on some
+    // GPUs. translate3d rather than the `translate` property for the same
+    // reason — and because `translate` collides with Tailwind's
+    // hover:-translate-y utility, where transform composes with it.
+    el.style.willChange = "transform"
+    el.style.backfaceVisibility = "hidden"
+
     let frame = 0
     const onMove = (e: PointerEvent) => {
       const rect = el.getBoundingClientRect()
@@ -42,16 +51,18 @@ export function useMagnetic<T extends HTMLElement>(strength = 0.32, radius = 90)
       frame = requestAnimationFrame(() => {
         if (dist < reach) {
           const falloff = 1 - dist / reach
-          el.style.translate = `${dx * strength * falloff}px ${dy * strength * falloff}px`
+          const x = dx * strength * falloff
+          const y = dy * strength * falloff
+          el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`
         } else {
-          el.style.translate = "0px 0px"
+          el.style.transform = "translate3d(0,0,0)"
         }
       })
     }
 
     const onLeave = () => {
       cancelAnimationFrame(frame)
-      el.style.translate = "0px 0px"
+      el.style.transform = "translate3d(0,0,0)"
     }
 
     window.addEventListener("pointermove", onMove, { passive: true })
