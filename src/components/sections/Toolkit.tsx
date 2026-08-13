@@ -44,10 +44,10 @@ function PillRow({ items }: { items: PillItem[] }) {
                 target="_blank"
                 rel="noreferrer"
                 style={style}
-                className={`${base} group/pill hover:!rotate-0 hover:!translate-y-0 hover:border-[var(--brand-gold)]/50 hover:text-[var(--ink-strong)]`}
+                className={`${base} group/pill hover:!rotate-0 hover:!translate-y-0 hover:border-[var(--brand-blood)]/50 hover:text-[var(--ink-strong)]`}
               >
                 {label}
-                <span className="text-[0.7em] text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover/pill:translate-x-0.5 group-hover/pill:text-[var(--brand-gold)]">
+                <span className="text-[0.7em] text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover/pill:translate-x-0.5 group-hover/pill:text-[var(--brand-blood)]">
                   ↗
                 </span>
               </a>
@@ -102,7 +102,7 @@ export function Toolkit() {
               const body = (
                 <>
                   {Icon ? (
-                    <Icon className="h-7 w-7 text-[var(--ink)] transition-colors duration-500 group-hover/chain:text-[var(--brand-gold)]" />
+                    <Icon className="h-7 w-7 text-[var(--ink)] transition-colors duration-500 group-hover/chain:text-[var(--brand-blood)]" />
                   ) : null}
                   <span className="text-[12px] text-[var(--ink-mute)] transition-colors duration-500 group-hover/chain:text-[var(--ink-strong)]">
                     {chain.label}

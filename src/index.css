@@ -13,7 +13,7 @@
     --font-heading: var(--font-display);
 
     /* brand palette exposed to tailwind utilities */
-    --color-brand-gold: var(--brand-gold);
+    --color-brand-blood: var(--brand-blood);
     --color-brand-orange: var(--brand-orange);
     --color-brand-red: var(--brand-red);
     --color-brand-purple: var(--brand-purple);
@@ -58,7 +58,10 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ── Dark amber theme (default & only theme) ──────────── */
+/* ── Blood theme (default & only theme) ────────────────
+   Vlad the Impaler is where the handle comes from, so the accent is
+   blood rather than amber. Same discipline as before: near-monochrome,
+   one accent, spent on hover states and single words only. */
 :root {
     /* ---- Motion ------------------------------------------------------
        One core ease for everything (easeOutQuint) and one spring for
@@ -89,10 +92,10 @@
     /* ---- Colour -------------------------------------------------------
        Near-monochrome with a single accent. The accent is a highlight,
        never a fill for large areas — that restraint is the whole trick. */
-    --brand-gold: #FFC400;
-    --brand-orange: #FF8C00;
-    --brand-red: #E85D04;
-    --brand-purple: #8B5CF6;
+    --brand-blood: #E63946;
+    --brand-deep: #8E1620;
+    --brand-rust: #7A0F17;
+    --brand-bone: #E8E2D9;
 
     --ink-strong: #F4F4F5;
     --ink: #B2B2BA;
@@ -104,16 +107,16 @@
     --line: rgba(255, 255, 255, 0.10);
     --line-soft: rgba(255, 255, 255, 0.055);
 
-    --gradient-hero: linear-gradient(135deg, #FFD000 0%, #FF8C00 55%, #E85D04 100%);
-    --gradient-subtle: linear-gradient(135deg, #FFD000 0%, #FF8C00 40%, #E85D04 70%, #8B5CF6 100%);
+    --gradient-hero: linear-gradient(135deg, #E63946 0%, #8E1620 60%, #4A0A10 100%);
+    --gradient-subtle: linear-gradient(135deg, #E63946 0%, #8E1620 55%, #2A060A 100%);
 
-    --background: #060606;
+    --background: #070506;
     --foreground: #f4f4f5;
     --card: #0b0b0d;
     --card-foreground: #f4f4f5;
     --popover: #0b0b0d;
     --popover-foreground: #f4f4f5;
-    --primary: #FFC400;
+    --primary: #E63946;
     --primary-foreground: #0a0a0a;
     --secondary: #161618;
     --secondary-foreground: #f4f4f5;
@@ -124,21 +127,21 @@
     --destructive: oklch(0.704 0.191 22.216);
     --border: #1d1d20;
     --input: #1d1d20;
-    --ring: #FFC400;
-    --chart-1: #FFD000;
-    --chart-2: #FF8C00;
-    --chart-3: #E85D04;
-    --chart-4: #8B5CF6;
+    --ring: #E63946;
+    --chart-1: #E63946;
+    --chart-2: #8E1620;
+    --chart-3: #7A0F17;
+    --chart-4: #E8E2D9;
     --chart-5: #22C55E;
     --radius: 0.9rem;
     --sidebar: #0b0b0d;
     --sidebar-foreground: #f4f4f5;
-    --sidebar-primary: #FFC400;
+    --sidebar-primary: #E63946;
     --sidebar-primary-foreground: #0a0a0a;
     --sidebar-accent: #1b1b1f;
     --sidebar-accent-foreground: #ffffff;
     --sidebar-border: #1d1d20;
-    --sidebar-ring: #FFC400;
+    --sidebar-ring: #E63946;
 }
 
 @layer base {
@@ -156,7 +159,7 @@
     overflow-x: hidden;
   }
   ::selection {
-    background: rgba(255, 196, 0, 0.3);
+    background: rgba(230, 57, 70, 0.32);
     color: #fff;
   }
   /* Kill mobile tap-highlight flash + keep focus rings clean and offset */
@@ -261,7 +264,7 @@
   height: 150%;
   overflow: visible;
   pointer-events: none;
-  color: var(--brand-gold);
+  color: var(--brand-blood);
 }
 .annot > svg path {
   fill: none;
@@ -304,7 +307,7 @@
      to stay legible against it. */
   background:
     radial-gradient(120% 90% at 50% 6%, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.028) 34%, transparent 62%),
-    radial-gradient(90% 70% at 50% 0%, rgba(255,196,0,0.055), transparent 58%);
+    radial-gradient(90% 70% at 50% 0%, rgba(230,57,70,0.05), transparent 58%);
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 88%);
   mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 88%);
 }
@@ -381,7 +384,7 @@
     border-radius: inherit;
     background: radial-gradient(
       460px circle at var(--mx, 50%) var(--my, -30%),
-      rgba(255, 196, 0, 0.15),
+      rgba(230, 57, 70, 0.15),
       transparent 62%
     );
     opacity: 0;
@@ -395,7 +398,7 @@
     background: radial-gradient(
       460px circle at var(--mx, 50%) var(--my, -30%),
       rgba(139, 92, 246, 0.2),
-      rgba(255, 196, 0, 0.07) 38%,
+      rgba(230, 57, 70, 0.07) 38%,
       transparent 64%
     );
   }

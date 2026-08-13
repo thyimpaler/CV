@@ -32,7 +32,7 @@ export function About() {
         <div className="lg:pt-[clamp(8px,3vw,56px)]">
           <RevealOnScroll>
             <span className="t-eyebrow">
-              <span className="text-[var(--brand-gold)]">00</span>
+              <span className="text-[var(--brand-blood)]">00</span>
               <span className="mx-3 opacity-30">/</span>
               About
             </span>

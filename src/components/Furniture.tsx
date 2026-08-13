@@ -32,7 +32,7 @@ export function RotatingBadge() {
         </text>
       </svg>
       {/* Centre dot — gives the ring something to orbit. */}
-      <span className="absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--brand-gold)]" />
+      <span className="absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--brand-blood)]" />
     </div>
   )
 }

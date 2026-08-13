@@ -28,13 +28,13 @@ export function Projects() {
                 on it. */}
             <Link
               to={`/work/${project.slug}`}
-              className="group flex h-full flex-col border-t border-[var(--line)] pt-7 outline-none transition-colors duration-500 hover:border-[var(--brand-gold)]/50 focus-visible:border-[var(--brand-gold)]"
+              className="group flex h-full flex-col border-t border-[var(--line)] pt-7 outline-none transition-colors duration-500 hover:border-[var(--brand-blood)]/50 focus-visible:border-[var(--brand-blood)]"
             >
               <div className="flex items-start justify-between gap-5">
-                <h3 className="font-[family-name:var(--font-display)] text-[clamp(26px,3vw,44px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-gold)]">
+                <h3 className="font-[family-name:var(--font-display)] text-[clamp(26px,3vw,44px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-blood)]">
                   {project.name}
                 </h3>
-                <span className="mt-1 shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-1 group-hover:text-[var(--brand-gold)]">
+                <span className="mt-1 shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-1 group-hover:text-[var(--brand-blood)]">
                   →
                 </span>
               </div>

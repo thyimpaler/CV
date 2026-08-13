@@ -192,10 +192,10 @@ export function ProjectPage({ slug }: { slug: string }) {
                 to={`/work/${p.slug}`}
                 className="group flex items-center justify-between gap-6 border-b border-[var(--line-soft)] py-[clamp(18px,2.4vw,30px)]"
               >
-                <span className="font-[family-name:var(--font-display)] text-[clamp(20px,2.4vw,34px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-gold)]">
+                <span className="font-[family-name:var(--font-display)] text-[clamp(20px,2.4vw,34px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-blood)]">
                   {p.name}
                 </span>
-                <span className="shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-1 group-hover:text-[var(--brand-gold)]">
+                <span className="shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:translate-x-1 group-hover:text-[var(--brand-blood)]">
                   →
                 </span>
               </Link>

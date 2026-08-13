@@ -25,7 +25,7 @@ export function Footer() {
         <LineReveal
           as="span"
           text="something solid."
-          className="block italic text-[var(--brand-gold)]"
+          className="block italic text-[var(--brand-blood)]"
           stagger={0.06}
           delay={0.1}
         />
@@ -41,22 +41,22 @@ export function Footer() {
               href={contact.href}
               target={contact.href.startsWith("mailto:") ? undefined : "_blank"}
               rel="noreferrer"
-              className="group flex h-full items-center justify-between gap-5 border-b border-[var(--line-soft)] py-[clamp(14px,1.6vw,20px)] pr-2 outline-none focus-visible:ring-1 focus-visible:ring-[var(--brand-gold)]/50"
+              className="group flex h-full items-center justify-between gap-5 border-b border-[var(--line-soft)] py-[clamp(14px,1.6vw,20px)] pr-2 outline-none focus-visible:ring-1 focus-visible:ring-[var(--brand-blood)]/50"
             >
               <span className="flex min-w-0 items-center gap-4">
                 <svg
                   viewBox="0 0 24 24"
                   aria-hidden
-                  className="h-4 w-4 shrink-0 fill-[var(--ink-mute)] transition-colors duration-500 group-hover:fill-[var(--brand-gold)]"
+                  className="h-4 w-4 shrink-0 fill-[var(--ink-mute)] transition-colors duration-500 group-hover:fill-[var(--brand-blood)]"
                 >
                   <path d={contact.path} />
                 </svg>
-                <span className="truncate text-[clamp(14px,1.3vw,17px)] text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-gold)]">
+                <span className="truncate text-[clamp(14px,1.3vw,17px)] text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-blood)]">
                   {contact.label}
                 </span>
               </span>
 
-              <span className="shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--brand-gold)]">
+              <span className="shrink-0 text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--brand-blood)]">
                 ↗
               </span>
             </a>

@@ -40,45 +40,36 @@ export type Experience = {
  * licence to invent it.
  */
 /*
- * Ordered oldest first, by start date — the order things actually happened,
- * so the board reads as a run of chapters rather than a shuffled list.
+ * Ordered most recent first. A CV is read top-down by people who want the
+ * current position first; chronological order buried the newest work at the
+ * bottom of the focus table.
  */
 export const experiences: Experience[] = [
   {
-    role: "Head Moderator",
-    project: "$HENNY",
-    sub: "BESC Hyperchain",
-    subHref: "https://bescfinancial.com",
+    role: "Head of Development",
+    project: "Axyom Sites",
+    period: "Jun 2026 — Aug 2026",
+    status: "Closed",
+    dev: true,
+    impact: "Led the development team until the studio closed.",
+    tags: ["Next.js", "Team lead"],
     lead: {
-      name: "Frontman",
-      role: "Project lead, $HENNY",
-      avatar: "/lead-frontman.jpg",
+      name: "Aazy",
+      role: "CEO, Axyom Sites",
+      // "made maintained" in the original was a slip; the duplicated verb is
+      // the only edit. Wording is otherwise theirs.
       quote:
-        "Impaler really held the team together, from the days we started and till we got the attention on CT, he never showed any lack in his work.",
+        "The dude maintained the websites so well, all our customers were truly satisfied by his work and his quality.",
     },
-    period: "Jan 2026 — Present",
-    status: "Active",
-    impact: "Held the room through a $105K all-time high — the project's peak.",
-    tags: ["Safeguard", "Rose", "BESC"],
   },
   {
-    role: "NFT Dev & Moderator",
-    project: "$CHAD",
-    sub: "Memecoin · BESC Hyperchain",
-    subHref: "https://bescfinancial.com",
-    lead: {
-      name: "Chad",
-      role: "Project lead, $CHAD",
-      avatar: "/lead-chad.jpg",
-      // Capitalisation and punctuation tidied for print; wording is theirs.
-      quote:
-        "We were nervous at first about how the NFTs would even go — this dude made it so much better that all our expectations felt like bare minimum for us.",
-    },
-    period: "Feb 2026 — Present",
+    role: "Moderator",
+    project: "Klein Funding",
+    href: "https://kleinfunding.com",
+    period: "Apr 2026 — Present",
     status: "Active",
-    dev: true,
-    impact: "Shipped the first NFT on BESC Hyperchain — built the data layer that took it live.",
-    tags: ["NFTs", "Carl-bot", "Discord"],
+    impact: "Moderating the community behind a funded-trader programme.",
+    tags: ["Discord", "Telegram"],
   },
   {
     role: "Developer & Admin",
@@ -96,30 +87,40 @@ export const experiences: Experience[] = [
     tags: ["Telegraf", "ethers.js", "SQLite"],
   },
   {
-    role: "Moderator",
-    project: "Klein Funding",
-    href: "https://kleinfunding.com",
-    period: "Apr 2026 — Present",
-    status: "Active",
-    impact: "Eight hours of moderation coverage, daily.",
-    tags: ["Discord", "Telegram"],
+    role: "NFT Dev & Moderator",
+    project: "$CHAD",
+    sub: "Memecoin · BESC Hyperchain",
+    subHref: "https://bescfinancial.com",
+    lead: {
+      name: "Chad",
+      role: "Project lead, $CHAD",
+      avatar: "/lead-chad.jpg",
+      // Capitalisation and punctuation tidied for print; wording is theirs.
+      quote:
+        "We were nervous at first about how the NFTs would even go — this dude made it so much better that all our expectations felt like bare minimum for us.",
+    },
+    period: "Feb 2026 — Jun 2026",
+    status: "Ended",
+    dev: true,
+    impact: "Shipped the first NFT on BESC Hyperchain — built the data layer that took it live.",
+    tags: ["NFTs", "Carl-bot", "Discord"],
   },
   {
-    role: "Head of Development",
-    project: "Axyom Sites",
-    period: "Jun 2026 — Aug 2026",
-    status: "Closed",
-    dev: true,
-    impact: "Led the development team until the studio closed.",
-    tags: ["Next.js", "Team lead"],
+    role: "Head Moderator",
+    project: "$HENNY",
+    sub: "BESC Hyperchain",
+    subHref: "https://bescfinancial.com",
     lead: {
-      name: "Aazy",
-      role: "CEO, Axyom Sites",
-      // "made maintained" in the original was a slip; the duplicated verb is
-      // the only edit. Wording is otherwise theirs.
+      name: "Frontman",
+      role: "Project lead, $HENNY",
+      avatar: "/lead-frontman.jpg",
       quote:
-        "The dude maintained the websites so well, all our customers were truly satisfied by his work and his quality.",
+        "Impaler really held the team together, from the days we started and till we got the attention on CT, he never showed any lack in his work.",
     },
+    period: "Jan 2026 — Present",
+    status: "Active",
+    impact: "Held the room through a $105K all-time high — the project's peak.",
+    tags: ["Safeguard", "Rose", "BESC"],
   },
 ]
 

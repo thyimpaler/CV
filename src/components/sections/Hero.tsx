@@ -49,7 +49,7 @@ export function Hero() {
               <LineReveal
                 as="span"
                 text="pressure."
-                className="block italic text-[var(--brand-gold)]"
+                className="block italic text-[var(--brand-blood)]"
                 immediate
                 stagger={0.055}
                 delay={0.44}
@@ -93,7 +93,18 @@ export function Hero() {
             />
             {/* The availability/channels strip lived here and is gone — the
                 hero says more by saying less, and "available for work" still
-                appears once, at the contact section, where it is actionable. */}
+                appears once, at the contact section, where it is actionable.
+
+                In its place, the setup half of the page's bookend. The coda
+                at the very bottom answers this with "Neither do I." — the
+                opening states a fact about the work, the closing makes it
+                personal, and the Dracula scene sits between the two. */}
+            <p
+              className="mt-[clamp(28px,4vw,44px)] font-[family-name:var(--font-display)] text-[clamp(19px,2vw,28px)] italic leading-tight text-[var(--ink-mute)]"
+              style={{ animation: "fade-rise 0.9s var(--ease-core) 1.15s both" }}
+            >
+              The market never closes.
+            </p>
           </div>
         </div>
       </div>

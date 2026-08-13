@@ -120,7 +120,7 @@ export function Experience() {
                   <span
                     className={`font-mono-ui mt-2 inline-block text-[10px] uppercase tracking-[0.14em] ${
                       exp.status === "Active"
-                        ? "text-[var(--brand-gold)]"
+                        ? "text-[var(--brand-blood)]"
                         : "text-[var(--ink-mute)] opacity-60"
                     }`}
                   >
@@ -166,7 +166,7 @@ export function Experience() {
                       }}
                     >
                       <div className="overflow-hidden">
-                        <figure className="mt-7 border-l border-[var(--brand-gold)]/35 pl-5">
+                        <figure className="mt-7 border-l border-[var(--brand-blood)]/35 pl-5">
                           <blockquote className="font-[family-name:var(--font-display)] text-[clamp(17px,1.8vw,23px)] italic leading-snug text-[var(--ink-strong)]">
                             “{exp.lead.quote}”
                           </blockquote>
@@ -204,7 +204,7 @@ export function Experience() {
                         fontSize: isActive
                           ? "clamp(26px, 2.8vw, 42px)"
                           : "clamp(20px, 2vw, 28px)",
-                        color: isActive ? "var(--brand-gold)" : "var(--ink-strong)",
+                        color: isActive ? "var(--brand-blood)" : "var(--ink-strong)",
                       }}
                     >
                       {exp.project}
@@ -221,7 +221,7 @@ export function Experience() {
                         href={exp.subHref}
                         target="_blank"
                         rel="noreferrer"
-                        className="font-mono-ui mt-1.5 inline-block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--brand-gold)]"
+                        className="font-mono-ui mt-1.5 inline-block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--brand-blood)]"
                       >
                         {exp.sub} ↗
                       </a>
@@ -237,7 +237,7 @@ export function Experience() {
                       href={exp.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group/link font-mono-ui mt-2 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.12em] text-[var(--brand-gold)] transition-opacity duration-500"
+                      className="group/link font-mono-ui mt-2 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.12em] text-[var(--brand-blood)] transition-opacity duration-500"
                       style={{ opacity: isActive ? 0.85 : 0 }}
                       tabIndex={isActive ? 0 : -1}
                     >
