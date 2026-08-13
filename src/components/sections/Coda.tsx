@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { LineReveal } from "@/components/LineReveal"
+import { Star } from "@/components/Furniture"
 
 /**
  * Closing scene. The last thing on the page, after contact.
@@ -96,19 +97,36 @@ export function Coda() {
         />
       </div>
 
-      <div className="relative z-10 mt-[clamp(40px,7vw,90px)] flex w-full flex-wrap items-center justify-between gap-4">
-        <span className="font-mono-ui text-[11px] text-[var(--ink-mute)]">
-          © {new Date().getFullYear()} ThyImpaler
-        </span>
-        <a
-          href="#hero"
-          className="font-mono-ui group -my-3 inline-flex items-center gap-2 py-3 text-[11px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
-        >
-          <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5">
-            ↑
+      {/* Colophon.
+          A bare "© 2026 ThyImpaler" is the default every template ships with
+          and says nothing. This is a ruled three-part strip instead: the
+          wordmark set in the display serif on the left, the four-point mark
+          holding the centre, and the return on the right. No artwork credit —
+          if a credit is ever needed it belongs beside the image, not folded
+          into the closing line. */}
+      <div className="relative z-10 mt-[clamp(40px,7vw,90px)] w-full">
+        <div className="h-px w-full bg-[var(--line-soft)]" />
+
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-[clamp(18px,2.4vw,28px)]">
+          <span className="font-[family-name:var(--font-display)] text-[16px] leading-none text-[var(--ink-mute)]">
+            Thy<span className="italic">Impaler</span>
+            <span className="font-mono-ui ml-3 text-[10px] tracking-[0.14em] opacity-60">
+              {new Date().getFullYear()}
+            </span>
           </span>
-          Back to top
-        </a>
+
+          <Star className="hidden h-2.5 w-2.5 text-[var(--brand-blood)] sm:block" />
+
+          <a
+            href="#hero"
+            className="font-mono-ui group -my-3 inline-flex items-center gap-2 py-3 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+          >
+            <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5">
+              ↑
+            </span>
+            Back to top
+          </a>
+        </div>
       </div>
     </section>
   )
