@@ -8,6 +8,13 @@
  * These are simplified geometric marks rather than the official brand assets:
  * a diamond for Ethereum, stacked bars for Solana, a ring for Base. Close
  * enough to read instantly, and no logo files to license or keep in sync.
+ *
+ * Chains only. Earlier versions also carried marks for "NFTs", "Liquid NFT
+ * Finance" and "Memecoin launches" — a picture frame, a droplet and a smiley
+ * face. Nothing in that set has an established mark, so all three were
+ * invented, and a smiley beside the Ethereum diamond read as clip-art in a
+ * page that avoids exactly that. They are categories of work, not chains, and
+ * are set as text instead.
  */
 
 type IconProps = { className?: string }
@@ -48,40 +55,9 @@ export function BescMark({ className = "" }: IconProps) {
   )
 }
 
-export function NftMark({ className = "" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden className={className} fill="none" stroke="currentColor" strokeWidth="1.6">
-      <rect x="3.5" y="3.5" width="17" height="17" rx="2.4" />
-      <path d="M3.8 15.4 8.6 11l4 3.6 3-2.4 4.6 3.9" strokeLinejoin="round" />
-      <circle cx="9" cy="8.2" r="1.4" />
-    </svg>
-  )
-}
-
-export function LiquidMark({ className = "" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden className={className} fill="none" stroke="currentColor" strokeWidth="1.6">
-      <path d="M12 2.8c3.6 4 5.9 6.9 5.9 9.8a5.9 5.9 0 0 1-11.8 0c0-2.9 2.3-5.8 5.9-9.8Z" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-export function MemecoinMark({ className = "" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden className={className} fill="none" stroke="currentColor" strokeWidth="1.6">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M8.6 9.4h.01M15.4 9.4h.01" strokeLinecap="round" strokeWidth="2.2" />
-      <path d="M8.2 14.2a4.6 4.6 0 0 0 7.6 0" strokeLinecap="round" />
-    </svg>
-  )
-}
-
 export const chainIcons: Record<string, (p: IconProps) => React.ReactElement> = {
   Ethereum: EthereumMark,
   Solana: SolanaMark,
   Base: BaseMark,
   "BESC Hyperchain": BescMark,
-  "Liquid NFT Finance": LiquidMark,
-  NFTs: NftMark,
-  "Memecoin launches": MemecoinMark,
 }

@@ -1,4 +1,4 @@
-import { chains, codingStack, moderationStack, trading } from "@/data/cv"
+import { assetTypes, chains, codingStack, moderationStack, trading } from "@/data/cv"
 import { SectionHeader } from "@/components/SectionHeader"
 import { RevealOnScroll } from "@/components/LineReveal"
 import { chainIcons } from "@/components/ChainIcons"
@@ -92,8 +92,10 @@ export function Toolkit() {
       <div className="mx-auto flex max-w-[1150px] flex-col gap-[clamp(44px,6vw,80px)]">
         {/* Chains carry marks rather than words. This row was the longest on
             the page and most of that length was spelling out things with a
-            recognisable shape. */}
-        <Group title="Chains & ecosystems">
+            recognisable shape. Only real chains appear here — asset types
+            follow as text, because inventing glyphs for them produced
+            clip-art. */}
+        <Group title="Chains">
           <ul className="flex flex-wrap items-center justify-center gap-x-[clamp(18px,3vw,44px)] gap-y-7">
             {chains.map((chain, i) => {
               const Icon = chainIcons[chain.label]
@@ -126,6 +128,19 @@ export function Toolkit() {
                 </li>
               )
             })}
+          </ul>
+
+          {/* Asset types, set as a plain ruled line. No icons: none of these
+              has an established mark, so any glyph would be invented. */}
+          <ul className="mt-9 flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
+            {assetTypes.map((label, i) => (
+              <li key={label} className="flex items-center gap-4">
+                {i > 0 ? (
+                  <span className="h-3 w-px bg-[var(--line)]" aria-hidden />
+                ) : null}
+                <span className="text-[13px] text-[var(--ink-mute)]">{label}</span>
+              </li>
+            ))}
           </ul>
         </Group>
 

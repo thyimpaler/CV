@@ -66,7 +66,14 @@ export const experiences: Experience[] = [
     project: "$CHAD",
     sub: "Memecoin · BESC Hyperchain",
     subHref: "https://bescfinancial.com",
-    lead: { name: "Chad", role: "Project lead, $CHAD", avatar: "/lead-chad.jpg" },
+    lead: {
+      name: "Chad",
+      role: "Project lead, $CHAD",
+      avatar: "/lead-chad.jpg",
+      // Capitalisation and punctuation tidied for print; wording is theirs.
+      quote:
+        "We were nervous at first about how the NFTs would even go — this dude made it so much better that all our expectations felt like bare minimum for us.",
+    },
     period: "Feb 2026 — Present",
     status: "Active",
     dev: true,
@@ -136,19 +143,23 @@ export const stats: Stat[] = [
 export type Pill = { label: string; href?: string }
 
 /**
- * Chains and asset types worked in. Only the ones with a canonical home get a
- * link — "Memecoin launches" has no official website and inventing one would
- * be worse than leaving it inert.
+ * Chains only — things that have a real mark and a canonical home.
+ *
+ * Asset types used to sit in this list too, which meant inventing icons for
+ * "NFTs" and "Memecoin launches". A picture-frame glyph and a smiley face
+ * next to the Ethereum diamond looked exactly like the clip-art the rest of
+ * the page avoids, and implied they were chains. They are categories of work,
+ * so they are set as text below instead.
  */
 export const chains: Pill[] = [
   { label: "Ethereum", href: "https://ethereum.org" },
   { label: "Solana", href: "https://solana.com" },
   { label: "Base", href: "https://base.org" },
   { label: "BESC Hyperchain", href: "https://bescfinancial.com" },
-  { label: "Liquid NFT Finance" },
-  { label: "NFTs" },
-  { label: "Memecoin launches" },
 ]
+
+/** What was actually worked on across those chains. Words, not glyphs. */
+export const assetTypes = ["NFTs", "Liquid NFT Finance", "Memecoin launches"]
 
 /**
  * Stack pulled from the actual dependency manifests across the projects in
