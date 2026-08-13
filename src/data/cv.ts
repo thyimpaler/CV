@@ -68,7 +68,7 @@ export const experiences: Experience[] = [
     href: "https://kleinfunding.com",
     period: "Apr 2026 — Present",
     status: "Active",
-    impact: "Moderating the community behind a funded-trader programme.",
+    impact: "Moderating a 33,000-member community for a funded-trader programme.",
     tags: ["Discord", "Telegram"],
   },
   {

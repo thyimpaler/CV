@@ -4,7 +4,11 @@
   "installCommand": "npm install",
   "framework": "vite",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "//": "Only extensionless paths fall through to the SPA. The previous catch-all rewrote everything, so a missing asset like /dracula.gif returned 200 with index.html instead of 404 — an <img> then received HTML, failed silently, and looked like a caching problem rather than a missing file.",
+      "source": "/((?!.*\\.).*)",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {

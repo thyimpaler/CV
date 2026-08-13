@@ -92,26 +92,38 @@
     /* ---- Colour -------------------------------------------------------
        Near-monochrome with a single accent. The accent is a highlight,
        never a fill for large areas — that restraint is the whole trick. */
-    --brand-blood: #E63946;
-    --brand-deep: #8E1620;
-    --brand-rust: #7A0F17;
-    --brand-bone: #E8E2D9;
+    /* One hue, two jobs.
+       --brand-blood is the real colour: deep and slightly desaturated, used
+       for large display type, rules, borders and glows. A single saturated
+       red doing every job is what made the previous pass read as a Bootstrap
+       error state rather than a palette.
+       Measured on the #0A0708 ground: #B82A38 is 3.27:1, which clears the
+       3:1 large-text/graphics threshold. #A8202D was tried first and looked
+       richer but measures 2.78:1 — under the bar even for 40px display type.
+       --brand-blood-text is the same hue lifted to 5.02:1, used *only* where
+       the accent lands on text under ~20px. Deep reds cannot reach 4.5:1 on
+       a near-black ground, so the alternative was illegible labels. */
+    --brand-blood: #B82A38;
+    --brand-blood-text: #D9505E;
+    --brand-deep: #6E141C;
+    --brand-rust: #4A0C12;
+    --brand-bone: #F0EAE4;
 
-    --ink-strong: #F4F4F5;
-    --ink: #B2B2BA;
+    --ink-strong: #F0EAE4;
+    --ink: #ADA49F;
     /* Raised from #6E6E76: at mono 10–11px with 0.18em tracking, the old
        value sat near 2.6:1 on the background and dropped further over the
        lifted grain field in the hero. Small tracked-out type needs more
        contrast than body copy, not less. */
-    --ink-mute: #8C8C96;
-    --line: rgba(255, 255, 255, 0.10);
-    --line-soft: rgba(255, 255, 255, 0.055);
+    --ink-mute: #8B8078;
+    --line: rgba(240, 234, 228, 0.11);
+    --line-soft: rgba(240, 234, 228, 0.06);
 
     --gradient-hero: linear-gradient(135deg, #E63946 0%, #8E1620 60%, #4A0A10 100%);
     --gradient-subtle: linear-gradient(135deg, #E63946 0%, #8E1620 55%, #2A060A 100%);
 
-    --background: #070506;
-    --foreground: #f4f4f5;
+    --background: #0A0708;
+    --foreground: #F0EAE4;
     --card: #0b0b0d;
     --card-foreground: #f4f4f5;
     --popover: #0b0b0d;
@@ -159,7 +171,7 @@
     overflow-x: hidden;
   }
   ::selection {
-    background: rgba(230, 57, 70, 0.32);
+    background: rgba(168, 32, 45, 0.42);
     color: #fff;
   }
   /* Kill mobile tap-highlight flash + keep focus rings clean and offset */
@@ -307,7 +319,7 @@
      to stay legible against it. */
   background:
     radial-gradient(120% 90% at 50% 6%, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.028) 34%, transparent 62%),
-    radial-gradient(90% 70% at 50% 0%, rgba(230,57,70,0.05), transparent 58%);
+    radial-gradient(90% 70% at 50% 0%, rgba(168,32,45,0.07), transparent 58%);
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 88%);
   mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 88%);
 }

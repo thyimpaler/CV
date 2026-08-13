@@ -120,7 +120,7 @@ export function Experience() {
                   <span
                     className={`font-mono-ui mt-2 inline-block text-[10px] uppercase tracking-[0.14em] ${
                       exp.status === "Active"
-                        ? "text-[var(--brand-blood)]"
+                        ? "text-[var(--brand-blood-text)]"
                         : "text-[var(--ink-mute)] opacity-60"
                     }`}
                   >
@@ -237,7 +237,7 @@ export function Experience() {
                       href={exp.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group/link font-mono-ui mt-2 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.12em] text-[var(--brand-blood)] transition-opacity duration-500"
+                      className="group/link font-mono-ui mt-2 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.12em] text-[var(--brand-blood-text)] transition-opacity duration-500"
                       style={{ opacity: isActive ? 0.85 : 0 }}
                       tabIndex={isActive ? 0 : -1}
                     >
