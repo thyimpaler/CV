@@ -221,7 +221,7 @@ export function Experience() {
                         href={exp.subHref}
                         target="_blank"
                         rel="noreferrer"
-                        className="font-mono-ui mt-1.5 inline-block text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--brand-accent)]"
+                        className="font-mono-ui -my-2.5 mt-1.5 inline-flex min-h-[44px] items-center py-2.5 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--brand-accent)]"
                       >
                         {exp.sub} ↗
                       </a>
@@ -237,7 +237,7 @@ export function Experience() {
                       href={exp.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group/link font-mono-ui mt-2 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.12em] text-[var(--brand-accent)] transition-opacity duration-500"
+                      className="group/link font-mono-ui -my-2.5 mt-2 inline-flex min-h-[44px] items-center gap-2 py-2.5 text-[10px] uppercase tracking-[0.12em] text-[var(--brand-accent)] transition-opacity duration-500"
                       style={{ opacity: isActive ? 0.85 : 0 }}
                       tabIndex={isActive ? 0 : -1}
                     >

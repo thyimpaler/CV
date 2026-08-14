@@ -119,7 +119,7 @@ export function Coda() {
 
           <a
             href="#hero"
-            className="font-mono-ui group -my-3 inline-flex items-center gap-2 py-3 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+            className="font-mono-ui group -my-3 inline-flex min-h-[44px] items-center gap-2 py-3 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
           >
             <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5">
               ↑
