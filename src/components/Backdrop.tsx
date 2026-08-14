@@ -17,7 +17,7 @@ export function Backdrop() {
         className="pointer-events-none fixed inset-0 z-0"
         style={{
           background:
-            "radial-gradient(120% 80% at 50% -10%, rgba(230,57,70,0.05), transparent 55%)",
+            "radial-gradient(120% 80% at 50% -10%, rgba(255,196,0,0.045), transparent 55%)",
         }}
       />
     </>

@@ -56,7 +56,7 @@ export function ScrollProgress() {
       >
         {/* The road ahead, and the ground already covered. */}
         <line x1="0" y1="13" x2="1000" y2="4" stroke="var(--line-soft)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-        <line x1="0" y1="13" x2={x} y2={y} stroke="var(--brand-blood)" strokeWidth="1" opacity="0.75" vectorEffect="non-scaling-stroke" />
+        <line x1="0" y1="13" x2={x} y2={y} stroke="var(--brand-accent)" strokeWidth="1" opacity="0.75" vectorEffect="non-scaling-stroke" />
       </svg>
 
       {/* The boulder is drawn in a second, non-stretched SVG so it stays
@@ -66,7 +66,7 @@ export function ScrollProgress() {
           cx={`${progress * 100}%`}
           cy={y}
           r={r}
-          className="fill-[var(--brand-blood)]"
+          className="fill-[var(--brand-accent)]"
           style={{ transition: "r 0.4s var(--ease-core)" }}
         />
       </svg>

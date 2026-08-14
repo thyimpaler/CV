@@ -40,7 +40,7 @@ export function Ticker() {
               <span className="whitespace-nowrap font-[family-name:var(--font-display)] text-[clamp(22px,2.6vw,40px)] leading-none text-[var(--ink)]">
                 {item}
               </span>
-              <Star className="h-3 w-3 shrink-0 text-[var(--brand-blood)]/70" />
+              <Star className="h-3 w-3 shrink-0 text-[var(--brand-accent)]/70" />
             </span>
           ))}
         </div>

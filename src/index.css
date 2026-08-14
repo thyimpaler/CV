@@ -13,7 +13,7 @@
     --font-heading: var(--font-display);
 
     /* brand palette exposed to tailwind utilities */
-    --color-brand-blood: var(--brand-blood);
+    --color-brand-accent: var(--brand-accent);
     --color-brand-orange: var(--brand-orange);
     --color-brand-red: var(--brand-red);
     --color-brand-purple: var(--brand-purple);
@@ -58,10 +58,10 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ── Blood theme (default & only theme) ────────────────
-   Vlad the Impaler is where the handle comes from, so the accent is
-   blood rather than amber. Same discipline as before: near-monochrome,
-   one accent, spent on hover states and single words only. */
+/* ── Warm amber theme (default & only theme) ───────────
+   Near-monochrome on warm neutrals with a single amber accent, spent on
+   hover states and single words only. The neutrals are the reason this
+   works: the same amber over cold greys read cheap. */
 :root {
     /* ---- Motion ------------------------------------------------------
        One core ease for everything (easeOutQuint) and one spring for
@@ -92,21 +92,19 @@
     /* ---- Colour -------------------------------------------------------
        Near-monochrome with a single accent. The accent is a highlight,
        never a fill for large areas — that restraint is the whole trick. */
-    /* One hue, two jobs.
-       --brand-blood is the real colour: deep and slightly desaturated, used
-       for large display type, rules, borders and glows. A single saturated
-       red doing every job is what made the previous pass read as a Bootstrap
-       error state rather than a palette.
-       Measured on the #0A0708 ground: #B82A38 is 3.27:1, which clears the
-       3:1 large-text/graphics threshold. #A8202D was tried first and looked
-       richer but measures 2.78:1 — under the bar even for 40px display type.
-       --brand-blood-text is the same hue lifted to 5.02:1, used *only* where
-       the accent lands on text under ~20px. Deep reds cannot reach 4.5:1 on
-       a near-black ground, so the alternative was illegible labels. */
-    --brand-blood: #B82A38;
-    --brand-blood-text: #D9505E;
-    --brand-deep: #6E141C;
-    --brand-rust: #4A0C12;
+    /* One accent, one token.
+       Amber measures 12.56:1 on the warm ground, so the same value works at
+       every size — from 10px tracked-out mono labels up to 40px display
+       type. The blood palette needed two tokens because deep reds top out
+       around 3:1 on near-black and could not carry small text; amber has no
+       such ceiling, so the split was removed rather than left as a second
+       variable holding a duplicate value.
+       Note this is not the amber the site started with: that was gold on
+       cold neutral greys (#F4F4F5 / #060606). The warm ground is what makes
+       it read rich rather than sharp. */
+    --brand-accent: #FFC400;
+    --brand-deep: #C98A00;
+    --brand-rust: #8A5E00;
     --brand-bone: #F0EAE4;
 
     --ink-strong: #F0EAE4;
@@ -171,7 +169,7 @@
     overflow-x: hidden;
   }
   ::selection {
-    background: rgba(168, 32, 45, 0.42);
+    background: rgba(255, 196, 0, 0.30);
     color: #fff;
   }
   /* Kill mobile tap-highlight flash + keep focus rings clean and offset */
@@ -276,7 +274,7 @@
   height: 150%;
   overflow: visible;
   pointer-events: none;
-  color: var(--brand-blood);
+  color: var(--brand-accent);
 }
 .annot > svg path {
   fill: none;
@@ -319,7 +317,7 @@
      to stay legible against it. */
   background:
     radial-gradient(120% 90% at 50% 6%, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.028) 34%, transparent 62%),
-    radial-gradient(90% 70% at 50% 0%, rgba(168,32,45,0.07), transparent 58%);
+    radial-gradient(90% 70% at 50% 0%, rgba(255,196,0,0.055), transparent 58%);
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 88%);
   mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 88%);
 }

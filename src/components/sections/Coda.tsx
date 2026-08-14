@@ -76,12 +76,12 @@ export function Coda() {
         </div>
 
         {/* Bloom behind the scene, tied to the accent so the light in the
-            artwork reads blood rather than neutral white. */}
+            artwork reads warm rather than neutral white. */}
         <div
           className="pointer-events-none absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(closest-side at 50% 42%, rgba(230,57,70,0.12), transparent 70%)",
+              "radial-gradient(closest-side at 50% 42%, rgba(255,196,0,0.10), transparent 70%)",
           }}
           aria-hidden
         />
@@ -115,7 +115,7 @@ export function Coda() {
             </span>
           </span>
 
-          <Star className="hidden h-2.5 w-2.5 text-[var(--brand-blood)] sm:block" />
+          <Star className="hidden h-2.5 w-2.5 text-[var(--brand-accent)] sm:block" />
 
           <a
             href="#hero"

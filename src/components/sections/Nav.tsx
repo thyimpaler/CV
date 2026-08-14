@@ -32,7 +32,7 @@ export function Nav() {
           /* py/-my pairs expand the touch area to ~44px without moving
              anything — small text links are otherwise ~17px tall, well under
              the minimum comfortable tap size on a phone. */
-          className="font-[family-name:var(--font-display)] -my-3 inline-flex items-center py-3 text-[17px] leading-none text-[var(--ink-strong)] transition-colors duration-300 hover:text-[var(--brand-blood)]"
+          className="font-[family-name:var(--font-display)] -my-3 inline-flex items-center py-3 text-[17px] leading-none text-[var(--ink-strong)] transition-colors duration-300 hover:text-[var(--brand-accent)]"
         >
           Thy<span className="italic">Impaler</span>
         </a>
@@ -60,7 +60,7 @@ export function Nav() {
             className="group font-mono-ui relative -my-3 inline-flex items-center py-3 text-[11px] uppercase tracking-[0.16em] text-[var(--ink-strong)]"
           >
             <ScrambleText text="Contact" />
-            <span className="absolute bottom-2 left-0 h-px w-full origin-right scale-x-0 bg-[var(--brand-blood)] transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:origin-left group-hover:scale-x-100" />
+            <span className="absolute bottom-2 left-0 h-px w-full origin-right scale-x-0 bg-[var(--brand-accent)] transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:origin-left group-hover:scale-x-100" />
           </a>
         </div>
       </nav>

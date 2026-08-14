@@ -49,7 +49,7 @@ export function Hero() {
               <LineReveal
                 as="span"
                 text="pressure."
-                className="block italic text-[var(--brand-blood)]"
+                className="block italic text-[var(--brand-accent)]"
                 immediate
                 stagger={0.055}
                 delay={0.44}

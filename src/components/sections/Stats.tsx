@@ -19,7 +19,7 @@ export function Stats() {
               style={{ animationDelay: `${i * 0.08}s` }}
             >
               <span className="t-eyebrow block">{stat.hint}</span>
-              <span className="mt-6 block font-[family-name:var(--font-display)] text-[clamp(46px,6vw,86px)] leading-[0.9] tracking-[-0.04em] text-[var(--ink-strong)] transition-colors duration-700 group-hover:text-[var(--brand-blood)]">
+              <span className="mt-6 block font-[family-name:var(--font-display)] text-[clamp(46px,6vw,86px)] leading-[0.9] tracking-[-0.04em] text-[var(--ink-strong)] transition-colors duration-700 group-hover:text-[var(--brand-accent)]">
                 {stat.value}
               </span>
               <span className="mt-4 block text-[14px] text-[var(--ink-mute)]">

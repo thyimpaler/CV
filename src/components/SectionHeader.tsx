@@ -27,7 +27,7 @@ export function SectionHeader({
     <RevealOnScroll className={className}>
       <div className={centred ? "text-center" : ""}>
         <span className="t-eyebrow inline-flex items-center">
-          <span className="text-[var(--brand-blood-text)]">{index}</span>
+          <span className="text-[var(--brand-accent)]">{index}</span>
           <span className="mx-3 opacity-30">/</span>
           {label}
         </span>
