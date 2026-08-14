@@ -19,13 +19,30 @@ export function Nav() {
   }, [])
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-700 [transition-timing-function:var(--ease-core)] ${
-        scrolled
-          ? "border-b border-[var(--line-soft)] bg-[var(--background)]/70 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent"
-      }`}
-    >
+    <header className="fixed inset-x-0 top-0 z-50">
+      {/* Gradient scrim instead of a frosted bar.
+          `backdrop-filter: blur()` samples a rectangular region, and on some
+          GPUs the edge of that sample box renders as a hard lighter band
+          across the page — a seam with no element to explain it. It also
+          forces a re-composite of everything beneath it on every scroll
+          frame, the same cost that caused the earlier smearing.
+
+          A gradient that fades to transparent has no boundary to show and no
+          sampling to do. It also suits the page better: a frosted bar is a
+          chrome affordance, a scrim just keeps the type legible and stays
+          out of the way. */}
+      <div
+        /* Extends past the header so the gradient has room to reach zero —
+           ending it at the header's own edge would reintroduce the hard line
+           this replaces. */
+        className="pointer-events-none absolute inset-x-0 top-0 -bottom-16 -z-10 transition-opacity duration-700 [transition-timing-function:var(--ease-core)]"
+        style={{
+          opacity: scrolled ? 1 : 0,
+          background:
+            "linear-gradient(to bottom, var(--background) 0%, color-mix(in oklab, var(--background), transparent 25%) 55%, transparent 100%)",
+        }}
+        aria-hidden
+      />
       <nav className="flex items-center justify-between px-[var(--section-edge)] py-[clamp(14px,1.8vw,22px)]">
         <a
           href="#hero"
