@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { usePointerWriter } from "@/lib/pointerVars"
 
 /**
  * Argus Panoptes — the hundred-eyed watchman who never closed every eye at
@@ -12,10 +13,10 @@ import { useEffect, useRef, useState } from "react"
  * The motion is reactive on both axes, never ambient:
  *  - Lids open in sequence as the section is reached, so the figure wakes up
  *    because the reader arrived.
- *  - Pupils track the cursor via the shared --px/--py custom properties, so
- *    the tracking costs zero React renders: the compositor moves the iris and
- *    React never hears about the pointer at all. Six eyes each running their
- *    own rAF and state stream was a measurable source of scroll jank.
+ *  - Pupils track the cursor through the shared pointer loop, which writes
+ *    each iris group's transform directly. Zero React renders, and — unlike
+ *    the custom-property version this replaced — the style invalidation is
+ *    scoped to the eyes rather than the whole document.
  *
  * Myth note: when Argus was finally killed his eyes were set into the
  * peacock's tail — the watching outlives the watchman.
@@ -61,14 +62,21 @@ function ArgusEye({ eye, open }: { eye: Eye; open: boolean }) {
   const lid = `M ${x - r} ${y} Q ${x} ${y - h} ${x + r} ${y} Q ${x} ${y + h} ${x - r} ${y} Z`
   const clipId = `argus-clip-${uid.current}`
 
-  // Pupil travel is capped so it never leaves the white. Applied as a CSS
-  // transform off the shared pointer vars rather than recomputed coordinates.
+  // Pupil travel is capped so it never leaves the white.
   const travel = r * 0.3
   const ix = x
   const iy = y
-  const track = {
-    transform: `translate(calc(var(--px, 0) * ${(travel * 2).toFixed(2)}px), calc(var(--py, 0) * ${(travel * 1.4).toFixed(2)}px))`,
-  } as React.CSSProperties
+  const track = useRef<SVGGElement>(null)
+  usePointerWriter(
+    useCallback(
+      ({ x: px, y: py }) => {
+        const el = track.current
+        if (el)
+          el.style.transform = `translate(${(px * travel * 2).toFixed(2)}px, ${(py * travel * 1.4).toFixed(2)}px)`
+      },
+      [travel],
+    ),
+  )
 
   return (
     <g>
@@ -97,7 +105,7 @@ function ArgusEye({ eye, open }: { eye: Eye; open: boolean }) {
           transition: `opacity 0.5s var(--ease-core) ${eye.delay + 0.25}s`,
         }}
       >
-        <g style={track}>
+        <g ref={track}>
         <circle cx={ix} cy={iy} r={r * 0.44} className="fill-[var(--brand-accent)]" />
         <circle cx={ix} cy={iy} r={r * 0.2} fill="#0A0708" />
         {/* Catchlight — the one detail that makes an eye read as wet rather

@@ -20,8 +20,15 @@ import { useEffect, useRef, useState } from "react"
  *     element's transform inside a rAF. Routing 60fps of pointer data
  *     through React state would re-render the whole page on every frame.
  */
+let resolveHot: (() => void) | null = null
+
 export function IrisCursor() {
   const dot = useRef<HTMLDivElement>(null)
+  // Mirrored in a ref so the pointer handler can read it without the effect
+  // depending on it — the effect previously listed `enabled`, so all four
+  // listeners were torn down and re-added the moment it flipped, resetting the
+  // eased position to the viewport centre.
+  const enabledRef = useRef(false)
   const [enabled, setEnabled] = useState(false)
   const [hot, setHot] = useState(false)
   const [down, setDown] = useState(false)
@@ -39,6 +46,7 @@ export function IrisCursor() {
     let running = false
 
     const tick = () => {
+      resolveHot?.()
       // Slight lag: the iris eases toward the pointer rather than pinning to
       // it. Pinned exactly, a custom cursor just looks like a broken native
       // one; a little trail is what reads as deliberate.
@@ -60,15 +68,34 @@ export function IrisCursor() {
       frame = requestAnimationFrame(tick)
     }
 
+    // `closest()` walks the whole ancestor chain, so running it on every
+    // pointermove was a DOM traversal at up to 120Hz. The target is cached and
+    // only re-tested when it actually changes element, inside the rAF.
+    let lastTarget: Element | null = null
+    let pendingTarget: Element | null = null
+
     const onMove = (e: PointerEvent) => {
       x = e.clientX
       y = e.clientY
-      if (!enabled) setEnabled(true)
+      pendingTarget = e.target as Element | null
+      if (!enabledRef.current) {
+        enabledRef.current = true
+        setEnabled(true)
+      }
       start()
+    }
 
-      // Dilate over anything the reader can act on.
-      const t = e.target as Element | null
-      setHot(Boolean(t?.closest?.("a, button, [role=button], input, textarea, select")))
+    // Hoisted so the rAF can resolve hover state without re-walking per event.
+    resolveHot = () => {
+      if (pendingTarget === lastTarget) return
+      lastTarget = pendingTarget
+      setHot(
+        Boolean(
+          pendingTarget?.closest?.(
+            "a, button, [role=button], input, textarea, select",
+          ),
+        ),
+      )
     }
 
     const onDown = () => setDown(true)
@@ -86,9 +113,11 @@ export function IrisCursor() {
       document.removeEventListener("pointerleave", onLeave)
       cancelAnimationFrame(frame)
     }
-  }, [enabled])
+  }, [])
 
-  // Hide the native cursor only once ours is actually on screen.
+  // Hide the native cursor only once ours is actually on screen. This one
+  // *does* depend on `enabled` — it is the listener effect above that must
+  // not, or the listeners are torn down the moment the cursor appears.
   useEffect(() => {
     if (!enabled) return
     document.documentElement.classList.add("iris-cursor-active")

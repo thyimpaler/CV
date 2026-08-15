@@ -238,7 +238,10 @@
   display: inline-block;
   opacity: 0;
   transform: translateY(110%);
-  will-change: transform, opacity;
+  /* No `will-change` here. It was a permanent layer-promotion hint on ~29+
+     text spans, which also disables subpixel antialiasing on all of them.
+     The transition is short and infrequent; promotion is not worth the
+     permanent memory and text-rendering cost. */
   transition:
     transform var(--dur-reveal) var(--ease-core),
     opacity var(--dur-reveal) var(--ease-core);
@@ -295,11 +298,6 @@
   opacity: 0.22;
 }
 
-/* ── Rotating circular badge ───────────────────────────
-   Small persistent furniture. Reads as a brand system operating in the
-   margins rather than another content block.                             */
-@keyframes badge-spin { to { transform: rotate(360deg); } }
-.badge-spin { animation: badge-spin 22s linear infinite; }
 
 /* ── Grain gradient field ──────────────────────────────
    Kaos's hero is a heavy-grain luminance ramp, not an illustration — which
@@ -480,20 +478,6 @@
   to   { background-position: 56px 56px; }
 }
 
-/* Animated ambient grid — fades out toward the edges via a radial mask */
-.grid-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 56px 56px;
-  -webkit-mask-image: radial-gradient(ellipse 75% 60% at 50% 35%, #000 0%, transparent 78%);
-  mask-image: radial-gradient(ellipse 75% 60% at 50% 35%, #000 0%, transparent 78%);
-  animation: grid-pan 36s linear infinite;
-}
 
 /* Subtle film grain for a premium, less-flat finish.
    Promoted to its own layer so a fixed, full-viewport element never

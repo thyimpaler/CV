@@ -1,6 +1,8 @@
 import { LineReveal } from "@/components/LineReveal"
 import { ProgressiveText } from "@/components/ProgressiveText"
+import { useCallback, useRef } from "react"
 import { useMagnetic } from "@/lib/interactions"
+import { usePointerWriter } from "@/lib/pointerVars"
 
 /**
  * Hero built on Kaos's structure rather than pxnz3r's.
@@ -16,6 +18,15 @@ import { useMagnetic } from "@/lib/interactions"
  */
 export function Hero() {
   const cta = useMagnetic<HTMLAnchorElement>(0.28, 80)
+  const wordmark = useRef<HTMLSpanElement>(null)
+
+  // Direct write rather than a root custom property — see lib/pointerVars.
+  usePointerWriter(
+    useCallback(({ x, y }) => {
+      const el = wordmark.current
+      if (el) el.style.translate = `${x * -26}px calc(26% + ${y * -10}px)`
+    }, []),
+  )
 
   return (
     <section
@@ -124,12 +135,9 @@ export function Hero() {
             get a much larger ratio so the wordmark still fills the base of the
             composition and absorbs the vertical space short copy leaves. */}
         <span
+          ref={wordmark}
           className="block whitespace-nowrap text-center font-[family-name:var(--font-display)] text-[26vw] leading-[0.8] tracking-[-0.055em] text-[var(--ink-strong)] opacity-[0.11] sm:text-[19.5vw]"
-          style={{
-            // Reads the shared pointer vars, so the parallax costs no renders.
-            translate:
-              "calc(var(--px, 0) * -26px) calc(26% + (var(--py, 0) * -10px))",
-          }}
+          style={{ translate: "0 26%" }}
         >
           ThyImpaler
         </span>

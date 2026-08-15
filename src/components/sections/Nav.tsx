@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useScrolledPast } from "@/lib/scrollStore"
 import { ScrambleText } from "@/components/ScrambleText"
 
 /**
@@ -9,14 +9,10 @@ import { ScrambleText } from "@/components/ScrambleText"
  * with the headline it sits on top of.
  */
 export function Nav() {
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
+  // Was a raw scroll listener with no rAF throttle, firing setScrolled on
+  // every scroll event. Now derived from the one shared measurement pass.
+  // Boolean selector: this component wakes twice per page, not per frame.
+  const scrolled = useScrolledPast(80)
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">

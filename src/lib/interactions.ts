@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 /**
  * Interaction hooks that make the page respond to the reader.
@@ -36,9 +36,17 @@ export function useMagnetic<T extends HTMLElement>(strength = 0.32, radius = 90)
     el.style.willChange = "transform"
     el.style.backfaceVisibility = "hidden"
 
+    // Cached: reading the rect inside the pointermove handler forced a layout
+    // on every event, up to 120/sec on a high-poll-rate mouse.
+    let rect = el.getBoundingClientRect()
+    const refreshRect = () => {
+      rect = el.getBoundingClientRect()
+    }
+    window.addEventListener("resize", refreshRect, { passive: true })
+    window.addEventListener("scroll", refreshRect, { passive: true })
+
     let frame = 0
     const onMove = (e: PointerEvent) => {
-      const rect = el.getBoundingClientRect()
       const cx = rect.left + rect.width / 2
       const cy = rect.top + rect.height / 2
       const dx = e.clientX - cx
@@ -71,121 +79,11 @@ export function useMagnetic<T extends HTMLElement>(strength = 0.32, radius = 90)
       cancelAnimationFrame(frame)
       window.removeEventListener("pointermove", onMove)
       window.removeEventListener("pointerleave", onLeave)
+      window.removeEventListener("resize", refreshRect)
+      window.removeEventListener("scroll", refreshRect)
     }
   }, [strength, radius])
 
   return ref
 }
 
-/**
- * Scroll velocity, smoothed and clamped.
- *
- * Feeding this into the marquee makes the band surge when the reader flicks
- * the page and settle when they stop — the page acknowledges the scroll
- * instead of ignoring it.
- */
-export function useScrollVelocity(max = 3) {
-  const [velocity, setVelocity] = useState(0)
-
-  useEffect(() => {
-    if (prefersReducedMotion()) return
-
-    let lastY = window.scrollY
-    let current = 0
-    let frame = 0
-    let running = false
-
-    const tick = () => {
-      const y = window.scrollY
-      const delta = y - lastY
-      lastY = y
-      // Ease toward the new delta, then decay toward rest.
-      current += (delta - current) * 0.18
-      current *= 0.92
-      const clamped = Math.max(-max, Math.min(max, current / 12))
-
-      if (Math.abs(clamped) < 0.008) {
-        // Settled — park at exactly rest and stop the loop entirely rather
-        // than burning a frame callback for the life of the page.
-        current = 0
-        setVelocity(0)
-        running = false
-        return
-      }
-
-      setVelocity(clamped)
-      frame = requestAnimationFrame(tick)
-    }
-
-    const start = () => {
-      if (running) return
-      running = true
-      lastY = window.scrollY
-      frame = requestAnimationFrame(tick)
-    }
-
-    window.addEventListener("scroll", start, { passive: true })
-    return () => {
-      window.removeEventListener("scroll", start)
-      cancelAnimationFrame(frame)
-    }
-  }, [max])
-
-  return velocity
-}
-
-/**
- * Normalised pointer position (-0.5 … 0.5 on each axis), smoothed.
- * Used for slow parallax on large background type.
- */
-export function usePointerOffset() {
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
-
-  useEffect(() => {
-    if (prefersReducedMotion()) return
-
-    let target = { x: 0, y: 0 }
-    let current = { x: 0, y: 0 }
-    let frame = 0
-    let running = false
-
-    const tick = () => {
-      current = {
-        x: current.x + (target.x - current.x) * 0.055,
-        y: current.y + (target.y - current.y) * 0.055,
-      }
-      setOffset({ x: current.x, y: current.y })
-
-      // Stop once the eased value has effectively caught up to the pointer.
-      // Without this the loop would run every frame forever, re-rendering
-      // the hero on each one even with the cursor parked.
-      if (
-        Math.abs(target.x - current.x) < 0.0006 &&
-        Math.abs(target.y - current.y) < 0.0006
-      ) {
-        running = false
-        return
-      }
-      frame = requestAnimationFrame(tick)
-    }
-
-    const onMove = (e: PointerEvent) => {
-      target = {
-        x: e.clientX / window.innerWidth - 0.5,
-        y: e.clientY / window.innerHeight - 0.5,
-      }
-      if (!running) {
-        running = true
-        frame = requestAnimationFrame(tick)
-      }
-    }
-
-    window.addEventListener("pointermove", onMove, { passive: true })
-    return () => {
-      window.removeEventListener("pointermove", onMove)
-      cancelAnimationFrame(frame)
-    }
-  }, [])
-
-  return offset
-}

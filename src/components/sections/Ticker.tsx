@@ -1,36 +1,41 @@
+import { useCallback, useRef } from "react"
 import { tickerItems } from "@/data/cv"
 import { Star } from "@/components/Furniture"
-import { useScrollVelocity } from "@/lib/interactions"
+import { useScrollWriter } from "@/lib/scrollStore"
 
 /**
  * Marquee running along a tilted axis.
  *
  * Kaos rotates their repeating band a few degrees off horizontal with a
  * four-point star between repeats. The tilt is the entire trick: a straight
- * marquee is a widget, a tilted one is a composition. It needs generous
- * vertical padding and `overflow-hidden` on the wrapper so the rotated
- * corners don't clip or leak horizontal scroll.
+ * marquee is a widget, a tilted one is a composition.
+ *
+ * The band leans into scroll velocity via a direct style write from the shared
+ * scroll tick. Previously it subscribed to a hook that called setState on
+ * **every frame**, re-rendering 20 spans and 20 SVG stars sixty times a second
+ * and continuing ~1.2s after scrolling stopped — the second-worst source of
+ * jank on the page. Rendering is now completely static.
  */
 export function Ticker() {
+  const band = useRef<HTMLDivElement>(null)
   const items = [...tickerItems, ...tickerItems]
-  const velocity = useScrollVelocity(2.6)
+
+  useScrollWriter(
+    useCallback(({ velocity }) => {
+      if (band.current) band.current.style.rotate = `${-2.4 + velocity * 1.5}deg`
+    }, []),
+  )
 
   return (
     <div className="relative overflow-hidden py-[clamp(48px,8vw,110px)]">
-      {/* The band's tilt responds to scroll velocity: flick the page and it
-          leans into the movement, then settles. The page acknowledging the
-          scroll is what reads as alive — ambient drift does not. */}
       <div
-        className="group border-y border-[var(--line-soft)] bg-[#08080a] py-[clamp(14px,1.8vw,24px)] [transition:rotate_0.5s_var(--ease-core)]"
-        style={{ rotate: `${-2.4 + velocity * 1.5}deg` }}
+        ref={band}
+        className="group border-y border-[var(--line-soft)] bg-[#08080a] py-[clamp(14px,1.8vw,24px)]"
+        style={{ rotate: "-2.4deg", willChange: "rotate" }}
       >
         <div
           className="flex w-max animate-ticker items-center gap-[clamp(24px,3.4vw,52px)] group-hover:[animation-play-state:paused]"
-          style={{
-            animationDuration: "52s",
-            // Words stretch slightly with the surge, like tape being pulled.
-            scale: `${1 + Math.abs(velocity) * 0.03} 1`,
-          }}
+          style={{ animationDuration: "52s" }}
         >
           {items.map((item, i) => (
             <span
