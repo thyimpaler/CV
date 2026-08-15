@@ -3,15 +3,18 @@ import { projectBySlug, projects } from "@/data/cv"
 import { LineReveal, RevealOnScroll } from "@/components/LineReveal"
 import { ProgressiveText } from "@/components/ProgressiveText"
 import { Link, navigate } from "@/lib/router"
+import { ProjectCover, hasCover } from "@/components/ProjectCover"
 
 /**
  * A project's own page, at /work/<slug>.
  *
  * Same type system and rhythm as the CV so it reads as one site rather than a
- * subpage bolted on. Screenshots are not in yet, so the gallery renders
- * labelled empty plates at the correct aspect ratio: the layout is finished
- * and the images drop straight in, and nothing pretends to be a screenshot
- * that isn't one.
+ * subpage bolted on.
+ *
+ * The visual is generated cover art derived from what the project does, not a
+ * screenshot and never labelled as one. Real captures replace it the moment
+ * `shots` is filled in; until then the page has weight without claiming to
+ * show a UI that isn't there.
  */
 export function ProjectPage({ slug }: { slug: string }) {
   const project = projectBySlug(slug)
@@ -131,49 +134,45 @@ export function ProjectPage({ slug }: { slug: string }) {
         </section>
       ) : null}
 
-      {/* Gallery */}
+      {/* Cover art, or real captures once they exist */}
       <section className="section-shell !pt-0">
         <RevealOnScroll>
           <div className="flex items-baseline justify-between gap-6">
-            <span className="t-eyebrow">Screens</span>
-            {!project.shots?.length ? (
+            <span className="t-eyebrow">
+              {project.shots?.length ? "Screens" : "Cover"}
+            </span>
+            {!project.shots?.length && hasCover(project.slug) ? (
               <span className="font-mono-ui text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] opacity-60">
-                Captures pending
+                Generated mark — not a screenshot
               </span>
             ) : null}
           </div>
           <div className="rule-draw mt-5" />
         </RevealOnScroll>
 
-        <div className="mt-[clamp(28px,4vw,52px)] grid gap-[clamp(14px,2vw,26px)] md:grid-cols-2">
-          {(project.shots?.length
-            ? project.shots
-            : [{ src: "", caption: "" }, { src: "", caption: "" }]
-          ).map((shot, i) =>
-            shot.src ? (
-              <RevealOnScroll key={shot.src}>
-                <figure>
-                  <img
-                    src={shot.src}
-                    alt={shot.caption ?? `${project.name} screenshot`}
-                    loading="lazy"
-                    className="w-full rounded-[3px] border border-[var(--line-soft)] object-cover"
-                  />
-                  {shot.caption ? (
-                    <figcaption className="t-eyebrow mt-3">{shot.caption}</figcaption>
-                  ) : null}
-                </figure>
-              </RevealOnScroll>
-            ) : (
-              // Correct aspect ratio, no invented content.
-              <RevealOnScroll key={i}>
-                <div className="flex aspect-[16/10] items-center justify-center rounded-[3px] border border-dashed border-[var(--line-soft)] bg-[#0a0a0c]">
-                  <span className="font-mono-ui text-[10px] uppercase tracking-[0.16em] text-[var(--ink-mute)] opacity-50">
-                    Screenshot
-                  </span>
-                </div>
-              </RevealOnScroll>
-            ),
+        <div className="mt-[clamp(28px,4vw,52px)]">
+          {project.shots?.length ? (
+            <div className="grid gap-[clamp(14px,2vw,26px)] md:grid-cols-2">
+              {project.shots.map((shot) => (
+                <RevealOnScroll key={shot.src}>
+                  <figure>
+                    <img
+                      src={shot.src}
+                      alt={shot.caption ?? `${project.name} screenshot`}
+                      loading="lazy"
+                      className="w-full rounded-[3px] border border-[var(--line-soft)] object-cover"
+                    />
+                    {shot.caption ? (
+                      <figcaption className="t-eyebrow mt-3">{shot.caption}</figcaption>
+                    ) : null}
+                  </figure>
+                </RevealOnScroll>
+              ))}
+            </div>
+          ) : (
+            <RevealOnScroll>
+              <ProjectCover slug={project.slug} />
+            </RevealOnScroll>
           )}
         </div>
       </section>
