@@ -28,7 +28,7 @@ import { usePointerWriter } from "@/lib/pointerVars"
  * figure watches the whole scroll rather than only appearing at the end.
  */
 
-type Eye = { x: number; y: number; r: number; delay: number }
+export type Eye = { x: number; y: number; r: number; delay: number }
 
 // Deterministic constellation. Hand-placed rather than random so the cluster
 // reads as composed — a scatter function put eyes in the corners and left the
@@ -49,7 +49,7 @@ const EYES: Eye[] = [
 
 let clipSeq = 0
 
-function ArgusEye({ eye, open }: { eye: Eye; open: boolean }) {
+export function ArgusEye({ eye, open }: { eye: Eye; open: boolean }) {
   const { x, y, r } = eye
   // Unique per mounted eye. Keying the clipPath id off coordinates alone
   // collided once margin eyes reused the field's positions, and a duplicate
