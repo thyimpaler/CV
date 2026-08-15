@@ -2,6 +2,7 @@ import { projects, githubUrl } from "@/data/cv"
 import { SectionHeader } from "@/components/SectionHeader"
 import { RevealOnScroll } from "@/components/LineReveal"
 import { Link } from "@/lib/router"
+import { WatchingEye } from "@/components/ArgusEyes"
 
 /**
  * Pinned repositories.
@@ -13,7 +14,8 @@ import { Link } from "@/lib/router"
  */
 export function Projects() {
   return (
-    <section id="projects" className="section-shell">
+    <section id="projects" className="section-shell relative">
+      <WatchingEye className="absolute right-[calc(var(--section-edge)/3)] top-[30%] hidden xl:block" size={22} />
       <SectionHeader index="02" label="Selected work" title="Things I've built" className="heading-gap" />
 
       <div className="mx-auto grid max-w-[1150px] gap-x-[clamp(24px,5vw,80px)] gap-y-[clamp(32px,5vw,64px)] md:grid-cols-2">

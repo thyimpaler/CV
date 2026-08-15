@@ -2,6 +2,8 @@ import { assetTypes, chains, codingStack, moderationStack, trading } from "@/dat
 import { SectionHeader } from "@/components/SectionHeader"
 import { RevealOnScroll } from "@/components/LineReveal"
 import { chainIcons } from "@/components/ChainIcons"
+import { WatchingEye } from "@/components/ArgusEyes"
+import { StackIcon } from "@/components/StackIcons"
 
 // Deterministic pseudo-random from the pill's own text, so the scatter is
 // stable across renders and reloads instead of reshuffling on every mount.
@@ -46,13 +48,15 @@ function PillRow({ items }: { items: PillItem[] }) {
                 style={style}
                 className={`${base} group/pill hover:!rotate-0 hover:!translate-y-0 hover:border-[var(--brand-accent)]/50 hover:text-[var(--ink-strong)]`}
               >
+                <StackIcon label={label} className="h-3.5 w-3.5 shrink-0 opacity-55 transition-opacity duration-500 group-hover/pill:opacity-100" />
                 {label}
                 <span className="text-[0.7em] text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover/pill:translate-x-0.5 group-hover/pill:text-[var(--brand-accent)]">
                   ↗
                 </span>
               </a>
             ) : (
-              <span style={style} className={`${base} hover:!rotate-0`}>
+              <span style={style} className={`${base} group/pill hover:!rotate-0`}>
+                <StackIcon label={label} className="h-3.5 w-3.5 shrink-0 opacity-55 transition-opacity duration-500 group-hover/pill:opacity-100" />
                 {label}
               </span>
             )}
@@ -86,7 +90,8 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
  */
 export function Toolkit() {
   return (
-    <section id="toolkit" className="section-shell">
+    <section id="toolkit" className="section-shell relative">
+      <WatchingEye className="absolute left-[var(--section-edge)] top-[14%] hidden lg:block" size={28} />
       <SectionHeader index="03" label="Capabilities" title="What I bring" className="heading-gap" />
 
       <div className="mx-auto flex max-w-[1150px] flex-col gap-[clamp(44px,6vw,80px)]">

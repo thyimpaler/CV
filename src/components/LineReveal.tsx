@@ -39,13 +39,12 @@ export function LineReveal({
     const el = ref.current
     if (!el) return
 
+    // Stays connected rather than disconnecting on first hit, so the reveal
+    // plays in reverse when the element leaves and again when it returns.
+    // The page reads as something that responds to the scroll in both
+    // directions rather than a list that has already fired.
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setRevealed(true)
-          io.disconnect()
-        }
-      },
+      ([entry]) => setRevealed(entry.isIntersecting),
       // Fire a little before the element is fully in view so the motion
       // has finished by the time the reader's eye lands on it.
       { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
@@ -90,12 +89,7 @@ export function RevealOnScroll({
     const el = ref.current
     if (!el) return
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setRevealed(true)
-          io.disconnect()
-        }
-      },
+      ([entry]) => setRevealed(entry.isIntersecting),
       { threshold, rootMargin: "0px 0px -8% 0px" },
     )
     io.observe(el)

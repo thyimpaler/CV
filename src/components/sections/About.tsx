@@ -1,4 +1,5 @@
 import { RevealOnScroll } from "@/components/LineReveal"
+import { WatchingEye } from "@/components/ArgusEyes"
 import { ProgressiveText, Annotate } from "@/components/ProgressiveText"
 
 /**
@@ -10,7 +11,8 @@ import { ProgressiveText, Annotate } from "@/components/ProgressiveText"
  */
 export function About() {
   return (
-    <section id="about" className="section-shell">
+    <section id="about" className="section-shell relative">
+      <WatchingEye className="absolute right-[var(--section-edge)] top-[18%] hidden lg:block" size={30} />
       <div className="grid gap-[clamp(40px,7vw,100px)] lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <RevealOnScroll>
           <figure className="group relative">

@@ -18,8 +18,13 @@ import { usePointerOffset } from "@/lib/interactions"
  *    costs one pointer listener that already exists for the hero parallax.
  *
  * Myth note: when Argus was finally killed his eyes were set into the
- * peacock's tail — the watching outlives the watchman. Hence the eyes stay
- * open once opened; nothing here loops back to sleep.
+ * peacock's tail — the watching outlives the watchman.
+ *
+ * Lids reopen and reclose as the section enters and leaves, matching the rest
+ * of the page's reveals, which run in both scroll directions.
+ *
+ * `WatchingEye` exports a single eye for placing in section margins, so the
+ * figure watches the whole scroll rather than only appearing at the end.
  */
 
 type Eye = { x: number; y: number; r: number; delay: number }
@@ -41,6 +46,8 @@ const EYES: Eye[] = [
   { x: 200, y: 350, r: 12, delay: 1.45 },
 ]
 
+let clipSeq = 0
+
 function ArgusEye({
   eye,
   open,
@@ -53,11 +60,16 @@ function ArgusEye({
   py: number
 }) {
   const { x, y, r } = eye
+  // Unique per mounted eye. Keying the clipPath id off coordinates alone
+  // collided once margin eyes reused the field's positions, and a duplicate
+  // id silently clips the wrong element.
+  const uid = useRef<number>(0)
+  if (uid.current === 0) uid.current = ++clipSeq
   // Almond built from two quadratic arcs. Width 2r, height ~0.72r, which is
   // the ratio that stops it reading as a lemon.
   const h = r * 0.72
   const lid = `M ${x - r} ${y} Q ${x} ${y - h} ${x + r} ${y} Q ${x} ${y + h} ${x - r} ${y} Z`
-  const clipId = `argus-clip-${x}-${y}`
+  const clipId = `argus-clip-${uid.current}`
 
   // Pupil travel is capped so it never leaves the white.
   const travel = r * 0.3
@@ -118,13 +130,9 @@ export function ArgusEyes({ className = "" }: { className?: string }) {
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    // Eyes close again when the section leaves and reopen on return.
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setOpen(true)
-          io.disconnect()
-        }
-      },
+      ([entry]) => setOpen(entry.isIntersecting),
       { threshold: 0.25 },
     )
     io.observe(el)
@@ -143,6 +151,50 @@ export function ArgusEyes({ className = "" }: { className?: string }) {
             py={pointer.y}
           />
         ))}
+      </svg>
+    </div>
+  )
+}
+
+/**
+ * A single eye, for placing in the margin of a section.
+ *
+ * Same lid-opens-on-arrival and pupil-follows-cursor behaviour as the field,
+ * at a size meant to sit at the edge of vision rather than command it. Marked
+ * aria-hidden and pointer-events-none throughout: it is atmosphere, and it
+ * must never intercept a click or announce itself to a screen reader.
+ */
+export function WatchingEye({
+  className = "",
+  size = 34,
+}: {
+  className?: string
+  size?: number
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false)
+  const pointer = usePointerOffset()
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entry]) => setOpen(entry.isIntersecting),
+      { threshold: 0.4 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref} className={`pointer-events-none ${className}`} aria-hidden>
+      <svg viewBox="0 0 100 100" width={size} height={size} className="overflow-visible">
+        <ArgusEye
+          eye={{ x: 50, y: 50, r: 42, delay: 0 }}
+          open={open}
+          px={pointer.x}
+          py={pointer.y}
+        />
       </svg>
     </div>
   )

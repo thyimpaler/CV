@@ -30,13 +30,9 @@ export function ProgressiveText({
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    // Kept connected: the brightening runs backwards on the way up.
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setRevealed(true)
-          io.disconnect()
-        }
-      },
+      ([entry]) => setRevealed(entry.isIntersecting),
       // Starts a little later than a headline reveal — the brightening should
       // track the reader arriving, not finish before they get there.
       { threshold: 0.25, rootMargin: "0px 0px -12% 0px" },

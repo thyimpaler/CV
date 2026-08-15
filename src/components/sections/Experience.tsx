@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { experiences } from "@/data/cv"
 import { SectionHeader } from "@/components/SectionHeader"
 import { RevealOnScroll } from "@/components/LineReveal"
+import { WatchingEye } from "@/components/ArgusEyes"
 
 /**
  * Experience as a vertical focus table.
@@ -76,7 +77,9 @@ export function Experience() {
   }, [])
 
   return (
-    <section id="experience" className="section-shell">
+    <section id="experience" className="section-shell relative">
+      {/* Watching the run of roles from the margin. */}
+      <WatchingEye className="absolute left-[calc(var(--section-edge)/3)] top-[42%] hidden xl:block" size={26} />
       <SectionHeader
         index="01"
         label="Experience"
