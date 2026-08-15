@@ -20,8 +20,10 @@ export function ScrollProgress() {
     let frame = 0
     const update = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight
+      // 0.5% steps — finer than a 1px-tall marker can express anyway.
       const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0
-      setProgress(p)
+      const stepped = Math.round(p * 200) / 200
+      setProgress((prev) => (prev === stepped ? prev : stepped))
       frame = 0
     }
     const onScroll = () => {

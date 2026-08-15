@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-import { usePointerOffset } from "@/lib/interactions"
 
 /**
  * Argus Panoptes — the hundred-eyed watchman who never closed every eye at
@@ -13,9 +12,10 @@ import { usePointerOffset } from "@/lib/interactions"
  * The motion is reactive on both axes, never ambient:
  *  - Lids open in sequence as the section is reached, so the figure wakes up
  *    because the reader arrived.
- *  - Pupils track the cursor. Standing still, it is a static illustration;
- *    move, and it is watching you. That is the entire idea of Argus, and it
- *    costs one pointer listener that already exists for the hero parallax.
+ *  - Pupils track the cursor via the shared --px/--py custom properties, so
+ *    the tracking costs zero React renders: the compositor moves the iris and
+ *    React never hears about the pointer at all. Six eyes each running their
+ *    own rAF and state stream was a measurable source of scroll jank.
  *
  * Myth note: when Argus was finally killed his eyes were set into the
  * peacock's tail — the watching outlives the watchman.
@@ -48,17 +48,7 @@ const EYES: Eye[] = [
 
 let clipSeq = 0
 
-function ArgusEye({
-  eye,
-  open,
-  px,
-  py,
-}: {
-  eye: Eye
-  open: boolean
-  px: number
-  py: number
-}) {
+function ArgusEye({ eye, open }: { eye: Eye; open: boolean }) {
   const { x, y, r } = eye
   // Unique per mounted eye. Keying the clipPath id off coordinates alone
   // collided once margin eyes reused the field's positions, and a duplicate
@@ -71,10 +61,14 @@ function ArgusEye({
   const lid = `M ${x - r} ${y} Q ${x} ${y - h} ${x + r} ${y} Q ${x} ${y + h} ${x - r} ${y} Z`
   const clipId = `argus-clip-${uid.current}`
 
-  // Pupil travel is capped so it never leaves the white.
+  // Pupil travel is capped so it never leaves the white. Applied as a CSS
+  // transform off the shared pointer vars rather than recomputed coordinates.
   const travel = r * 0.3
-  const ix = x + px * travel * 2
-  const iy = y + py * travel * 1.4
+  const ix = x
+  const iy = y
+  const track = {
+    transform: `translate(calc(var(--px, 0) * ${(travel * 2).toFixed(2)}px), calc(var(--py, 0) * ${(travel * 1.4).toFixed(2)}px))`,
+  } as React.CSSProperties
 
   return (
     <g>
@@ -103,6 +97,7 @@ function ArgusEye({
           transition: `opacity 0.5s var(--ease-core) ${eye.delay + 0.25}s`,
         }}
       >
+        <g style={track}>
         <circle cx={ix} cy={iy} r={r * 0.44} className="fill-[var(--brand-accent)]" />
         <circle cx={ix} cy={iy} r={r * 0.2} fill="#0A0708" />
         {/* Catchlight — the one detail that makes an eye read as wet rather
@@ -114,6 +109,7 @@ function ArgusEye({
           fill="#FFFFFF"
           opacity="0.85"
         />
+        </g>
       </g>
 
       {/* Rim, drawn over everything so the lid edge stays crisp */}
@@ -125,7 +121,6 @@ function ArgusEye({
 export function ArgusEyes({ className = "" }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
-  const pointer = usePointerOffset()
 
   useEffect(() => {
     const el = ref.current
@@ -143,13 +138,7 @@ export function ArgusEyes({ className = "" }: { className?: string }) {
     <div ref={ref} className={className}>
       <svg viewBox="0 0 400 400" className="h-full w-full overflow-visible" aria-hidden>
         {EYES.map((eye) => (
-          <ArgusEye
-            key={`${eye.x}-${eye.y}`}
-            eye={eye}
-            open={open}
-            px={pointer.x}
-            py={pointer.y}
-          />
+          <ArgusEye key={`${eye.x}-${eye.y}`} eye={eye} open={open} />
         ))}
       </svg>
     </div>
@@ -173,7 +162,6 @@ export function WatchingEye({
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
-  const pointer = usePointerOffset()
 
   useEffect(() => {
     const el = ref.current
@@ -189,12 +177,7 @@ export function WatchingEye({
   return (
     <div ref={ref} className={`pointer-events-none ${className}`} aria-hidden>
       <svg viewBox="0 0 100 100" width={size} height={size} className="overflow-visible">
-        <ArgusEye
-          eye={{ x: 50, y: 50, r: 42, delay: 0 }}
-          open={open}
-          px={pointer.x}
-          py={pointer.y}
-        />
+        <ArgusEye eye={{ x: 50, y: 50, r: 42, delay: 0 }} open={open} />
       </svg>
     </div>
   )

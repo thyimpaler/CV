@@ -13,6 +13,7 @@ import { Footer } from "@/components/sections/Footer"
 import { Coda } from "@/components/sections/Coda"
 import { ProjectPage } from "@/pages/ProjectPage"
 import { usePath } from "@/lib/router"
+import { usePointerVars } from "@/lib/pointerVars"
 
 function Home() {
   return (
@@ -35,6 +36,8 @@ function Home() {
 
 function App() {
   const path = usePath()
+  // One pointer loop for the page; consumers read --px/--py in CSS.
+  usePointerVars()
   const projectMatch = path.match(/^\/work\/([^/]+)\/?$/)
 
   return (

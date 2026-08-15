@@ -15,6 +15,15 @@ import { WatchingEye } from "@/components/ArgusEyes"
  *
  * Blur scales with distance from centre rather than switching on and off, so
  * neighbours soften gradually instead of snapping between two states.
+ *
+ * Performance note: `filter: blur()` forces a re-rasterisation of the whole
+ * element every time the value changes, and these rows are large. Recomputing
+ * a continuous blur every scroll frame produced 800ms+ frames under CPU
+ * throttling. The distance is therefore quantised to fixed steps, so the blur
+ * changes a handful of times across the section instead of sixty times a
+ * second, and setState is skipped entirely when the quantised values have not
+ * moved. The gradient still reads as continuous because the CSS transition
+ * smooths between steps.
  */
 
 function host(url: string) {
@@ -52,13 +61,22 @@ export function Experience() {
           bestDist = raw
           best = i
         }
-        // Normalise against half the viewport — a row a full half-screen away
-        // is fully receded.
-        return Math.min(1, raw / (window.innerHeight * 0.5))
+        // Normalise against half the viewport, then snap to 1/6ths. Six
+        // discrete blur values across the section is indistinguishable from a
+        // continuous ramp once the CSS transition smooths between them, and
+        // costs a fraction of the rasterisation.
+        const d = Math.min(1, raw / (window.innerHeight * 0.5))
+        return Math.round(d * 6) / 6
       })
 
-      setDistances(reduce ? next.map((_, i) => (i === best ? 0 : 0.4)) : next)
-      setActive(best)
+      const quantised = reduce ? next.map((_, i) => (i === best ? 0 : 0.5)) : next
+      // Skip the render entirely when nothing changed — most scroll frames.
+      setDistances((prev) =>
+        prev.length === quantised.length && prev.every((v, i) => v === quantised[i])
+          ? prev
+          : quantised,
+      )
+      setActive((prev) => (prev === best ? prev : best))
     }
 
     const onScroll = () => {
@@ -102,7 +120,7 @@ export function Experience() {
               style={{
                 // Softens with distance instead of toggling — the whole point
                 // of the effect is the gradient between states.
-                filter: `blur(${(d * 3.2).toFixed(2)}px)`,
+                filter: d === 0 ? "none" : `blur(${(d * 2.4).toFixed(2)}px)`,
                 opacity: 1 - d * 0.62,
               }}
             >

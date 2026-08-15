@@ -30,7 +30,11 @@ export function Backdrop() {
     const measure = () => {
       frame = 0
       const max = document.documentElement.scrollHeight - window.innerHeight
-      setDepth(max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0)
+      // Quantised to 2% steps: the overlays are broad gradients, so a finer
+      // value is invisible but costs a render on every scroll frame.
+      const raw = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0
+      const stepped = Math.round(raw * 50) / 50
+      setDepth((prev) => (prev === stepped ? prev : stepped))
     }
     const onScroll = () => {
       if (frame) return

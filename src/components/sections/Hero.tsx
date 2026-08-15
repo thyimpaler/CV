@@ -1,6 +1,6 @@
 import { LineReveal } from "@/components/LineReveal"
 import { ProgressiveText } from "@/components/ProgressiveText"
-import { useMagnetic, usePointerOffset } from "@/lib/interactions"
+import { useMagnetic } from "@/lib/interactions"
 
 /**
  * Hero built on Kaos's structure rather than pxnz3r's.
@@ -16,7 +16,6 @@ import { useMagnetic, usePointerOffset } from "@/lib/interactions"
  */
 export function Hero() {
   const cta = useMagnetic<HTMLAnchorElement>(0.28, 80)
-  const pointer = usePointerOffset()
 
   return (
     <section
@@ -127,7 +126,9 @@ export function Hero() {
         <span
           className="block whitespace-nowrap text-center font-[family-name:var(--font-display)] text-[26vw] leading-[0.8] tracking-[-0.055em] text-[var(--ink-strong)] opacity-[0.11] sm:text-[19.5vw]"
           style={{
-            translate: `${pointer.x * -26}px calc(26% + ${pointer.y * -10}px)`,
+            // Reads the shared pointer vars, so the parallax costs no renders.
+            translate:
+              "calc(var(--px, 0) * -26px) calc(26% + (var(--py, 0) * -10px))",
           }}
         >
           ThyImpaler
