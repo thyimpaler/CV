@@ -1,5 +1,6 @@
 import { Backdrop } from "@/components/Backdrop"
 import { ScrollProgress } from "@/components/ScrollProgress"
+import { IrisCursor } from "@/components/IrisCursor"
 import { Nav } from "@/components/sections/Nav"
 import { Hero } from "@/components/sections/Hero"
 import { Ticker } from "@/components/sections/Ticker"
@@ -39,6 +40,7 @@ function App() {
   return (
     <>
       <ScrollProgress />
+      <IrisCursor />
       <Backdrop />
       <Nav />
       {projectMatch ? <ProjectPage slug={projectMatch[1]} /> : <Home />}

@@ -134,10 +134,21 @@ export type Stat = {
  * "24/7" and "100% uptime" were removed — nobody moderates 24 hours a day and
  * claiming it undercuts the numbers that are real.
  */
+/**
+ * One figure is pulled out and given a screen of its own. $105K is the pick
+ * because it is an outcome rather than a count — a peak held through the
+ * volatility, backed by the $HENNY testimonial two sections up. "33,000
+ * members" is a bigger number but describes a room, not something done.
+ */
+export const featuredStat: Stat = {
+  value: "$105K",
+  label: "All-time high held through the volatility",
+  hint: "Peak under watch",
+}
+
 export const stats: Stat[] = [
+  { value: "33K", label: "Members moderated", hint: "Klein Funding" },
   { value: "5", label: "Ecosystems", hint: "Communities operated" },
-  { value: "8H", label: "Daily coverage", hint: "Consistent, not claimed" },
-  { value: "$105K", label: "ATH held", hint: "Peak under watch" },
   { value: "2024", label: "Trading since", hint: "Live markets" },
 ]
 
