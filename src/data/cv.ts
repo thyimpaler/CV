@@ -242,8 +242,95 @@ export type Project = {
   shots?: { src: string; caption?: string }[]
 }
 
-/** Pinned from github.com/thyimpaler. */
+/**
+ * Work, newest and strongest first.
+ *
+ * `shots` are real captures of the deployed apps, taken from their live URLs —
+ * not mock-ups. Where a capture would misrepresent the project it is omitted
+ * and `ProjectCover.tsx` draws a generated mark instead:
+ *
+ *  - CryptoIntel renders an onboarding empty state to a signed-out visitor,
+ *    and populating it needs an admin password. The capture is honest about
+ *    what it is rather than being staged.
+ *  - omni-sync serves a login screen, so there is nothing of the product to
+ *    show. It keeps its generated cover.
+ *  - ZenCode has no reachable deploy.
+ */
 export const projects: Project[] = [
+  {
+    slug: "riggk",
+    name: "$RIGGK",
+    blurb:
+      "Penalty-shootout arcade game on Solana — burn tokens for attempts, beat an AI keeper, climb the leaderboard.",
+    detail:
+      "A Phaser game wrapped in React, with wallet connection, a burn shop that trades tokens for attempts, and a leaderboard. The keeper adapts as your streak grows, so the difficulty comes from the opponent rather than from the physics.",
+    language: "JavaScript",
+    stack: ["React", "Phaser", "Zustand", "@solana/web3.js", "Vite"],
+    year: "2026",
+    status: "Shipped",
+    href: "https://github.com/thyimpaler",
+    live: "https://riggk.vercel.app",
+    shots: [{ src: "/shot-riggk.png", caption: "Landing screen — live build" }],
+  },
+  {
+    slug: "henny-run",
+    name: "Henny Run",
+    blurb:
+      "Endless runner in the browser, rendered in 3D — dodge the FUD, collect bones, unlock skins.",
+    detail:
+      "Built with React Three Fiber over a Three.js city scene, with DOM overlays for the HUD, a garage of unlockable skins tied to token holdings, and a generated share card for scores.",
+    language: "JavaScript",
+    stack: ["React Three Fiber", "Three.js", "Zustand", "Vite"],
+    year: "2026",
+    status: "Shipped",
+    href: "https://github.com/thyimpaler",
+    live: "https://henny-run.vercel.app",
+    shots: [{ src: "/shot-henny-run.png", caption: "Home screen — live build" }],
+  },
+  {
+    slug: "axyom",
+    name: "Axyom Sites",
+    blurb:
+      "The studio site for the development team I led, until the studio closed.",
+    detail:
+      "Next.js marketing site with a showcase, pricing and enquiry flow. I owned the technical direction and the shipping cadence across the product suite.",
+    language: "TypeScript",
+    stack: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
+    year: "2026",
+    status: "Archived",
+    href: "https://github.com/thyimpaler/axysites",
+    live: "https://axysites.vercel.app",
+    shots: [{ src: "/shot-axyom.png", caption: "Live site" }],
+  },
+  {
+    slug: "rasm",
+    name: "Rasm",
+    blurb:
+      "Events marketplace — plan an event, book a venue, keep every rasm in one place.",
+    detail:
+      "Next.js and Prisma, with a venue marketplace, planning flow and reviews. Bilingual from the start rather than translated afterwards.",
+    language: "TypeScript",
+    stack: ["Next.js", "Prisma", "PostgreSQL", "Tailwind CSS"],
+    year: "2026",
+    status: "Shipped",
+    href: "https://github.com/thyimpaler",
+    live: "https://rasm-live.vercel.app",
+    shots: [{ src: "/shot-rasm.png", caption: "Live site" }],
+  },
+  {
+    slug: "ansemg",
+    name: "$ANSEMG",
+    blurb: "Token site with live price, market cap and holder count.",
+    detail:
+      "A single-page token site wired to live market data, built to hold up on launch day when traffic and price both move fast.",
+    language: "JavaScript",
+    stack: ["HTML", "CSS", "JavaScript"],
+    year: "2026",
+    status: "Shipped",
+    href: "https://github.com/thyimpaler",
+    live: "https://ansemg.vercel.app",
+    shots: [{ src: "/shot-ansemg.png", caption: "Live site" }],
+  },
   {
     slug: "cipv1",
     name: "CIPV1",
@@ -256,6 +343,13 @@ export const projects: Project[] = [
     year: "2026",
     status: "Shipped",
     href: "https://github.com/thyimpaler/CIPV1",
+    live: "https://cipv-1.vercel.app",
+    shots: [
+      {
+        src: "/shot-cipv1.png",
+        caption: "Live build, signed out — the populated view is behind an admin login",
+      },
+    ],
   },
   {
     slug: "csc1",
@@ -263,17 +357,24 @@ export const projects: Project[] = [
     blurb:
       "Crypto dashboard on live Binance data: probability scoring, correlation analysis and order-book depth tracking.",
     detail:
-      "A live market dashboard built around order flow rather than candles — depth, correlation between pairs, and a probability score per setup, all streaming from Binance.",
+      "A live market dashboard built around order flow rather than candles — depth, correlation between pairs, and a probability score per setup. Shares the CryptoIntel front end with CIPV1.",
     language: "JavaScript",
     stack: ["JavaScript", "Binance API", "WebSockets"],
     year: "2026",
     status: "Shipped",
     href: "https://github.com/thyimpaler/csc1",
+    live: "https://csc1.vercel.app",
+    shots: [
+      {
+        src: "/shot-csc1.png",
+        caption: "Live build, signed out — the populated view is behind an admin login",
+      },
+    ],
   },
   {
     slug: "zencode",
     name: "ZenCode",
-    blurb: "Voice your code, watch it stream to your phone, approve with a glow.",
+    blurb: "Voice your code, watch it stream to your phone, approve with a glance.",
     detail:
       "Speak a change, watch it stream to your phone, approve it with a glance. An experiment in moving code review off the desk and onto the device already in your hand.",
     language: "HTML",
@@ -285,7 +386,7 @@ export const projects: Project[] = [
   {
     slug: "omni-sync",
     name: "omni-sync",
-    blurb: "Cross-platform sync tooling. In progress.",
+    blurb: "Cross-platform state sync. In progress.",
     detail:
       "Keeping state consistent across platforms that were never designed to agree with each other. Still being built.",
     language: "JavaScript",

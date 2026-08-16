@@ -3,6 +3,7 @@ import { SectionHeader } from "@/components/SectionHeader"
 import { RevealOnScroll } from "@/components/LineReveal"
 import { Link } from "@/lib/router"
 import { WatchingEye } from "@/components/ArgusEyes"
+import { ProjectCover } from "@/components/ProjectCover"
 
 /**
  * Pinned repositories.
@@ -32,6 +33,26 @@ export function Projects() {
               to={`/work/${project.slug}`}
               className="group flex h-full flex-col border-t border-[var(--line)] pt-7 outline-none transition-colors duration-500 hover:border-[var(--brand-accent)]/50 focus-visible:border-[var(--brand-accent)]"
             >
+              {/* Real capture of the deployed app where one exists, the
+                  generated mark otherwise. Desaturated at rest so nine of
+                  them down the page stay quiet, resolving on hover — the same
+                  treatment the avatars and token art get, so the page has one
+                  way of handling images rather than three. */}
+              <div className="mb-6 overflow-hidden rounded-[3px] border border-[var(--line-soft)] bg-[#0a0a0c]">
+                {project.shots?.length ? (
+                  <img
+                    src={project.shots[0].src}
+                    alt=""
+                    loading="lazy"
+                    className="aspect-[16/10] w-full object-cover object-top grayscale transition-all duration-700 [transition-timing-function:var(--ease-core)] group-hover:scale-[1.02] group-hover:grayscale-0"
+                  />
+                ) : (
+                  <div className="aspect-[16/10] w-full opacity-70 transition-opacity duration-700 group-hover:opacity-100">
+                    <ProjectCover slug={project.slug} className="h-full !rounded-none !border-0" />
+                  </div>
+                )}
+              </div>
+
               <div className="flex items-start justify-between gap-5">
                 <h3 className="font-[family-name:var(--font-display)] text-[clamp(26px,3vw,44px)] leading-none text-[var(--ink-strong)] transition-colors duration-500 group-hover:text-[var(--brand-accent)]">
                   {project.name}
