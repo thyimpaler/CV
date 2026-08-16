@@ -255,8 +255,56 @@ export type Project = {
  *  - omni-sync serves a login screen, so there is nothing of the product to
  *    show. It keeps its generated cover.
  *  - ZenCode has no reachable deploy.
+ *
+ * The two Telegram bots have no web UI to capture at all. Their images are
+ * reconstructions: the message text and inline keyboards are rendered verbatim
+ * from the definitions in each repo (`src/bot/menus.js` and
+ * `buildDashboardText` for Phantom Bridge, `src/ux/alertUi.ts` for Alpha
+ * Signals), with representative values in place of live data. They are
+ * labelled as reconstructions on the project pages rather than passed off as
+ * captures.
  */
 export const projects: Project[] = [
+  {
+    slug: "phantom-bridge",
+    name: "Phantom Bridge",
+    blurb:
+      "Telegram trading desk for BESC — custodial wallets, cross-chain bridging to BNB and ETH, and a PnL board.",
+    detail:
+      "A Telegraf bot that gives each user a generated wallet and drives the whole flow from inline keyboards: balances, swaps, bridging BESC to BNB or ETH, positions and realised PnL. Keys are encrypted at rest with Fernet, state is in SQLite, and chain calls go through ethers v6. Bridges can strand funds mid-route, so there is a dedicated recovery path for stuck WBESC rather than a support ticket.",
+    language: "JavaScript",
+    stack: ["Telegraf", "ethers v6", "better-sqlite3", "Fernet", "zod", "pngjs"],
+    year: "2026",
+    status: "Shipped",
+    href: "https://github.com/thyimpaler",
+    shots: [
+      {
+        src: "/shot-phantom-bridge.png",
+        caption:
+          "Reconstruction — control center and wallet vault, rendered from the bot's own message and keyboard definitions",
+      },
+    ],
+  },
+  {
+    slug: "alpha-signals",
+    name: "Alpha Signals",
+    blurb:
+      "Watches X for narratives forming, ranks the tokens attached to them, and alerts before the rotation is obvious.",
+    detail:
+      "Reads a curated set of X accounts, groups posts into narratives, then scores each candidate token on liquidity attraction, age and volume against liquidity to pick a main play. Following a narrative subscribes you to stage changes, main-play shifts, continuation moves and saturation warnings, so the alert is a thread rather than a one-off. Free and premium tiers render different screens from the same payload.",
+    language: "TypeScript",
+    stack: ["Telegraf", "X API", "DexScreener", "ethers", "Node"],
+    year: "2026",
+    status: "Shipped",
+    href: "https://github.com/thyimpaler",
+    shots: [
+      {
+        src: "/shot-alpha-signals.png",
+        caption:
+          "Reconstruction — realtime trigger and token ranking, rendered from the bot's own alert templates",
+      },
+    ],
+  },
   {
     slug: "riggk",
     name: "$RIGGK",
