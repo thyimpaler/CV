@@ -27,7 +27,11 @@ export function Hero() {
   usePointerWriter(
     useCallback(({ x, y }) => {
       const el = wordmark.current
-      if (el) el.style.translate = `${x * -26}px calc(26% + ${y * -10}px)`
+      // Phones get a much smaller downward offset. At 26% the word sat almost
+      // entirely below the fold on a 390px screen, leaving a 233px void above
+      // it — 28% of the viewport — and showing a sliver rather than a bleed.
+      const baseY = view.current.w < 640 ? 9 : 26
+      if (el) el.style.translate = `${x * -26}px calc(${baseY}% + ${y * -10}px)`
       // Travel is in viewport units, not a percentage of the lamp's own box.
       // The percentage version moved it +/-365px inside a ~1900px viewport, so
       // the light stayed near the middle no matter where the cursor went and
@@ -231,8 +235,8 @@ export function Hero() {
         <div ref={drift} className="will-change-transform">
           <span
             ref={wordmark}
-            className="block whitespace-nowrap text-center font-[family-name:var(--font-display)] text-[26vw] leading-[0.8] tracking-[-0.055em] text-[var(--ink-strong)] opacity-[0.11] sm:text-[19.5vw]"
-            style={{ translate: "0 26%" }}
+            className="block whitespace-nowrap text-center font-[family-name:var(--font-display)] text-[33vw] leading-[0.8] tracking-[-0.055em] text-[var(--ink-strong)] opacity-[0.11] sm:text-[19.5vw]"
+            style={{ translate: "0 9%" }}
           >
             ThyImpaler
           </span>
