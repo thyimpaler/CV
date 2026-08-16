@@ -5,78 +5,104 @@ import { chainIcons } from "@/components/ChainIcons"
 import { WatchingEye } from "@/components/ArgusEyes"
 import { StackIcon } from "@/components/StackIcons"
 
-// Deterministic pseudo-random from the pill's own text, so the scatter is
-// stable across renders and reloads instead of reshuffling on every mount.
-function jitter(seed: string, spread: number) {
-  let h = 0
-  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0
-  return ((Math.abs(h) % 1000) / 1000 - 0.5) * 2 * spread
-}
-
 type PillItem = string | { label: string; href?: string }
 
 /**
- * Pills straighten and lift on hover. Ones with a destination also get an
- * arrow, so a linked pill is distinguishable from an inert one before you
- * click — the scatter already makes them look interactive, and a pill that
- * looks clickable but isn't is a small lie repeated across the section.
+ * Capabilities as a ruled index rather than a tag cloud.
+ *
+ * The previous version centred ~45 pills in stacked rows and gave each one a
+ * deterministic rotation of up to 6 degrees plus a few pixels of vertical
+ * offset, so the section looked hand-scattered. It did not. At that count and
+ * that size the jitter read as items failing to line up — every row had its
+ * own ragged baseline — and a wall of rounded tags is the least distinctive
+ * pattern a portfolio can use. It also ran 1923px tall for what is, in the
+ * end, a list.
+ *
+ * A left-aligned index fixes all of it at once: the label column gives the eye
+ * a fixed edge to track down, the hairlines do the separating that whitespace
+ * was doing badly, and the whole thing reads as a specimen sheet. Nothing was
+ * cut — every item, link and mark that was here is still here.
  */
-function PillRow({ items }: { items: PillItem[] }) {
+
+/** One item in a row. Linked items are visibly linked before you click. */
+function Item({ item }: { item: PillItem }) {
+  const label = typeof item === "string" ? item : item.label
+  const href = typeof item === "string" ? undefined : item.href
+
+  const body = (
+    <>
+      <StackIcon
+        label={label}
+        className="h-3.5 w-3.5 shrink-0 opacity-40 transition-opacity duration-500 group-hover/i:opacity-100"
+      />
+      {label}
+      {href ? (
+        <span className="text-[0.7em] text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover/i:translate-x-0.5 group-hover/i:text-[var(--brand-accent)]">
+          ↗
+        </span>
+      ) : null}
+    </>
+  )
+
+  const cls =
+    "group/i inline-flex items-center gap-2 text-[clamp(13px,1.15vw,16px)] text-[var(--ink)] transition-colors duration-400 [transition-timing-function:var(--ease-core)] hover:text-[var(--ink-strong)]"
+
   return (
-    <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-3.5">
-      {items.map((item, i) => {
-        const label = typeof item === "string" ? item : item.label
-        const href = typeof item === "string" ? undefined : item.href
-
-        const base =
-          "inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[#0d0d10] px-[clamp(13px,1.4vw,20px)] py-[clamp(7px,0.8vw,12px)] text-[clamp(12px,1.1vw,15px)] text-[var(--ink)] transition-all duration-500 [transition-timing-function:var(--ease-core)]"
-        const style = {
-          rotate: `${jitter(label, 6)}deg`,
-          translate: `0 ${jitter(label + "y", 4)}px`,
-          animation: `fade-rise 0.7s var(--ease-core) ${i * 0.035}s both`,
-        } as React.CSSProperties
-
-        // The jitter lives on the inner element only — applying it to the <li>
-        // as well would compound both rotations.
-        return (
-          <li key={label} className="flex">
-            {href ? (
-              <a
-                href={href}
-                target="_blank"
-                rel="noreferrer"
-                style={style}
-                className={`${base} group/pill hover:!rotate-0 hover:!translate-y-0 hover:border-[var(--brand-accent)]/50 hover:text-[var(--ink-strong)]`}
-              >
-                <StackIcon label={label} className="h-3.5 w-3.5 shrink-0 opacity-55 transition-opacity duration-500 group-hover/pill:opacity-100" />
-                {label}
-                <span className="text-[0.7em] text-[var(--ink-mute)] transition-all duration-500 [transition-timing-function:var(--ease-core)] group-hover/pill:translate-x-0.5 group-hover/pill:text-[var(--brand-accent)]">
-                  ↗
-                </span>
-              </a>
-            ) : (
-              <span style={style} className={`${base} group/pill hover:!rotate-0`}>
-                <StackIcon label={label} className="h-3.5 w-3.5 shrink-0 opacity-55 transition-opacity duration-500 group-hover/pill:opacity-100" />
-                {label}
-              </span>
-            )}
-          </li>
-        )
-      })}
-    </ul>
+    <li>
+      {href ? (
+        // Same py/-my pair as the chains row: these runs are ~20px tall on a
+        // phone, and anything tappable has to clear 44px.
+        <a href={href} target="_blank" rel="noreferrer" className={`${cls} -my-3 py-3`}>
+          {body}
+        </a>
+      ) : (
+        <span className={cls}>{body}</span>
+      )}
+    </li>
   )
 }
 
-function Group({ title, children }: { title: string; children: React.ReactNode }) {
+/**
+ * A row of the index: label on the left, contents on the right, hairline above.
+ * The label sits in its own column so every row starts at the same x — that
+ * shared edge is the whole reason this reads as ordered.
+ */
+function Row({
+  label,
+  note,
+  children,
+}: {
+  label: string
+  note?: string
+  children: React.ReactNode
+}) {
   return (
     <RevealOnScroll>
-      <div className="flex flex-col items-center gap-6 text-center">
-        <h3 className="font-mono-ui text-[10px] uppercase tracking-[0.18em] text-[var(--ink-mute)]">
-          {title}
-        </h3>
-        {children}
+      <div className="group grid gap-x-[clamp(20px,4vw,64px)] gap-y-4 border-t border-[var(--line-soft)] py-[clamp(22px,2.8vw,38px)] md:grid-cols-[minmax(120px,0.22fr)_1fr]">
+        <div>
+          <h3 className="font-mono-ui text-[10px] uppercase tracking-[0.18em] text-[var(--ink-mute)] transition-colors duration-500 group-hover:text-[var(--ink)]">
+            {label}
+          </h3>
+          {note ? (
+            <p className="font-mono-ui mt-2 text-[10px] leading-relaxed text-[var(--ink-mute)] opacity-60">
+              {note}
+            </p>
+          ) : null}
+        </div>
+        <div>{children}</div>
       </div>
     </RevealOnScroll>
+  )
+}
+
+/** Items flow as a single wrapped line, separated by space rather than boxes. */
+function Items({ items }: { items: PillItem[] }) {
+  return (
+    <ul className="flex flex-wrap items-center gap-x-[clamp(16px,2vw,30px)] gap-y-3.5">
+      {items.map((item) => (
+        <Item key={typeof item === "string" ? item : item.label} item={item} />
+      ))}
+    </ul>
   )
 }
 
@@ -84,9 +110,9 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
  * Capabilities, grouped by kind rather than dumped in one heap.
  *
  * The coding stack is taken from the dependency manifests of the actual
- * projects in this portfolio — Next.js, Three.js, ethers, Telegraf,
- * Postgres and the rest are all things that ship in real repos here, not a
- * list of technologies worth being seen with.
+ * projects in this portfolio — Next.js, Three.js, ethers, Telegraf, Postgres
+ * and the rest are all things that ship in real repos here, not a list of
+ * technologies worth being seen with.
  */
 export function Toolkit() {
   return (
@@ -94,35 +120,33 @@ export function Toolkit() {
       <WatchingEye className="absolute left-[var(--section-edge)] top-[14%] hidden lg:block" size={28} />
       <SectionHeader index="03" label="Capabilities" title="What I bring" className="heading-gap" />
 
-      <div className="mx-auto flex max-w-[1150px] flex-col gap-[clamp(44px,6vw,80px)]">
-        {/* Chains carry marks rather than words. This row was the longest on
-            the page and most of that length was spelling out things with a
-            recognisable shape. Only real chains appear here — asset types
-            follow as text, because inventing glyphs for them produced
-            clip-art. */}
-        <Group title="Chains">
-          <ul className="flex flex-wrap items-center justify-center gap-x-[clamp(18px,3vw,44px)] gap-y-7">
-            {chains.map((chain, i) => {
+      <div className="mx-auto max-w-[1150px] border-b border-[var(--line-soft)]">
+        {/* Chains keep their marks. This is the one row where the items have
+            real, recognisable logos, so it earns the extra height that the
+            text rows below do not. */}
+        <Row label="Chains">
+          <ul className="flex flex-wrap items-center gap-x-[clamp(22px,3.2vw,52px)] gap-y-6">
+            {chains.map((chain) => {
               const Icon = chainIcons[chain.label]
               const body = (
                 <>
                   {Icon ? (
-                    <Icon className="h-7 w-7 text-[var(--ink)] transition-colors duration-500 group-hover/chain:text-[var(--brand-accent)]" />
+                    <Icon className="h-6 w-6 shrink-0 text-[var(--ink)] transition-colors duration-500 group-hover/chain:text-[var(--brand-accent)]" />
                   ) : null}
-                  <span className="text-[12px] text-[var(--ink-mute)] transition-colors duration-500 group-hover/chain:text-[var(--ink-strong)]">
+                  <span className="text-[clamp(13px,1.15vw,16px)] text-[var(--ink)] transition-colors duration-500 group-hover/chain:text-[var(--ink-strong)]">
                     {chain.label}
                   </span>
                 </>
               )
-
+              // py/-my pair expands the touch area to 44px without moving
+              // anything. Laying these out in a single row cut them to 24px
+              // tall; the old stacked icon-over-label shape was accidentally
+              // clearing the minimum, and this row is all links.
               const cls =
-                "group/chain flex w-[clamp(74px,9vw,104px)] flex-col items-center gap-2.5 text-center transition-transform duration-500 [transition-timing-function:var(--ease-core)] hover:-translate-y-1"
+                "group/chain -my-2.5 inline-flex items-center gap-2.5 py-2.5 transition-transform duration-500 [transition-timing-function:var(--ease-core)] hover:-translate-y-0.5"
 
               return (
-                <li
-                  key={chain.label}
-                  style={{ animation: `fade-rise 0.7s var(--ease-core) ${i * 0.05}s both` }}
-                >
+                <li key={chain.label}>
                   {chain.href ? (
                     <a href={chain.href} target="_blank" rel="noreferrer" className={cls}>
                       {body}
@@ -134,45 +158,33 @@ export function Toolkit() {
               )
             })}
           </ul>
+        </Row>
 
-          {/* Asset types, set as a plain ruled line. No icons: none of these
-              has an established mark, so any glyph would be invented. */}
-          <ul className="mt-9 flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
-            {assetTypes.map((label, i) => (
-              <li key={label} className="flex items-center gap-4">
-                {i > 0 ? (
-                  <span className="h-3 w-px bg-[var(--line)]" aria-hidden />
-                ) : null}
-                <span className="text-[13px] text-[var(--ink-mute)]">{label}</span>
-              </li>
-            ))}
-          </ul>
-        </Group>
+        {/* No icons: none of these has an established mark, so any glyph would
+            be invented. They were clip-art the one time they had them. */}
+        <Row label="Assets">
+          <Items items={assetTypes} />
+        </Row>
 
         {codingStack.map((group) => (
-          <Group key={group.title} title={group.title}>
-            <PillRow items={group.pills} />
-          </Group>
+          <Row key={group.title} label={group.title}>
+            <Items items={group.pills} />
+          </Row>
         ))}
 
-        <Group title="Moderation stack">
-          <PillRow items={moderationStack} />
-        </Group>
+        <Row label="Moderation">
+          <Items items={moderationStack} />
+        </Row>
 
-        {/* Trading gets its own treatment — the retired methods are listed
-            plainly, because dropping a model reads as more credible than
-            claiming every one ever touched. */}
-        <RevealOnScroll>
-          <div className="flex flex-col items-center gap-6 text-center">
-            <h3 className="font-mono-ui text-[10px] uppercase tracking-[0.18em] text-[var(--ink-mute)]">
-              Trading — since {trading.since}
-            </h3>
-            <PillRow items={[...trading.primary, ...trading.methods]} />
-            <p className="font-mono-ui mt-1 text-[11px] text-[var(--ink-mute)] opacity-70">
-              Previously: {trading.retired.join(", ")} — no longer in use
-            </p>
-          </div>
-        </RevealOnScroll>
+        {/* Trading carries its retired models in the label column — dropping a
+            method reads as more credible than claiming every one ever touched,
+            and it belongs beside the heading, not trailing the list. */}
+        <Row
+          label={`Trading — since ${trading.since}`}
+          note={`Previously ${trading.retired.join(", ")} — no longer in use`}
+        >
+          <Items items={[...trading.primary, ...trading.methods]} />
+        </Row>
       </div>
     </section>
   )
