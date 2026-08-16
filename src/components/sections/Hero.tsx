@@ -97,7 +97,7 @@ export function Hero() {
         /* Centred, not top-42%: the pointer offset is measured from the centre
            of the viewport, so any other rest position adds a constant skew and
            the light never lines up with the hand. */
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[min(86vh,760px)] w-[min(86vw,760px)] -translate-x-1/2 -translate-y-1/2"
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[min(62vh,540px)] w-[min(62vw,540px)] -translate-x-1/2 -translate-y-1/2"
         aria-hidden
       >
         <div
