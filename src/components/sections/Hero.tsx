@@ -87,12 +87,21 @@ export function Hero() {
           lead paragraph, the palest small text in the hero, still clears
           4.5:1.
 
-          Size is a performance budget, not a taste call. At 1250px this layer
-          recomposited over the whole hero on every pointer frame and measured a
-          consistent p95 of 50ms against 33.4ms with it removed, over three
-          interleaved pairs at 4x CPU throttle. Overdraw scales with area, so
-          the box is now 760px and the travel is scaled up to compensate — the
-          light covers the same ground with well under half the pixels. */}
+          Size is a performance budget, not a taste call, and it trades against
+          travel: the further this thing moves per frame, the more of the hero
+          it dirties. Measured by interleaving three ON/OFF pairs at 4x CPU
+          throttle while scrolling and sweeping the pointer at once, comparing
+          against the same page with this element detached:
+
+            1250px, short travel     p95 50.0 vs 33.4 removed   too expensive
+             760px, viewport travel  p95 50.0 vs 33.4 removed   too expensive
+             540px, viewport travel  indistinguishable from removed
+
+          At 540px both conditions read 33.4 on the first run of a fresh
+          browser and ~50 on later ones — an order effect from the machine, not
+          this element. Interleaving matters: a first attempt ran the conditions
+          in sequence and the drift across runs was larger than the effect being
+          measured, which made "removed" look slower than "present". */}
       <div
         /* Centred, not top-42%: the pointer offset is measured from the centre
            of the viewport, so any other rest position adds a constant skew and
