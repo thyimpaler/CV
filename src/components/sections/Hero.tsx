@@ -23,6 +23,30 @@ export function Hero() {
   const lamp = useRef<HTMLDivElement>(null)
   const drift = useRef<HTMLDivElement>(null)
 
+  /**
+   * Measured at render, not in an effect.
+   *
+   * This was initialised to a 1440x900 default and corrected in a useEffect
+   * declared *after* usePointerWriter. React runs effects in declaration
+   * order, so the writer's first paint ran against the desktop default, and
+   * because it only re-runs on `pointermove` — which a touch device never
+   * fires — phones kept the desktop wordmark offset permanently. It looked
+   * correct in dev purely because StrictMode double-invokes effects, so the
+   * second pass happened to run after the measurement.
+   */
+  const view = useRef({
+    w: typeof window === "undefined" ? 1440 : window.innerWidth,
+    h: typeof window === "undefined" ? 900 : window.innerHeight,
+  })
+  useEffect(() => {
+    const measure = () => {
+      view.current = { w: window.innerWidth, h: window.innerHeight }
+    }
+    measure()
+    window.addEventListener("resize", measure, { passive: true })
+    return () => window.removeEventListener("resize", measure)
+  }, [])
+
   // Direct write rather than a root custom property — see lib/pointerVars.
   usePointerWriter(
     useCallback(({ x, y }) => {
@@ -45,17 +69,6 @@ export function Hero() {
       }
     }, []),
   )
-
-  // Cached so the pointer loop never touches `window` per frame.
-  const view = useRef({ w: 1440, h: 900 })
-  useEffect(() => {
-    const measure = () => {
-      view.current = { w: window.innerWidth, h: window.innerHeight }
-    }
-    measure()
-    window.addEventListener("resize", measure, { passive: true })
-    return () => window.removeEventListener("resize", measure)
-  }, [])
 
   // The wordmark lifts as the hero leaves. Parallax on the one element that is
   // already decorative, so the section has depth on the way out as well as
