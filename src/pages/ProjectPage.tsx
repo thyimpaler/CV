@@ -124,17 +124,12 @@ export function ProjectPage({ slug }: { slug: string }) {
         </div>
       </section>
 
-      {project.detail ? (
-        <section className="section-shell !pt-0">
-          <ProgressiveText
-            text={project.detail}
-            className="measure text-[clamp(18px,2vw,26px)] leading-[1.45] text-[var(--ink-strong)]"
-            stagger={0.012}
-          />
-        </section>
-      ) : null}
-
-      {/* Cover art, or real captures once they exist */}
+      {/* Imagery comes before the write-up.
+          It used to sit below it, roughly 1700px down the page. You click a
+          card that is mostly a screenshot and then land on two full screens of
+          type before seeing a single pixel of the thing itself — the card
+          makes a promise the page took too long to keep. The picture leads,
+          the detail explains it afterwards. */}
       <section className="section-shell !pt-0">
         <RevealOnScroll>
           <div className="flex items-baseline justify-between gap-6">
@@ -152,7 +147,14 @@ export function ProjectPage({ slug }: { slug: string }) {
 
         <div className="mt-[clamp(28px,4vw,52px)]">
           {project.shots?.length ? (
-            <div className="grid gap-[clamp(14px,2vw,26px)] md:grid-cols-2">
+            /* Two columns only when there is something to put in the second
+               one. With a single shot the old md:grid-cols-2 left half the row
+               empty and showed the page's best asset at half size. */
+            <div
+              className={`grid gap-[clamp(14px,2vw,26px)] ${
+                project.shots.length > 1 ? "md:grid-cols-2" : ""
+              }`}
+            >
               {project.shots.map((shot) => (
                 <RevealOnScroll key={shot.src}>
                   <figure>
@@ -176,6 +178,16 @@ export function ProjectPage({ slug }: { slug: string }) {
           )}
         </div>
       </section>
+
+      {project.detail ? (
+        <section className="section-shell !pt-0">
+          <ProgressiveText
+            text={project.detail}
+            className="measure text-[clamp(18px,2vw,26px)] leading-[1.45] text-[var(--ink-strong)]"
+            stagger={0.012}
+          />
+        </section>
+      ) : null}
 
       {/* Next projects */}
       <section className="section-shell !pt-0">

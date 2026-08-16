@@ -3,10 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thyimpaler — Web3 Community Architect</title>
-    <meta name="description" content="Thyimpaler — Web3 Community Architect. Discord & Telegram operations specialist for DeFi ecosystems. 24/7 anti-FUD, security architecture, viral growth." />
-    <meta name="theme-color" content="#060606" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9876;</text></svg>" />
+    <title>ThyImpaler — Web3 Community Architect</title>
+    <!-- Matches the wording on the page. The previous description promised
+         "viral growth" and "24/7 anti-FUD", which appears nowhere on the site
+         and is not how any of this work is described. -->
+    <meta name="description" content="Web3 Community Architect and Head of Development. I keep fast-moving crypto communities calm, secure and shipping — five ecosystems across Ethereum, Solana, Base and BESC, plus the bots and role structures that hold them together." />
+    <meta name="theme-color" content="#0A0708" />
+    <link rel="canonical" href="https://www.thyimpaler.xyz/" />
+    <!-- The Argus eye, matching the site. Was a crossed-swords emoji rendered
+         through a data URI, which had nothing to do with anything here. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/og.png" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,10 +23,29 @@
       rel="stylesheet"
     />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="Thyimpaler — Web3 Community Architect" />
-    <meta property="og:description" content="The operational backbone behind some of DeFi's fastest-moving communities." />
+    <!-- Open Graph.
+         `og:image` was missing, which is the whole reason shared links showed
+         no preview: without it most platforms fall back to a bare URL. The URL
+         must be absolute — relative paths are not resolved by crawlers. -->
+    <meta property="og:title" content="ThyImpaler — Web3 Community Architect" />
+    <meta property="og:description" content="I keep fast-moving crypto communities calm, secure and shipping. Five ecosystems across Ethereum, Solana, Base and BESC — plus the bots and role structures that hold them together." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.thyimpaler.xyz/" />
+    <meta property="og:site_name" content="ThyImpaler" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://www.thyimpaler.xyz/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ThyImpaler — Order held under pressure. Web3 Community Architect and Head of Development." />
+
+    <!-- Twitter/X reads its own namespace and ignores og:* for card type.
+         summary_large_image is what produces the full-width preview. -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ThyImpaler — Web3 Community Architect" />
+    <meta name="twitter:description" content="I keep fast-moving crypto communities calm, secure and shipping. Five ecosystems across Ethereum, Solana, Base and BESC." />
+    <meta name="twitter:image" content="https://www.thyimpaler.xyz/og.png" />
+    <meta name="twitter:image:alt" content="ThyImpaler — Order held under pressure." />
   </head>
   <body>
     <div id="root"></div>

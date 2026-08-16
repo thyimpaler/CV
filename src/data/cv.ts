@@ -351,21 +351,6 @@ export const projects: Project[] = [
     shots: [{ src: "/shot-axyom.png", caption: "Live site" }],
   },
   {
-    slug: "rasm",
-    name: "Rasm",
-    blurb:
-      "Events marketplace — plan an event, book a venue, keep every rasm in one place.",
-    detail:
-      "Next.js and Prisma, with a venue marketplace, planning flow and reviews. Bilingual from the start rather than translated afterwards.",
-    language: "TypeScript",
-    stack: ["Next.js", "Prisma", "PostgreSQL", "Tailwind CSS"],
-    year: "2026",
-    status: "Shipped",
-    href: "https://github.com/thyimpaler",
-    live: "https://rasm-live.vercel.app",
-    shots: [{ src: "/shot-rasm.png", caption: "Live site" }],
-  },
-  {
     slug: "ansemg",
     name: "$ANSEMG",
     blurb: "Token site with live price, market cap and holder count.",
