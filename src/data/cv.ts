@@ -252,10 +252,14 @@ export type Project = {
  *  - CryptoIntel renders an onboarding empty state to a signed-out visitor,
  *    and populating it needs an admin password. The capture is honest about
  *    what it is rather than being staged.
- *  - ZenCode has no deploy, so its capture is its own source run locally
- *    against the relay server in the repo. Both halves report "Connected" but
- *    sit at the pairing step, because the populated view needs a live VS Code
- *    session driving it.
+ *  - ZenCode has no deploy, so its image is its own source cloned and run
+ *    against the relay server in the repo, then driven into the review state.
+ *    The reviewing UI is not drawn — desktop `#previewCard` and mobile
+ *    `#mainInterface` ship in the markup and are populated through the same
+ *    fields `handleStreamStart` and `handleStreamEnd` fill. Only the spoken
+ *    instruction and the resulting snippet are representative, because those
+ *    come from a live VS Code session there is no way to stage. Labelled a
+ *    reconstruction, like the two bots.
  *
  * The two Telegram bots have no web UI to capture at all. Their images are
  * reconstructions: the message text and inline keyboards are rendered verbatim
@@ -420,7 +424,7 @@ export const projects: Project[] = [
       {
         src: "/shot-zencode.png",
         caption:
-          "Desk and phone, both live against the repo's own relay server — paired but idle, since the populated view needs a running VS Code session",
+          "Reconstruction — the project's own pages, run against the relay server in its repo and driven into the review state, with a representative instruction and result",
       },
     ],
   },
