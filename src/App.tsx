@@ -1,7 +1,6 @@
 import { Backdrop } from "@/components/Backdrop"
 import { ScrollProgress } from "@/components/ScrollProgress"
 import { IrisCursor } from "@/components/IrisCursor"
-import { EntryGate } from "@/components/EntryGate"
 import { Nav } from "@/components/sections/Nav"
 import { Hero } from "@/components/sections/Hero"
 import { Ticker } from "@/components/sections/Ticker"
@@ -43,7 +42,12 @@ function App() {
 
   return (
     <>
-      <EntryGate />
+      {/* The entry gate is gone. It was a full-screen field of blinking eyes
+          that you had to dismiss before reaching anything, and as a first
+          impression it worked against the site rather than for it. A gate only
+          earns its bounce rate if it is the best thing on the page; this one
+          was not, and the hero it was covering is. Recover it from git history
+          if it is ever wanted back — components/EntryGate.tsx. */}
       <ScrollProgress />
       <IrisCursor />
       <Backdrop />
