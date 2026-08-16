@@ -144,14 +144,18 @@ export function EntryGate() {
         )
       })}
 
+      {/* The whole curtain is the control. Sizing the button to the word
+          "Enter" gave a 51x17px tap target with nothing else on screen
+          responding to a tap — on a phone that is a gate you can miss. The
+          button fills the viewport; the word is just its visible label. */}
       <button
         ref={btn}
         onClick={enter}
         aria-label="Enter the site"
-        className="group absolute bottom-[clamp(48px,10vh,110px)] left-1/2 -translate-x-1/2 outline-none"
+        className="group absolute inset-0 h-full w-full cursor-pointer outline-none"
       >
         <span
-          className="font-mono-ui block text-[11px] uppercase tracking-[0.32em] text-[var(--ink-mute)] transition-colors duration-500 group-hover:text-[var(--ink-strong)] group-focus-visible:text-[var(--ink-strong)]"
+          className="font-mono-ui absolute bottom-[clamp(48px,10vh,110px)] left-1/2 -translate-x-1/2 text-[11px] uppercase tracking-[0.32em] text-[var(--ink-mute)] transition-colors duration-500 group-hover:text-[var(--ink-strong)] group-focus-visible:text-[var(--ink-strong)]"
           style={{
             opacity: opening ? 0 : 1,
             // Arrives after the field has finished waking.
