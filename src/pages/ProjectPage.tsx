@@ -36,7 +36,7 @@ export function ProjectPage({ slug }: { slug: string }) {
         <h1 className="t-h2 mt-6 text-[var(--ink-strong)]">No such project.</h1>
         <Link
           to="/"
-          className="group mt-10 inline-flex items-center gap-3 text-[15px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+          className="group mt-10 -my-3 inline-flex items-center gap-3 py-3 text-[15px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
         >
           <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-x-1">
             ←
@@ -51,11 +51,14 @@ export function ProjectPage({ slug }: { slug: string }) {
 
   return (
     <main className="relative z-10">
-      <section className="section-shell !pt-[clamp(120px,15vh,180px)]">
+      {/* The shell's 260px bottom padding left a near-empty screen between the
+          buttons and the image. The header and the picture are one unit here,
+          so the seam is much tighter than a between-sections gap. */}
+      <section className="section-shell !pb-[clamp(44px,5vw,76px)] !pt-[clamp(120px,15vh,180px)]">
         <RevealOnScroll>
           <Link
             to="/"
-            className="group t-eyebrow inline-flex items-center gap-3 transition-colors duration-300 hover:text-[var(--ink-strong)]"
+            className="group t-eyebrow -my-4 inline-flex items-center gap-3 py-4 transition-colors duration-300 hover:text-[var(--ink-strong)]"
           >
             <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-x-1">
               ←
@@ -64,41 +67,55 @@ export function ProjectPage({ slug }: { slug: string }) {
           </Link>
         </RevealOnScroll>
 
-        <LineReveal
-          as="h1"
-          text={project.name}
-          className="t-h1 mt-[clamp(28px,4vw,52px)] block text-[var(--ink-strong)]"
-          immediate
-          stagger={0.05}
-          delay={0.15}
-        />
+        {/* Statement left, facts right — the hero's composition, so a project
+            page reads as part of the same document rather than a detail view
+            bolted on. The facts used to be a four-across strip under the copy:
+            a dashboard pattern that said nothing, left a wide empty band beside
+            the blurb, and pushed everything below it further down. As rows in
+            the right column they fill that band and carry the same ruled
+            vocabulary as the capabilities index. */}
+        <div className="mt-[clamp(28px,4vw,52px)] grid gap-x-[clamp(24px,5vw,80px)] gap-y-[clamp(28px,4vw,48px)] lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          <div>
+            <LineReveal
+              as="h1"
+              text={project.name}
+              className="t-h1 block text-[var(--ink-strong)]"
+              immediate
+              stagger={0.05}
+              delay={0.15}
+            />
 
-        <ProgressiveText
-          text={project.blurb}
-          className="t-lead measure mt-[clamp(22px,3vw,38px)] text-[var(--ink)]"
-          stagger={0.014}
-          delay={0.4}
-        />
+            <ProgressiveText
+              text={project.blurb}
+              className="t-lead measure mt-[clamp(20px,2.6vw,32px)] text-[var(--ink)]"
+              stagger={0.014}
+              delay={0.4}
+            />
+          </div>
 
-        {/* Facts as a ruled strip rather than a card — same treatment the CV
-            uses for capabilities, so the two pages share a vocabulary. */}
-        <RevealOnScroll className="mt-[clamp(40px,6vw,80px)]">
-          <dl className="grid gap-px border-y border-[var(--line-soft)] bg-[var(--line-soft)] sm:grid-cols-4">
-            {[
-              ["Year", project.year],
-              ["Status", project.status],
-              ["Language", project.language],
-              ["Stack", project.stack?.join(", ") ?? "—"],
-            ].map(([label, value]) => (
-              <div key={label} className="bg-[var(--background)] px-1 py-5 sm:px-4">
-                <dt className="t-eyebrow">{label}</dt>
-                <dd className="mt-2.5 text-[14px] text-[var(--ink-strong)]">{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </RevealOnScroll>
+          <RevealOnScroll className="lg:pt-[clamp(8px,1.6vw,22px)]">
+            <dl className="border-b border-[var(--line-soft)]">
+              {[
+                ["Year", project.year],
+                ["Status", project.status],
+                ["Language", project.language],
+                ["Stack", project.stack?.join(", ") ?? "—"],
+              ].map(([label, value]) => (
+                <div
+                  key={label}
+                  className="group grid grid-cols-[minmax(84px,0.32fr)_1fr] items-baseline gap-4 border-t border-[var(--line-soft)] py-[clamp(12px,1.5vw,18px)]"
+                >
+                  <dt className="t-eyebrow transition-colors duration-500 group-hover:text-[var(--ink)]">
+                    {label}
+                  </dt>
+                  <dd className="text-[14px] leading-relaxed text-[var(--ink-strong)]">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </RevealOnScroll>
+        </div>
 
-        <div className="mt-[clamp(32px,4vw,52px)] flex flex-wrap items-center gap-x-8 gap-y-4">
+        <div className="mt-[clamp(28px,3.4vw,44px)] flex flex-wrap items-center gap-x-8 gap-y-4">
           <a
             href={project.href}
             target="_blank"
@@ -216,7 +233,7 @@ export function ProjectPage({ slug }: { slug: string }) {
 
         <button
           onClick={() => navigate("/")}
-          className="group mt-[clamp(40px,6vw,72px)] inline-flex items-center gap-3 text-[15px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+          className="group mt-[clamp(40px,6vw,72px)] inline-flex min-h-[44px] items-center gap-3 py-3 text-[15px] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
         >
           <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-x-1">
             ←
