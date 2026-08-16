@@ -75,7 +75,12 @@ function FeaturedStat() {
 
 export function Stats() {
   return (
-    <section id="stats" className="section-shell !pb-[clamp(80px,10vw,140px)]">
+    /* No top padding: FeaturedStat is min-h-[72svh] and centres its own
+       content, so the shell's 144px would stack on top of the ~150px of slack
+       the centring already produces. Two sources of vertical space for one gap
+       measured as a 471px empty band above the numeral — the only band that
+       size anywhere on the page. The min-height owns the space now. */
+    <section id="stats" className="section-shell !pt-0 !pb-[clamp(80px,10vw,140px)]">
       <FeaturedStat />
 
       <div className="mt-[clamp(60px,9vw,140px)] grid gap-px overflow-hidden bg-[var(--line-soft)] sm:grid-cols-3">

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { experiences } from "@/data/cv"
 import { SectionHeader } from "@/components/SectionHeader"
-import { RevealOnScroll } from "@/components/LineReveal"
 import { WatchingEye } from "@/components/ArgusEyes"
 
 /**
@@ -298,11 +297,10 @@ export function Experience() {
         })}
       </div>
 
-      <RevealOnScroll className="mt-8 text-center">
-        <span className="font-mono-ui text-[10px] uppercase tracking-[0.16em] text-[var(--ink-mute)] opacity-50">
-          Keep scrolling
-        </span>
-      </RevealOnScroll>
+      {/* A "Keep scrolling" hint used to sit here. It instructed the reader to
+          do the one thing they were already doing, and it sat alone in the
+          largest empty band on the page, which drew the eye straight to the
+          emptiness. Cut. */}
     </section>
   )
 }

@@ -34,17 +34,22 @@ export function Projects() {
               className="group flex h-full flex-col border-t border-[var(--line)] pt-7 outline-none transition-colors duration-500 hover:border-[var(--brand-accent)]/50 focus-visible:border-[var(--brand-accent)]"
             >
               {/* Real capture of the deployed app where one exists, the
-                  generated mark otherwise. Desaturated at rest so nine of
-                  them down the page stay quiet, resolving on hover — the same
-                  treatment the avatars and token art get, so the page has one
-                  way of handling images rather than three. */}
+                  generated mark otherwise. Quiet at rest, resolving on hover.
+
+                  Plain `grayscale` was wrong here. Most of these captures are
+                  dark UI on near-black, so desaturating them left $ANSEMG,
+                  CIPV1 and csc1 indistinguishable from the card's own
+                  background — they read as empty boxes, which is worse than
+                  the generated covers they replaced. Lifting brightness while
+                  desaturating keeps the image legible as an image and still
+                  holds it back from competing with the type. */}
               <div className="mb-6 overflow-hidden rounded-[3px] border border-[var(--line-soft)] bg-[#0a0a0c]">
                 {project.shots?.length ? (
                   <img
                     src={project.shots[0].src}
                     alt=""
                     loading="lazy"
-                    className="aspect-[16/10] w-full object-cover object-top grayscale transition-all duration-700 [transition-timing-function:var(--ease-core)] group-hover:scale-[1.02] group-hover:grayscale-0"
+                    className="aspect-[16/10] w-full object-cover object-top transition-all duration-700 [transition-timing-function:var(--ease-core)] [filter:grayscale(0.85)_brightness(1.32)_contrast(0.94)] group-hover:scale-[1.02] group-hover:[filter:none]"
                   />
                 ) : (
                   <div className="aspect-[16/10] w-full opacity-70 transition-opacity duration-700 group-hover:opacity-100">

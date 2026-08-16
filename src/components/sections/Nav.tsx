@@ -26,7 +26,14 @@ export function Nav() {
           A gradient that fades to transparent has no boundary to show and no
           sampling to do. It also suits the page better: a frosted bar is a
           chrome affordance, a scrim just keeps the type legible and stays
-          out of the way. */}
+          out of the way.
+
+          The gradient holds the background *solid* through the nav's own
+          height before it starts fading. The first version began fading
+          immediately, so at the vertical centre of the nav labels the scrim
+          was only ~88% opaque — enough for body text to show through behind
+          them. Two low-contrast greys overlapping read as noise, which is
+          worse than either a bar or no scrim at all. */}
       <div
         /* Extends past the header so the gradient has room to reach zero —
            ending it at the header's own edge would reintroduce the hard line
@@ -35,7 +42,7 @@ export function Nav() {
         style={{
           opacity: scrolled ? 1 : 0,
           background:
-            "linear-gradient(to bottom, var(--background) 0%, color-mix(in oklab, var(--background), transparent 25%) 55%, transparent 100%)",
+            "linear-gradient(to bottom, var(--background) 0%, var(--background) 46%, color-mix(in oklab, var(--background), transparent 40%) 72%, transparent 100%)",
         }}
         aria-hidden
       />
