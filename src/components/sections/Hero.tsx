@@ -3,6 +3,7 @@ import { ProgressiveText } from "@/components/ProgressiveText"
 import { useCallback, useRef } from "react"
 import { useMagnetic } from "@/lib/interactions"
 import { usePointerWriter } from "@/lib/pointerVars"
+import { useScrollWriter } from "@/lib/scrollStore"
 
 /**
  * Hero built on Kaos's structure rather than pxnz3r's.
@@ -19,12 +20,29 @@ import { usePointerWriter } from "@/lib/pointerVars"
 export function Hero() {
   const cta = useMagnetic<HTMLAnchorElement>(0.28, 80)
   const wordmark = useRef<HTMLSpanElement>(null)
+  const lamp = useRef<HTMLDivElement>(null)
+  const drift = useRef<HTMLDivElement>(null)
 
   // Direct write rather than a root custom property — see lib/pointerVars.
   usePointerWriter(
     useCallback(({ x, y }) => {
       const el = wordmark.current
       if (el) el.style.translate = `${x * -26}px calc(26% + ${y * -10}px)`
+      // The lamp travels roughly with the cursor. Not pinned to it — a light
+      // welded to the pointer reads as a gimmick; one that lags and travels
+      // less than the hand reads as a light source in the room.
+      const l = lamp.current
+      if (l) l.style.transform = `translate3d(${(x * 78).toFixed(1)}%, ${(y * 62).toFixed(1)}%, 0)`
+    }, []),
+  )
+
+  // The wordmark lifts as the hero leaves. Parallax on the one element that is
+  // already decorative, so the section has depth on the way out as well as
+  // under the cursor. Transform only — no layout, no paint.
+  useScrollWriter(
+    useCallback(({ scrollY }) => {
+      const el = drift.current
+      if (el) el.style.transform = `translate3d(0, ${(-scrollY * 0.16).toFixed(1)}px, 0)`
     }, []),
   )
 
@@ -34,6 +52,36 @@ export function Hero() {
       className="relative flex min-h-[100svh] flex-col overflow-hidden pt-[clamp(120px,16vh,190px)]"
     >
       <div className="grain-field" aria-hidden />
+
+      {/* The lamp.
+          The hero was flat black behind the type: correct restraint, no depth.
+          This is a single soft radial that drifts with the cursor, so the black
+          reads as a lit room rather than a flat backdrop.
+
+          Deliberately not a `filter: blur()` — a blurred element this large is
+          one of the most expensive things you can put on a page, and a radial
+          gradient with soft stops is already the shape a blur would produce, at
+          zero raster cost. It moves by transform alone, so it composites and
+          never repaints, and it sits behind the content layer so no text is
+          drawn on top of a moving surface.
+
+          Alpha is capped low on purpose. This lifts the background luminance
+          under white type, which *reduces* contrast — the peak is set where the
+          lead paragraph, the palest small text in the hero, still clears
+          4.5:1. */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-[42%] -z-0 h-[min(140vh,1250px)] w-[min(140vw,1250px)] -translate-x-1/2 -translate-y-1/2"
+        aria-hidden
+      >
+        <div
+          ref={lamp}
+          className="h-full w-full will-change-transform"
+          style={{
+            background:
+              "radial-gradient(closest-side, rgba(255,196,0,0.085), rgba(255,176,32,0.036) 42%, transparent 72%)",
+          }}
+        />
+      </div>
 
       <div className="relative z-10 flex flex-1 flex-col px-[var(--section-edge)]">
         <div className="grid gap-[clamp(28px,5vw,80px)] lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
@@ -134,13 +182,20 @@ export function Hero() {
             read as a small clipped word rather than a deliberate bleed. Phones
             get a much larger ratio so the wordmark still fills the base of the
             composition and absorbs the vertical space short copy leaves. */}
-        <span
-          ref={wordmark}
-          className="block whitespace-nowrap text-center font-[family-name:var(--font-display)] text-[26vw] leading-[0.8] tracking-[-0.055em] text-[var(--ink-strong)] opacity-[0.11] sm:text-[19.5vw]"
-          style={{ translate: "0 26%" }}
-        >
-          ThyImpaler
-        </span>
+        {/* Own layer for the scroll parallax. It cannot share an element with
+            the fade-rise entrance: that animation drives `transform` with
+            fill-mode `both`, so its final `translateY(0)` keeps winning over
+            an inline transform long after the animation has finished, and the
+            parallax would silently never apply. */}
+        <div ref={drift} className="will-change-transform">
+          <span
+            ref={wordmark}
+            className="block whitespace-nowrap text-center font-[family-name:var(--font-display)] text-[26vw] leading-[0.8] tracking-[-0.055em] text-[var(--ink-strong)] opacity-[0.11] sm:text-[19.5vw]"
+            style={{ translate: "0 26%" }}
+          >
+            ThyImpaler
+          </span>
+        </div>
       </div>
     </section>
   )
