@@ -414,7 +414,7 @@ export const projects: Project[] = [
     name: "ZenCode",
     blurb: "Voice your code, watch it stream to your phone, approve with a glance.",
     detail:
-      "Speak a change, watch it stream to your phone, approve it with a glance. A relay server pairs a VS Code extension to a phone with a four-digit code, then keeps the two in step over a websocket. An experiment in moving code review off the desk and onto the device already in your hand.",
+      "Speak a change, watch it stream to your phone, approve it with a glance. A relay server pairs a VS Code extension to a phone with a four-digit code, then keeps the two in step over a websocket. An experiment in moving code review off the desk and onto the device already in your hand. The repository is ZenCode; the interface it ships brands itself AuraCode, which is the name in the screens below.",
     language: "HTML",
     stack: ["HTML", "JavaScript", "WebSockets", "Web Speech API"],
     year: "2026",
