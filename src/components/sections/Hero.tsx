@@ -1,6 +1,6 @@
 import { LineReveal } from "@/components/LineReveal"
 import { ProgressiveText } from "@/components/ProgressiveText"
-import { useCallback, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { useMagnetic } from "@/lib/interactions"
 import { usePointerWriter } from "@/lib/pointerVars"
 import { useScrollWriter } from "@/lib/scrollStore"
@@ -28,13 +28,30 @@ export function Hero() {
     useCallback(({ x, y }) => {
       const el = wordmark.current
       if (el) el.style.translate = `${x * -26}px calc(26% + ${y * -10}px)`
-      // The lamp travels roughly with the cursor. Not pinned to it — a light
-      // welded to the pointer reads as a gimmick; one that lags and travels
-      // less than the hand reads as a light source in the room.
+      // Travel is in viewport units, not a percentage of the lamp's own box.
+      // The percentage version moved it +/-365px inside a ~1900px viewport, so
+      // the light stayed near the middle no matter where the cursor went and
+      // read as not following at all. Scaled to the viewport it tracks the hand
+      // across the whole hero; 0.92 keeps it just behind, which is what makes
+      // it read as a light in the room rather than a cursor decoration.
       const l = lamp.current
-      if (l) l.style.transform = `translate3d(${(x * 96).toFixed(1)}%, ${(y * 74).toFixed(1)}%, 0)`
+      if (l) {
+        const { w, h } = view.current
+        l.style.transform = `translate3d(${(x * w * 0.92).toFixed(1)}px, ${(y * h * 0.92).toFixed(1)}px, 0)`
+      }
     }, []),
   )
+
+  // Cached so the pointer loop never touches `window` per frame.
+  const view = useRef({ w: 1440, h: 900 })
+  useEffect(() => {
+    const measure = () => {
+      view.current = { w: window.innerWidth, h: window.innerHeight }
+    }
+    measure()
+    window.addEventListener("resize", measure, { passive: true })
+    return () => window.removeEventListener("resize", measure)
+  }, [])
 
   // The wordmark lifts as the hero leaves. Parallax on the one element that is
   // already decorative, so the section has depth on the way out as well as
@@ -77,15 +94,23 @@ export function Hero() {
           the box is now 760px and the travel is scaled up to compensate — the
           light covers the same ground with well under half the pixels. */}
       <div
-        className="pointer-events-none absolute left-1/2 top-[42%] -z-0 h-[min(86vh,760px)] w-[min(86vw,760px)] -translate-x-1/2 -translate-y-1/2"
+        /* Centred, not top-42%: the pointer offset is measured from the centre
+           of the viewport, so any other rest position adds a constant skew and
+           the light never lines up with the hand. */
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[min(86vh,760px)] w-[min(86vw,760px)] -translate-x-1/2 -translate-y-1/2"
         aria-hidden
       >
         <div
           ref={lamp}
           className="h-full w-full will-change-transform"
           style={{
+            /* Falls off all the way to zero at the edge of the box. The first
+               version hit `transparent` at 72%, which puts a real boundary in
+               the middle of a solid-black page — it read as a disc with an
+               edge, not as light. The extra stops shape the curve so the
+               falloff is gradual rather than linear. */
             background:
-              "radial-gradient(closest-side, rgba(255,196,0,0.085), rgba(255,176,32,0.036) 42%, transparent 72%)",
+              "radial-gradient(closest-side, rgba(255,196,0,0.10), rgba(255,193,10,0.058) 28%, rgba(255,186,20,0.026) 52%, rgba(255,180,30,0.009) 76%, rgba(255,176,36,0) 100%)",
           }}
         />
       </div>

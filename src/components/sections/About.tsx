@@ -1,6 +1,7 @@
 import { RevealOnScroll } from "@/components/LineReveal"
 import { WatchingEye } from "@/components/ArgusEyes"
 import { ProgressiveText, Annotate } from "@/components/ProgressiveText"
+import { trading } from "@/data/cv"
 
 /**
  * About: pull-quote statement with hand-drawn emphasis, plus the avatar.
@@ -26,7 +27,11 @@ export function About() {
             </div>
             <figcaption className="t-eyebrow mt-5 flex items-center justify-between gap-4">
               <span>ThyImpaler</span>
-              <span className="opacity-50">Web3 · Since 2026</span>
+              {/* Read from the data, not typed in. This was hardcoded to 2026
+                  — the current year, so it read as "started a few months ago"
+                  — while the paragraph beside it says "I have traded since
+                  2024". Two different start years within one screen. */}
+              <span className="opacity-50">Web3 · Since {trading.since}</span>
             </figcaption>
           </figure>
         </RevealOnScroll>
