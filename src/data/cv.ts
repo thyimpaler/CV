@@ -252,9 +252,10 @@ export type Project = {
  *  - CryptoIntel renders an onboarding empty state to a signed-out visitor,
  *    and populating it needs an admin password. The capture is honest about
  *    what it is rather than being staged.
- *  - omni-sync serves a login screen, so there is nothing of the product to
- *    show. It keeps its generated cover.
- *  - ZenCode has no reachable deploy.
+ *  - ZenCode has no deploy, so its capture is its own source run locally
+ *    against the relay server in the repo. Both halves report "Connected" but
+ *    sit at the pairing step, because the populated view needs a live VS Code
+ *    session driving it.
  *
  * The two Telegram bots have no web UI to capture at all. Their images are
  * reconstructions: the message text and inline keyboards are rendered verbatim
@@ -409,24 +410,34 @@ export const projects: Project[] = [
     name: "ZenCode",
     blurb: "Voice your code, watch it stream to your phone, approve with a glance.",
     detail:
-      "Speak a change, watch it stream to your phone, approve it with a glance. An experiment in moving code review off the desk and onto the device already in your hand.",
+      "Speak a change, watch it stream to your phone, approve it with a glance. A relay server pairs a VS Code extension to a phone with a four-digit code, then keeps the two in step over a websocket. An experiment in moving code review off the desk and onto the device already in your hand.",
     language: "HTML",
-    stack: ["HTML", "JavaScript", "Web APIs"],
+    stack: ["HTML", "JavaScript", "WebSockets", "Web Speech API"],
     year: "2026",
     status: "Shipped",
     href: "https://github.com/thyimpaler/ZenCode",
+    shots: [
+      {
+        src: "/shot-zencode.png",
+        caption:
+          "Desk and phone, both live against the repo's own relay server — paired but idle, since the populated view needs a running VS Code session",
+      },
+    ],
   },
   {
     slug: "omni-sync",
-    name: "omni-sync",
-    blurb: "Cross-platform state sync. In progress.",
+    name: "OmniSync",
+    blurb:
+      "Unified social inbox — WhatsApp and Instagram DMs in one queue, with SLA tracking on every conversation.",
     detail:
-      "Keeping state consistent across platforms that were never designed to agree with each other. Still being built.",
+      "A support inbox that merges WhatsApp and Instagram DMs into a single queue, prioritises what is going stale, and tracks an SLA clock per conversation so nothing sits unanswered. Marketing site, pricing and demo are live.",
     language: "JavaScript",
-    stack: ["JavaScript", "Node.js"],
+    stack: ["React", "Vite", "Node.js"],
     year: "2026",
     status: "In progress",
     href: "https://github.com/thyimpaler/omni-sync",
+    live: "https://omni-sync-e7gd.vercel.app",
+    shots: [{ src: "/shot-omni-sync.png", caption: "Live site" }],
   },
 ]
 
