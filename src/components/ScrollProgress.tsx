@@ -50,6 +50,21 @@ export function ScrollProgress() {
         preserveAspectRatio="none"
         className="h-full w-full"
       >
+        {/* The travelled line fades out behind the marker instead of running
+            at full strength the whole way. At the coda — where depth is 1 —
+            a flat 0.75-opacity accent stroke spanned the entire viewport and
+            became the loudest thing on a page whose whole language is
+            hairlines; it read as a heavy bar even at one physical pixel,
+            because a near-horizontal diagonal antialiases across two.
+            Reading the gradient in `objectBoundingBox` units means it always
+            spans exactly the distance covered, with no second source of
+            truth for `depth` to drift against. */}
+        <linearGradient id="scroll-trail" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="var(--brand-accent)" stopOpacity="0" />
+          <stop offset="55%" stopColor="var(--brand-accent)" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="var(--brand-accent)" stopOpacity="0.6" />
+        </linearGradient>
+
         {/* The road ahead, and the ground already covered. `vectorEffect`
             keeps the stroke 1px despite the non-uniform stretch. */}
         <line x1="0" y1="13" x2="1000" y2="4" stroke="var(--line-soft)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
@@ -58,9 +73,8 @@ export function ScrollProgress() {
           y1="13"
           x2={depth * 1000}
           y2={13 - depth * 9}
-          stroke="var(--brand-accent)"
+          stroke="url(#scroll-trail)"
           strokeWidth="1"
-          opacity="0.75"
           vectorEffect="non-scaling-stroke"
         />
       </svg>
@@ -73,9 +87,12 @@ export function ScrollProgress() {
         style={{
           left: `${depth * 100}%`,
           top: `${y * 100}%`,
-          width: "7px",
-          height: "7px",
-          transform: `translate(-50%, -50%) scale(${(1 + depth * 0.5).toFixed(3)})`,
+          width: "6px",
+          height: "6px",
+          // Grows as the climb goes on, but not much: at 7px scaling to 1.5
+          // the marker finished as a 10.5px dot, which is a bullet, not a
+          // marker.
+          transform: `translate(-50%, -50%) scale(${(1 + depth * 0.3).toFixed(3)})`,
           transition: "transform 0.4s var(--ease-core)",
           willChange: "transform",
         }}
