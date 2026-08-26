@@ -46,6 +46,62 @@
     <meta name="twitter:description" content="I keep fast-moving crypto communities calm, secure and shipping. Five ecosystems across Ethereum, Solana, Base and BESC." />
     <meta name="twitter:image" content="https://www.thyimpaler.xyz/og.png" />
     <meta name="twitter:image:alt" content="ThyImpaler — Order held under pressure." />
+
+    <!-- Structured data. Without it Google has to infer the entity from the
+         prose, which is how a site ends up titled with a bare domain and a
+         guessed capitalisation. `name` states the spelling explicitly, and
+         `sameAs` ties the handles on the page to the same person rather than
+         leaving four unrelated profiles.
+
+         Everything here is asserted on the page too. Schema that claims more
+         than the page shows is worse than none: it is the kind of thing that
+         gets structured data ignored site-wide. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://www.thyimpaler.xyz/#person",
+            "name": "ThyImpaler",
+            "url": "https://www.thyimpaler.xyz/",
+            "image": "https://www.thyimpaler.xyz/avatar.jpg",
+            "jobTitle": "Web3 Community Architect and Head of Development",
+            "description": "I keep fast-moving crypto communities calm, secure and shipping — five ecosystems across Ethereum, Solana, Base and BESC, plus the bots and role structures that hold them together.",
+            "knowsAbout": [
+              "Discord operations",
+              "Telegram bots",
+              "Community moderation",
+              "Web3 security",
+              "Ethereum",
+              "Solana"
+            ],
+            "sameAs": [
+              "https://t.me/ThyImpaler",
+              "https://x.com/Thy_Impaler",
+              "https://github.com/thyimpaler"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://www.thyimpaler.xyz/#website",
+            "url": "https://www.thyimpaler.xyz/",
+            "name": "ThyImpaler",
+            "inLanguage": "en",
+            "publisher": { "@id": "https://www.thyimpaler.xyz/#person" }
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://www.thyimpaler.xyz/#page",
+            "url": "https://www.thyimpaler.xyz/",
+            "name": "ThyImpaler — Web3 Community Architect",
+            "isPartOf": { "@id": "https://www.thyimpaler.xyz/#website" },
+            "about": { "@id": "https://www.thyimpaler.xyz/#person" },
+            "primaryImageOfPage": "https://www.thyimpaler.xyz/og.png"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

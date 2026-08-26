@@ -1,5 +1,5 @@
-import { useEffect } from "react"
 import { projectBySlug, projects } from "@/data/cv"
+import { SITE_ORIGIN, useHead } from "@/lib/head"
 import { LineReveal, RevealOnScroll } from "@/components/LineReveal"
 import { ProgressiveText } from "@/components/ProgressiveText"
 import { Link, navigate } from "@/lib/router"
@@ -19,15 +19,29 @@ import { ProjectCover, hasCover } from "@/components/ProjectCover"
 export function ProjectPage({ slug }: { slug: string }) {
   const project = projectBySlug(slug)
 
-  // Keep the tab title in step with the route.
-  useEffect(() => {
-    document.title = project
-      ? `${project.name} — ThyImpaler`
-      : "Not found — ThyImpaler"
-    return () => {
-      document.title = "Thyimpaler — Web3 Community Architect"
-    }
-  }, [project])
+  // Title, description and canonical all in step with the route. The canonical
+  // is the one that matters: without it this page declares itself a duplicate
+  // of the home page. See the note in lib/head.
+  //
+  // The old version restored the title as "Thyimpaler", lower-case i, so
+  // navigating to a project and back left the brand misspelled in the tab. The
+  // defaults now come from the document instead of a second hand-typed copy.
+  useHead(
+    project
+      ? {
+          title: `${project.name} — ThyImpaler`,
+          // Blurb alone, not prefixed with the name. A description that opens
+          // by restating the title spends the snippet's first line saying what
+          // the heading directly above it already said.
+          description: project.blurb,
+          canonical: `${SITE_ORIGIN}/work/${project.slug}`,
+        }
+      : {
+          title: "Not found — ThyImpaler",
+          description: "That project does not exist.",
+          canonical: `${SITE_ORIGIN}/`,
+        },
+  )
 
   if (!project) {
     return (
