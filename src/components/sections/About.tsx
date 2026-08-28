@@ -49,27 +49,28 @@ export function About() {
           {/* Pull quote, with the marker bar under the phrase that matters */}
           <RevealOnScroll>
             <p className="mt-[clamp(30px,4.5vw,58px)] font-[family-name:var(--font-display)] text-[clamp(25px,3.4vw,50px)] leading-[1.1] text-[var(--ink-strong)]">
-              Most communities break in the same place — the moment{" "}
-              <Annotate type="mark">volatility arrives</Annotate> and nobody is
-              holding the room.
+              Most crypto products break in the same place — the moment{" "}
+              <Annotate type="mark">real money moves</Annotate> through code
+              nobody stress-tested.
             </p>
           </RevealOnScroll>
 
           <div className="measure mt-[clamp(28px,4vw,46px)] grid gap-7">
             <RevealOnScroll>
               <p className="t-body text-[var(--ink)]">
-                I am the person holding it. Across{" "}
+                I write the parts that cannot fail. On Nest that meant ERC-721
+                factory contracts with reentrancy guards,{" "}
                 <Annotate type="circle">
-                  <span className="text-[var(--ink-strong)]">five ecosystems</span>
+                  <span className="text-[var(--ink-strong)]">pull-payment accounting</span>
                 </Annotate>{" "}
-                I have moderated through raids, CTO transitions and record highs —
-                eight hours a day, every day — building the bots and role
-                structures that keep a room legible when the chart is not.
+                and a 95/5 revenue split — and an indexer that stores the hash of
+                the block it last read, so a reorg rewinds and replays instead of
+                losing a mint.
               </p>
             </RevealOnScroll>
 
             <ProgressiveText
-              text="That work turned into engineering — Telegram bots, dashboards and the web infrastructure these communities run on. I have traded since 2024, mostly memecoins and perps, which is where most of the instinct for reading a room under pressure actually comes from."
+              text="Before the contracts there were five ecosystems' worth of Discord and Telegram rooms — raids, CTO transitions, a $105K peak — which is where the instinct for building things that hold under load actually comes from. I have traded since 2024, mostly memecoins and perps."
               className="t-body text-[var(--ink)]"
             />
           </div>

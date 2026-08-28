@@ -147,7 +147,7 @@ export function Hero() {
           <div>
             <LineReveal
               as="p"
-              text="Web3 Community Architect — Head of Development"
+              text="Full-stack & Smart Contract Engineer — Head of Development"
               className="t-eyebrow t-eyebrow--bright block"
               immediate
               stagger={0.018}
@@ -156,7 +156,7 @@ export function Hero() {
             <h1 className="t-h1 mt-[clamp(22px,3vw,40px)] text-[var(--ink-strong)]">
               <LineReveal
                 as="span"
-                text="Order held under"
+                text="Built to hold"
                 className="block"
                 immediate
                 stagger={0.055}
@@ -164,7 +164,7 @@ export function Hero() {
               />
               <LineReveal
                 as="span"
-                text="pressure."
+                text="under pressure."
                 className="block italic text-[var(--brand-accent)]"
                 immediate
                 stagger={0.055}
@@ -202,7 +202,7 @@ export function Hero() {
           {/* Supporting copy, brightening as it resolves */}
           <div className="lg:pt-[clamp(6px,2vw,28px)]">
             <ProgressiveText
-              text="I keep fast-moving crypto communities calm, secure and shipping. Five ecosystems across Ethereum, Solana, Base and BESC — plus the bots and role structures that hold them together, and a trading desk that never really closes."
+              text="I build the on-chain infrastructure other people launch on — ERC-721 factories, the indexers that keep them honest, and the front ends that make them usable. Currently head of development on Nest, an NFT launchpad live on Robinhood Chain."
               className="t-lead measure text-[var(--ink)]"
               stagger={0.016}
               delay={0.7}

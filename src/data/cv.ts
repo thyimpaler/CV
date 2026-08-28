@@ -47,6 +47,18 @@ export type Experience = {
 export const experiences: Experience[] = [
   {
     role: "Head of Development",
+    project: "Nest",
+    sub: "NFT launchpad · Robinhood Chain",
+    href: "https://nest-nft-launchpad.vercel.app",
+    period: "Jul 2026 — Present",
+    status: "Active",
+    dev: true,
+    impact:
+      "Leading the build — ERC-721 factory, chain indexer and mint flow, live on Robinhood Chain mainnet.",
+    tags: ["Solidity", "TypeScript", "Fastify", "Prisma", "viem"],
+  },
+  {
+    role: "Head of Development",
     project: "Axyom Sites",
     period: "Jun 2026 — Aug 2026",
     status: "Closed",
@@ -135,21 +147,25 @@ export type Stat = {
  * claiming it undercuts the numbers that are real.
  */
 /**
- * One figure is pulled out and given a screen of its own. $105K is the pick
- * because it is an outcome rather than a count — a peak held through the
- * volatility, backed by the $HENNY testimonial two sections up. "33,000
- * members" is a bigger number but describes a room, not something done.
+ * One figure is pulled out and given a screen of its own. It has to be an
+ * outcome rather than a count, and it should be the outcome of the work being
+ * applied for — so this is the split written into the Nest contracts, not the
+ * $105K peak, which is a moderation result and now sits in the row below.
+ *
+ * Keep the value to about five characters. It renders at
+ * clamp(96px, 26vw, 400px) in Stats.tsx, and a longer string runs past the
+ * section edge on desktop.
  */
 export const featuredStat: Stat = {
-  value: "$105K",
-  label: "All-time high held through the volatility",
-  hint: "Peak under watch",
+  value: "95%",
+  label: "Of primary mint revenue routed to creators by the contracts I shipped",
+  hint: "Nest — live on Robinhood Chain mainnet",
 }
 
 export const stats: Stat[] = [
+  { value: "11", label: "Products shipped and deployed", hint: "Selected work" },
   { value: "33K", label: "Members moderated", hint: "Klein Funding" },
-  { value: "5", label: "Ecosystems", hint: "Communities operated" },
-  { value: "2024", label: "Trading since", hint: "Live markets" },
+  { value: "$105K", label: "All-time high held through the volatility", hint: "$HENNY" },
 ]
 
 export type Pill = { label: string; href?: string }
@@ -168,27 +184,49 @@ export const chains: Pill[] = [
   { label: "Solana", href: "https://solana.com" },
   { label: "Base", href: "https://base.org" },
   { label: "BESC Hyperchain", href: "https://bescfinancial.com" },
+  // No href and no mark: the only public surface is a Blockscout explorer,
+  // which is not a canonical home for the chain, and drawing a logo for it
+  // would be inventing one. Toolkit renders icon-less entries as label-only.
+  { label: "Robinhood Chain" },
 ]
 
 /** What was actually worked on across those chains. Words, not glyphs. */
-export const assetTypes = ["NFTs", "Liquid NFT Finance", "Memecoin launches"]
+export const assetTypes = [
+  "NFTs",
+  "NFT launch infrastructure",
+  "Liquid NFT Finance",
+  "Memecoin launches",
+]
 
 /**
  * Stack pulled from the actual dependency manifests across the projects in
  * this portfolio, not from a list of things worth mentioning.
  */
+/*
+ * Contracts first. This section used to open on frontend frameworks, which
+ * describes the least differentiated half of the work — the Solidity is the
+ * part that is hard to fake and the part a hiring engineer is scanning for.
+ */
 export const codingStack = [
+  {
+    title: "Smart contracts",
+    pills: ["Solidity", "OpenZeppelin", "ERC-721", "ERC-2981 royalties", "solc", "Ganache", "Reentrancy guards", "Pull payments"],
+  },
   {
     title: "Frontend",
     pills: ["React", "Next.js", "Vite", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js", "React Three Fiber", "Zustand"],
   },
   {
     title: "Backend & data",
-    pills: ["Node.js", "Express", "PostgreSQL", "SQLite", "Prisma", "Zod", "Python"],
+    pills: ["Node.js", "Fastify", "Express", "PostgreSQL", "SQLite", "Prisma", "Zod", "Python"],
   },
   {
     title: "Web3",
-    pills: ["ethers.js", "@solana/web3.js", "bs58", "Wallet integrations"],
+    pills: ["viem", "ethers.js", "@solana/web3.js", "WalletConnect", "Wallet auth (SIWE)", "Chain indexing", "IPFS / Pinata", "Seaport", "bs58"],
+  },
+  {
+    title: "Infrastructure",
+    pills: ["Docker", "docker-compose", "GitHub Actions", "Railway", "Vercel", "nginx", "CSP & SRI", "Prisma migrations"],
   },
   {
     title: "Bots & automation",
@@ -270,6 +308,23 @@ export type Project = {
  * captures.
  */
 export const projects: Project[] = [
+  {
+    slug: "nest",
+    name: "Nest",
+    blurb:
+      "Permissionless NFT launchpad for Robinhood Chain — upload artwork, deploy an ERC-721, open a mint, without writing code.",
+    detail:
+      "Creators upload artwork, get permanent IPFS metadata, and deploy their own ERC-721 through a factory contract that keeps 95% of primary mint revenue under their control. The contracts are Solidity 0.8.24 on OpenZeppelin 5 — royalties, two-step ownership, reentrancy guards and pull-payment accounting rather than pushing ETH on mint. Behind them sits a Fastify and PostgreSQL backend with a chain indexer that stores the hash of the last block it read, so a reorg rewinds and replays instead of quietly losing a mint, plus a reconciliation worker and an idempotency layer on every endpoint that touches money.",
+    // Two languages, and the pairing is the point: the Solidity is what makes
+    // it more than another dashboard, the TypeScript is most of the lines.
+    language: "TypeScript · Solidity",
+    stack: ["Solidity", "OpenZeppelin", "TypeScript", "Fastify", "Prisma", "PostgreSQL", "viem", "IPFS / Pinata"],
+    year: "2026",
+    status: "Shipped",
+    href: "https://github.com/thyimpaler",
+    live: "https://nest-nft-launchpad.vercel.app",
+    shots: [{ src: "/shot-nest.png", caption: "Live site" }],
+  },
   {
     slug: "phantom-bridge",
     name: "Phantom Bridge",
@@ -450,15 +505,15 @@ export const projectBySlug = (slug: string) => projects.find((p) => p.slug === s
 export const githubUrl = "https://github.com/thyimpaler"
 
 export const tickerItems = [
-  "Community Operations",
-  "Bot Development",
-  "Anti-FUD",
-  "Memecoin Trading",
-  "Discord Security",
+  "Solidity",
+  "Smart Contracts",
+  "ERC-721",
+  "Full-stack TypeScript",
+  "Chain Indexing",
+  "IPFS",
   "Telegram Bots",
+  "Community Operations",
   "Orderflow",
-  "Perps",
-  "NFT Ecosystems",
   "Shipping",
 ]
 

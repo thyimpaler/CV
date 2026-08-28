@@ -1,0 +1,535 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   ThyImpaler — print sheet
+   Two A4 pages, rendered to PDF by Chrome (see build.mjs).
+
+   Same art direction as thyimpaler.xyz: Instrument Serif at 400 for display,
+   Inter Tight for body, JetBrains Mono for labels, near-monochrome warm
+   neutrals with a single amber accent spent on numbers and one italic phrase.
+
+   Two variants from one sheet. `html.paper` swaps the tokens for a warm
+   paper ground and drops the accent to --brand-rust, because #FFC400 on
+   white measures ~1.5:1 and cannot carry text. Nothing else changes — the
+   layout, rhythm and type scale are identical in both.
+   ────────────────────────────────────────────────────────────────────────── */
+
+@import url("fonts.css");
+
+:root {
+    --bg: #0a0708;
+    --ink-strong: #f0eae4;
+    --ink: #ada49f;
+    --ink-mute: #8b8078;
+    --accent: #ffc400;
+    --line: rgba(240, 234, 228, 0.13);
+    --line-soft: rgba(240, 234, 228, 0.07);
+    /* Grain off, deliberately. The site's noise field costs 6.3MB in a
+       printed PDF — Chrome flattens the overlay into a full-page raster per
+       sheet, taking the file from 480KB to 6.8MB. Not worth 5% opacity on a
+       document whose whole job is being pasted into a chat window. */
+    --grain: 0;
+
+    --font-display: "Instrument Serif", "Times New Roman", serif;
+    --font-sans: "Inter Tight", -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+    /* Page gutters. Generous for a CV — the white space is the point.
+       --top came down from 14mm when Nest made page 1 a six-row sheet: the
+       page is a fixed 297mm with overflow hidden, so anything that does not
+       fit is silently cropped rather than pushed to a third sheet. */
+    --edge: 15mm;
+    --top: 12mm;
+}
+
+html.paper {
+    --bg: #fbf8f5;
+    --ink-strong: #17120f;
+    --ink: #4b433c;
+    --ink-mute: #7c7168;
+    /* --brand-rust from the site palette: ~6.4:1 on this ground where the
+       screen amber is ~1.5:1. Same hue family, readable in ink. */
+    --accent: #8a5e00;
+    --line: rgba(23, 18, 15, 0.16);
+    --line-soft: rgba(23, 18, 15, 0.08);
+    --grain: 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+html {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 9.4pt;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+    position: relative;
+    width: 210mm;
+    height: 297mm;
+    padding: var(--top) var(--edge) 11mm;
+    background: var(--bg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.sheet + .sheet {
+    page-break-before: always;
+}
+
+/* Film grain, as on the site. Dark variant only — on paper it just makes
+   the ink look dirty, so `html.paper` zeroes the opacity. */
+.sheet::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--grain);
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Primitives ──────────────────────────────────────────────────────────── */
+
+.mono {
+    font-family: var(--font-mono);
+    font-size: 6.4pt;
+    font-weight: 400;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+}
+
+.rule {
+    height: 1px;
+    background: var(--line);
+}
+
+.accent {
+    color: var(--accent);
+}
+
+.strong {
+    color: var(--ink-strong);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Section header: index number in the accent, slash, label, hairline under.
+   The one motif carried straight across from the site. */
+.sec {
+    margin-top: 5.5mm;
+}
+
+.sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9em;
+}
+
+.sec-head .num {
+    color: var(--accent);
+}
+
+.sec-head .slash {
+    opacity: 0.32;
+}
+
+.sec-head .label {
+    color: var(--ink-strong);
+    letter-spacing: 0.19em;
+}
+
+.sec-head .aside {
+    margin-left: auto;
+    opacity: 0.72;
+}
+
+.sec-head + .rule {
+    margin-top: 2.6mm;
+}
+
+/* ── Masthead ────────────────────────────────────────────────────────────── */
+
+.masthead {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 10mm;
+}
+
+.wordmark {
+    font-family: var(--font-display);
+    font-weight: 400; /* Instrument Serif ships one weight. Never fake-bold it. */
+    font-size: 74pt;
+    line-height: 0.82;
+    letter-spacing: -0.035em;
+    color: var(--ink-strong);
+}
+
+.wordmark .the {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 6.4pt;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 4mm;
+}
+
+.role {
+    margin-top: 4.5mm;
+    font-size: 10.5pt;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+}
+
+.role em {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 13pt;
+    color: var(--ink-strong);
+}
+
+/* Contact rail, right-aligned against the wordmark's baseline block. */
+.contact {
+    text-align: right;
+    display: grid;
+    gap: 1.5mm;
+    padding-bottom: 1mm;
+}
+
+.contact .row {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.9em;
+    justify-content: end;
+    align-items: baseline;
+}
+
+.contact .k {
+    font-family: var(--font-mono);
+    font-size: 5.9pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+}
+
+.contact .v {
+    font-size: 8.6pt;
+    color: var(--ink-strong);
+}
+
+.contact .v.link {
+    color: var(--accent);
+}
+
+/* ── Statement ───────────────────────────────────────────────────────────── */
+
+.statement {
+    margin-top: 5.5mm;
+    font-family: var(--font-display);
+    font-size: 19.5pt;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--ink-strong);
+    max-width: 158mm;
+}
+
+.statement em {
+    font-style: italic;
+    color: var(--accent);
+}
+
+.support {
+    margin-top: 4.5mm;
+    max-width: 152mm;
+    color: var(--ink);
+    font-size: 9.3pt;
+    line-height: 1.62;
+}
+
+/* ── Figures ─────────────────────────────────────────────────────────────── */
+
+.figures {
+    margin-top: 5mm;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+
+.figures .fig {
+    padding: 3.2mm 5mm 3mm 0;
+}
+
+.figures .fig + .fig {
+    border-left: 1px solid var(--line-soft);
+    padding-left: 5mm;
+}
+
+.figures .n {
+    font-family: var(--font-display);
+    font-size: 25pt;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--ink-strong);
+}
+
+.figures .fig:first-child .n {
+    color: var(--accent);
+}
+
+.figures .cap {
+    margin-top: 2.4mm;
+    font-size: 7.8pt;
+    line-height: 1.35;
+    color: var(--ink);
+}
+
+.figures .src {
+    margin-top: 1.4mm;
+}
+
+/* ── Experience: indexed rows, no cards ──────────────────────────────────── */
+
+/* Scoped to `.rows` on purpose. Unscoped, `.row` also matched the contact
+   rail in the masthead, which inherited its padding and bottom rule and
+   pushed the header 200px taller than the wordmark beside it. */
+.rows {
+    display: grid;
+}
+
+/* 2.1mm, down from 2.8mm. Six experience rows rather than five, times two
+   edges, is where the space for the Nest row came from — taken from the
+   rhythm evenly instead of by cutting a role or shrinking the type. */
+.rows .row {
+    display: grid;
+    grid-template-columns: 7mm 1fr 42mm;
+    gap: 0 5mm;
+    padding: 2.1mm 0;
+    border-bottom: 1px solid var(--line-soft);
+    align-items: start;
+}
+
+.rows .row:last-child {
+    border-bottom: 0;
+}
+
+.rows .row .idx {
+    font-family: var(--font-mono);
+    font-size: 6.6pt;
+    letter-spacing: 0.06em;
+    color: var(--ink-mute);
+    padding-top: 1.1mm;
+}
+
+.rows .row .title {
+    font-family: var(--font-display);
+    font-size: 14.5pt;
+    line-height: 1.1;
+    letter-spacing: -0.012em;
+    color: var(--ink-strong);
+}
+
+.rows .row .title .at {
+    color: var(--ink-mute);
+    font-size: 11pt;
+    font-style: italic;
+}
+
+.rows .row .impact {
+    margin-top: 1.6mm;
+    font-size: 9pt;
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 114mm;
+}
+
+.rows .row .tags {
+    margin-top: 1.8mm;
+    display: flex;
+    gap: 0.9em;
+}
+
+.rows .row .tags span::after {
+    content: "·";
+    margin-left: 0.9em;
+    opacity: 0.4;
+}
+
+.rows .row .tags span:last-child::after {
+    content: "";
+    margin: 0;
+}
+
+.rows .row .meta {
+    text-align: right;
+    padding-top: 1.2mm;
+}
+
+.rows .row .period {
+    font-family: var(--font-mono);
+    font-size: 6.8pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+.rows .row .status {
+    margin-top: 1.5mm;
+    font-family: var(--font-mono);
+    font-size: 6.1pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+}
+
+.rows .row .status.active {
+    color: var(--accent);
+}
+
+/* ── Work index ──────────────────────────────────────────────────────────── */
+
+.work .rows .row {
+    grid-template-columns: 7mm 1fr 50mm;
+    padding: 2.6mm 0;
+}
+
+.work .rows .title {
+    font-size: 12.5pt;
+}
+
+.work .rows .blurb {
+    margin-top: 1.1mm;
+    font-size: 8.6pt;
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 104mm;
+}
+
+.work .rows .meta {
+    padding-top: 1mm;
+}
+
+.work .rows .stack {
+    font-family: var(--font-mono);
+    font-size: 6.1pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    line-height: 1.6;
+}
+
+.work .rows .live {
+    margin-top: 1.1mm;
+    font-family: var(--font-mono);
+    font-size: 6.1pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+}
+
+/* The accent is spent on the one thing a reader can act on — a live URL.
+   Applied to every year/status line too it stopped being an accent. */
+.work .rows .live.url {
+    color: var(--accent);
+    text-transform: none;
+    letter-spacing: 0.04em;
+}
+
+.also {
+    margin-top: 3mm;
+    color: var(--ink-mute);
+    letter-spacing: 0.11em;
+}
+
+/* ── Toolkit: ruled label/value lines, not pills ─────────────────────────── */
+
+.kit {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 10mm;
+}
+
+.kit .cell {
+    padding: 2.8mm 0;
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.kit .cell:nth-last-child(-n + 2) {
+    border-bottom: 0;
+}
+
+.kit .v {
+    margin-top: 1.5mm;
+    color: var(--ink-strong);
+    font-size: 8.6pt;
+    line-height: 1.5;
+}
+
+/* ── Quotes ──────────────────────────────────────────────────────────────── */
+
+.quotes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 9mm;
+}
+
+.quote p {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 12pt;
+    line-height: 1.28;
+    letter-spacing: -0.008em;
+    color: var(--ink-strong);
+}
+
+.quote .by {
+    margin-top: 3mm;
+    display: flex;
+    align-items: baseline;
+    gap: 0.7em;
+}
+
+.quote .by .who {
+    color: var(--accent);
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+
+.foot {
+    margin-top: auto;
+    padding-top: 5mm;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.foot .site {
+    font-family: var(--font-display);
+    font-size: 11pt;
+    letter-spacing: -0.01em;
+    color: var(--ink-strong);
+}

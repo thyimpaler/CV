@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ThyImpaler — Curriculum Vitae</title>
+    <link rel="stylesheet" href="cv.css" />
+    <!-- One sheet, two variants. `?paper` renders the print-safe version; the
+         build script calls the same file twice. -->
+    <script>
+      if (location.search.includes("paper"))
+        document.documentElement.classList.add("paper")
+    </script>
+  </head>
+  <body>
+    <!-- ══ PAGE 1 ════════════════════════════════════════════════════════ -->
+    <section class="sheet">
+      <header class="masthead">
+        <div>
+          <h1 class="wordmark">
+            <span class="the">Curriculum Vitae — 2026</span>
+            ThyImpaler
+          </h1>
+          <p class="role">
+            Full-stack &amp; smart contract engineer —
+            <em>Solidity, TypeScript &amp; infrastructure</em>
+          </p>
+        </div>
+
+        <div class="contact">
+          <div class="row">
+            <span class="k">Email</span
+            ><a class="v" href="mailto:work@thyimpaler.xyz">work@thyimpaler.xyz</a>
+          </div>
+          <div class="row">
+            <span class="k">Telegram</span
+            ><a class="v" href="https://t.me/ThyImpaler">@ThyImpaler</a>
+          </div>
+          <div class="row">
+            <span class="k">X</span
+            ><a class="v" href="https://x.com/Thy_Impaler">@Thy_Impaler</a>
+          </div>
+          <div class="row">
+            <span class="k">Discord</span><span class="v">thyimpaler_</span>
+          </div>
+          <div class="row">
+            <span class="k">GitHub</span
+            ><a class="v" href="https://github.com/thyimpaler">github.com/thyimpaler</a>
+          </div>
+          <div class="row">
+            <span class="k">Site</span
+            ><a class="v link" href="https://www.thyimpaler.xyz">www.thyimpaler.xyz</a>
+          </div>
+        </div>
+      </header>
+
+      <div class="rule" style="margin-top: 5mm"></div>
+
+      <p class="statement">
+        Most crypto products break in the same place — the moment
+        <em>real&nbsp;money&nbsp;moves</em> through code nobody stress-tested.
+        I write the parts that cannot fail.
+      </p>
+
+      <p class="support">
+        On Nest that means ERC-721 factory contracts with reentrancy guards and
+        pull-payment accounting, over a Fastify and PostgreSQL backend whose
+        indexer stores the hash of the block it last read — so a reorg rewinds
+        and replays instead of losing a mint. Before the contracts came five
+        ecosystems of Discord and Telegram rooms, which is where the instinct
+        for building things that hold under load comes from.
+      </p>
+
+      <div class="figures">
+        <div class="fig">
+          <div class="n">95%</div>
+          <div class="cap">Of mint revenue routed to creators</div>
+          <div class="mono src">Nest · Robinhood Chain</div>
+        </div>
+        <div class="fig">
+          <div class="n">11</div>
+          <div class="cap">Products shipped and deployed</div>
+          <div class="mono src">Selected work</div>
+        </div>
+        <div class="fig">
+          <div class="n">33K</div>
+          <div class="cap">Members moderated</div>
+          <div class="mono src">Klein Funding</div>
+        </div>
+        <div class="fig">
+          <div class="n">$105K</div>
+          <div class="cap">All-time high held through the volatility</div>
+          <div class="mono src">$HENNY · peak held</div>
+        </div>
+      </div>
+
+      <section class="sec">
+        <div class="sec-head mono">
+          <span class="num">01</span><span class="slash">/</span
+          ><span class="label">Experience</span>
+          <span class="aside">Most recent first</span>
+        </div>
+        <div class="rule"></div>
+
+        <div class="rows">
+          <article class="row">
+            <div class="idx">01</div>
+            <div>
+              <h2 class="title">
+                Head of Development <span class="at">— Nest</span>
+              </h2>
+              <p class="impact">
+                ERC-721 factory, indexer and mint flow — live on Robinhood
+                Chain mainnet.
+              </p>
+              <div class="tags mono">
+                <span>Solidity</span><span>TypeScript</span><span>Fastify</span
+                ><span>Prisma</span><span>viem</span>
+              </div>
+            </div>
+            <div class="meta">
+              <div class="period">Jul 2026 — Present</div>
+              <div class="status active">Active</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">02</div>
+            <div>
+              <h2 class="title">
+                Head of Development <span class="at">— Axyom Sites</span>
+              </h2>
+              <p class="impact">Led the development team until the studio closed.</p>
+              <div class="tags mono"><span>Next.js</span><span>Team lead</span></div>
+            </div>
+            <div class="meta">
+              <div class="period">Jun 2026 — Aug 2026</div>
+              <div class="status">Closed</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">03</div>
+            <div>
+              <h2 class="title">
+                Moderator <span class="at">— Klein Funding</span>
+              </h2>
+              <p class="impact">
+                Moderating a 33,000-member community for a funded-trader programme.
+              </p>
+              <div class="tags mono"><span>Discord</span><span>Telegram</span></div>
+            </div>
+            <div class="meta">
+              <div class="period">Apr 2026 — Present</div>
+              <div class="status active">Active</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">04</div>
+            <div>
+              <h2 class="title">
+                Developer &amp; Admin <span class="at">— Phantom CTO</span>
+              </h2>
+              <p class="impact">Built Phantom Bot — Telegram bridging and trading.</p>
+              <div class="tags mono">
+                <span>Telegraf</span><span>ethers.js</span><span>SQLite</span>
+              </div>
+            </div>
+            <div class="meta">
+              <div class="period">Apr 2026 — Jun 2026</div>
+              <div class="status">Ended</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">05</div>
+            <div>
+              <h2 class="title">
+                NFT Dev &amp; Moderator <span class="at">— $CHAD</span>
+              </h2>
+              <p class="impact">
+                Shipped the first NFT on BESC Hyperchain — built the data layer
+                that took it live.
+              </p>
+              <div class="tags mono">
+                <span>NFTs</span><span>Carl-bot</span><span>Discord</span>
+              </div>
+            </div>
+            <div class="meta">
+              <div class="period">Feb 2026 — Jun 2026</div>
+              <div class="status">Ended</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">06</div>
+            <div>
+              <h2 class="title">
+                Head Moderator <span class="at">— $HENNY</span>
+              </h2>
+              <p class="impact">
+                Held the room through a $105K all-time high — the project's peak.
+              </p>
+              <div class="tags mono">
+                <span>Safeguard</span><span>Rose</span><span>BESC</span>
+              </div>
+            </div>
+            <div class="meta">
+              <div class="period">Jan 2026 — Present</div>
+              <div class="status active">Active</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <span class="site">www.thyimpaler.xyz</span>
+        <span class="mono">Page 1 / 2 — Experience</span>
+      </footer>
+    </section>
+
+    <!-- ══ PAGE 2 ════════════════════════════════════════════════════════ -->
+    <section class="sheet">
+      <section class="sec work" style="margin-top: 0">
+        <div class="sec-head mono">
+          <span class="num">02</span><span class="slash">/</span
+          ><span class="label">Selected work</span>
+          <span class="aside">github.com/thyimpaler</span>
+        </div>
+        <div class="rule"></div>
+
+        <div class="rows">
+          <article class="row">
+            <div class="idx">01</div>
+            <div>
+              <h2 class="title">Nest</h2>
+              <p class="blurb">
+                Permissionless NFT launchpad — deploy an ERC-721 and open a mint,
+                without writing code.
+              </p>
+            </div>
+            <div class="meta">
+              <div class="stack">Solidity · Fastify · Prisma</div>
+              <div class="live url">nest-nft-launchpad.vercel.app</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">02</div>
+            <div>
+              <h2 class="title">Phantom Bridge</h2>
+              <p class="blurb">
+                Telegram trading desk for BESC — custodial wallets, bridging, PnL board.
+              </p>
+            </div>
+            <div class="meta">
+              <div class="stack">Telegraf · ethers v6 · SQLite</div>
+              <div class="live">2026 · Shipped</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">03</div>
+            <div>
+              <h2 class="title">Alpha Signals</h2>
+              <p class="blurb">
+                Watches X for forming narratives, alerts before the rotation is obvious.
+              </p>
+            </div>
+            <div class="meta">
+              <div class="stack">Telegraf · X API · DexScreener</div>
+              <div class="live">2026 · Shipped</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">04</div>
+            <div>
+              <h2 class="title">$RIGGK</h2>
+              <p class="blurb">
+                Penalty-shootout arcade on Solana — burn tokens, beat an adaptive keeper.
+              </p>
+            </div>
+            <div class="meta">
+              <div class="stack">React · Phaser · Solana</div>
+              <div class="live url">riggk.vercel.app</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">05</div>
+            <div>
+              <h2 class="title">Henny Run</h2>
+              <p class="blurb">
+                Endless runner rendered in 3D — dodge the FUD, collect bones, earn skins.
+              </p>
+            </div>
+            <div class="meta">
+              <div class="stack">R3F · Three.js · Zustand</div>
+              <div class="live url">henny-run.vercel.app</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">06</div>
+            <div>
+              <h2 class="title">CIPV1</h2>
+              <p class="blurb">
+                Turns crypto research into automated trades across several exchanges.
+              </p>
+            </div>
+            <div class="meta">
+              <div class="stack">Node.js · Exchange APIs</div>
+              <div class="live url">cipv-1.vercel.app</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">07</div>
+            <div>
+              <h2 class="title">ZenCode</h2>
+              <p class="blurb">
+                Voice a change, watch it stream to your phone, approve it with a glance.
+              </p>
+            </div>
+            <div class="meta">
+              <div class="stack">WebSockets · Web Speech API</div>
+              <div class="live">2026 · Shipped</div>
+            </div>
+          </article>
+
+          <article class="row">
+            <div class="idx">08</div>
+            <div>
+              <h2 class="title">OmniSync</h2>
+              <p class="blurb">
+                WhatsApp and Instagram DMs in one queue, with an SLA clock per thread.
+              </p>
+            </div>
+            <div class="meta">
+              <div class="stack">React · Vite · Node.js</div>
+              <div class="live">2026 · In progress</div>
+            </div>
+          </article>
+
+        </div>
+
+        <p class="also mono">
+          Also — Axyom Sites (studio site, above) · csc1 · $ANSEMG · full index
+          at thyimpaler.xyz/work
+        </p>
+      </section>
+
+      <section class="sec">
+        <div class="sec-head mono">
+          <span class="num">03</span><span class="slash">/</span
+          ><span class="label">Toolkit</span>
+          <span class="aside">From the manifests, not the wish list</span>
+        </div>
+        <div class="rule"></div>
+
+        <!-- Six cells, deliberately. The grid runs two across, so a seventh
+             cell costs a whole row and pushes the quotes off the sheet. When
+             something new has to go in, it merges into an existing cell —
+             which is why bots and moderation now share one. -->
+        <div class="kit">
+          <div class="cell">
+            <div class="k mono">Contracts &amp; chains</div>
+            <div class="v">
+              Solidity · OpenZeppelin · ERC-721 · ERC-2981 · Reentrancy guards ·
+              viem · ethers.js · IPFS · Ethereum · Solana · Base · BESC
+              Hyperchain · Robinhood Chain
+            </div>
+          </div>
+          <div class="cell">
+            <div class="k mono">Backend &amp; data</div>
+            <div class="v">
+              Node.js · Fastify · Express · PostgreSQL · SQLite · Prisma · Zod ·
+              Python
+            </div>
+          </div>
+          <div class="cell">
+            <div class="k mono">Frontend</div>
+            <div class="v">
+              React · Next.js · Vite · TypeScript · Tailwind CSS · Framer Motion ·
+              Three.js · React Three Fiber · Zustand
+            </div>
+          </div>
+          <div class="cell">
+            <div class="k mono">Infrastructure</div>
+            <div class="v">
+              Docker · docker-compose · GitHub Actions · Railway · Vercel · nginx ·
+              CSP &amp; SRI · Prisma migrations
+            </div>
+          </div>
+          <div class="cell">
+            <div class="k mono">Bots &amp; moderation</div>
+            <div class="v">
+              Telegraf · Telegram Bot API · Discord · Encrypted storage ·
+              Carl-bot · Wick · Rose · Safeguard · RBAC
+            </div>
+          </div>
+          <div class="cell">
+            <div class="k mono">Trading — since 2024</div>
+            <div class="v">
+              Memecoins · Perpetuals · Chart reading · Orderflow · Liquidity-based
+              strategy
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sec-head mono">
+          <span class="num">04</span><span class="slash">/</span
+          ><span class="label">In their words</span>
+          <span class="aside">Project leads, verbatim</span>
+        </div>
+        <div class="rule"></div>
+
+        <div class="quotes" style="margin-top: 5mm">
+          <div class="quote">
+            <p>
+              “Impaler really held the team together, from the days we started
+              and till we got the attention on CT, he never showed any lack in
+              his work.”
+            </p>
+            <div class="by mono">
+              <span class="who">Frontman</span><span>Project lead, $HENNY</span>
+            </div>
+          </div>
+
+          <div class="quote">
+            <p>
+              “The dude maintained the websites so well, all our customers were
+              truly satisfied by his work and his quality.”
+            </p>
+            <div class="by mono">
+              <span class="who">Aazy</span><span>CEO, Axyom Sites</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <span class="site">Available for work</span>
+        <span class="mono">work@thyimpaler.xyz — @ThyImpaler</span>
+      </footer>
+    </section>
+  </body>
+</html>

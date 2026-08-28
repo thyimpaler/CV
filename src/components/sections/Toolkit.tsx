@@ -160,17 +160,19 @@ export function Toolkit() {
           </ul>
         </Row>
 
-        {/* No icons: none of these has an established mark, so any glyph would
-            be invented. They were clip-art the one time they had them. */}
-        <Row label="Assets">
-          <Items items={assetTypes} />
-        </Row>
-
         {codingStack.map((group) => (
           <Row key={group.title} label={group.title}>
             <Items items={group.pills} />
           </Row>
         ))}
+
+        {/* Below the code, not above it: these are categories of work, and the
+            section now leads with what was built rather than what it was for.
+            No icons — none of these has an established mark, so any glyph would
+            be invented. They were clip-art the one time they had them. */}
+        <Row label="Assets">
+          <Items items={assetTypes} />
+        </Row>
 
         <Row label="Moderation">
           <Items items={moderationStack} />

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ThyImpaler — OG card</title>
+    <!--
+      The 1200×630 share card, rendered to public/og.png by build.mjs.
+
+      It exists as a page rather than as a drawing because the card is mostly
+      type: it has to say exactly what the hero says, in the same faces, and
+      the hero's wording changes. Redrawing it by hand in an image editor is
+      how it ended up a version behind — the card still read "Order held under
+      pressure / Web3 community architect" after the site had stopped saying
+      either.
+
+      Fonts come from print/fonts.css as base64 data URIs, so nothing is
+      fetched at render time and the card cannot come out in Times.
+    -->
+    <link rel="stylesheet" href="fonts.css" />
+    <style>
+      :root {
+        --bg: #0a0708;
+        --ink-strong: #f0eae4;
+        --ink-mute: #8b8078;
+        --accent: #ffc400;
+        --line: rgba(240, 234, 228, 0.13);
+        --font-display: "Instrument Serif", "Times New Roman", serif;
+        --font-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        background: var(--bg);
+        overflow: hidden;
+      }
+
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        padding: 74px 76px 66px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      /* The same lamp as the site's hero, falling off to zero rather than to
+         `transparent`, which would put a visible disc edge on a black ground. */
+      .lamp {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          58% 62% at 63% 40%,
+          rgba(255, 196, 0, 0.1),
+          rgba(255, 193, 10, 0.055) 30%,
+          rgba(255, 186, 20, 0.022) 55%,
+          rgba(255, 176, 36, 0) 100%
+        );
+      }
+
+      .row {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+
+      .wordmark {
+        font-family: var(--font-display);
+        font-size: 30px;
+        line-height: 1;
+        color: var(--ink-strong);
+      }
+      .wordmark em {
+        font-style: italic;
+      }
+
+      .eyes {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      h1 {
+        position: relative;
+        font-family: var(--font-display);
+        font-weight: 400;
+        font-size: 92px;
+        line-height: 1.02;
+        letter-spacing: -0.02em;
+        color: var(--ink-strong);
+        margin-top: -18px;
+      }
+      h1 .accent {
+        display: block;
+        font-style: italic;
+        color: var(--accent);
+      }
+
+      .foot {
+        position: relative;
+      }
+      .rule {
+        height: 1px;
+        background: var(--line);
+        margin-bottom: 26px;
+      }
+      .meta {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        font-family: var(--font-mono);
+      }
+      .role {
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-mute);
+      }
+      .site {
+        font-size: 14px;
+        color: var(--ink-strong);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="lamp"></div>
+
+      <div class="row">
+        <div class="wordmark">Thy<em>Impaler</em></div>
+
+        <!-- Two of the Argus eyes, drawn from the same lid formula as
+             ArgusEyes.tsx (unequal cubics: upper lid peaks inside of centre,
+             lower dips outside, corners at different heights) so the card and
+             the site are drawing the same eye rather than two similar ones. -->
+        <div class="eyes">
+          <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
+            <path
+              d="M 0 16.96 C 7.68 6.08 20.8 6.4 32 15.36 C 23.2 23.04 11.2 23.36 0 16.96 Z"
+              fill="#f0eae4"
+            />
+            <circle cx="16" cy="15.9" r="5.44" fill="#ffc400" />
+            <circle cx="16" cy="15.9" r="2.4" fill="#0a0708" />
+          </svg>
+          <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
+            <path
+              d="M 0 16.96 C 7.68 6.08 20.8 6.4 32 15.36 C 23.2 23.04 11.2 23.36 0 16.96 Z"
+              fill="#f0eae4"
+            />
+            <circle cx="16" cy="15.9" r="5.44" fill="#ffc400" />
+            <circle cx="16" cy="15.9" r="2.4" fill="#0a0708" />
+          </svg>
+        </div>
+      </div>
+
+      <h1>
+        Built to hold
+        <span class="accent">under pressure.</span>
+      </h1>
+
+      <div class="foot">
+        <div class="rule"></div>
+        <div class="meta">
+          <span class="role">Full-stack &amp; smart contract engineer</span>
+          <span class="site">thyimpaler.xyz</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
