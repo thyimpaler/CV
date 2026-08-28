@@ -49,7 +49,7 @@ export const experiences: Experience[] = [
     role: "Head of Development",
     project: "Nest",
     sub: "NFT launchpad · Robinhood Chain",
-    href: "https://nest-nft-launchpad.vercel.app",
+    href: "https://nest-rh.xyz",
     period: "Jul 2026 — Present",
     status: "Active",
     dev: true,
@@ -322,7 +322,7 @@ export const projects: Project[] = [
     year: "2026",
     status: "Shipped",
     href: "https://github.com/thyimpaler",
-    live: "https://nest-nft-launchpad.vercel.app",
+    live: "https://nest-rh.xyz",
     shots: [{ src: "/shot-nest.png", caption: "Live site" }],
   },
   {
