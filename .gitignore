@@ -24,3 +24,22 @@ dist-ssr/
 *.local
 .vercel
 
+
+# --- safety rules (added during GitHub backup) ---
+node_modules/
+.next/
+.venv/
+venv/
+__pycache__/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+wallet*.json
+auth.json
+*.zip
+.vercel/
+.pglite-data/
+.claude/settings.local.json
+phrases/
