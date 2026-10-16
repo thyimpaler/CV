@@ -58,14 +58,15 @@ export function About() {
           <div className="measure mt-[clamp(28px,4vw,46px)] grid gap-7">
             <RevealOnScroll>
               <p className="t-body text-[var(--ink)]">
-                I write the parts that cannot fail. On Nest that meant ERC-721
-                factory contracts with reentrancy guards,{" "}
+                I write the parts that cannot fail. On KEYPASS, every AI request is
+                priced at its worst case and reserved in one Postgres transaction
+                before it goes out, so a pass cannot be raced past its cap. On
+                TAB, an agent&apos;s USDC stays in a token account the user&apos;s wallet
+                owns, and TAB only ever holds a{" "}
                 <Annotate type="circle">
-                  <span className="text-[var(--ink-strong)]">pull-payment accounting</span>
-                </Annotate>{" "}
-                and a 95/5 revenue split — and an indexer that stores the hash of
-                the block it last read, so a reorg rewinds and replays instead of
-                losing a mint.
+                  <span className="text-[var(--ink-strong)]">capped, revocable allowance</span>
+                </Annotate>
+                .
               </p>
             </RevealOnScroll>
 

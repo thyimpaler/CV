@@ -24,6 +24,10 @@ const ICON_COPY =
   "M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
 const ICON_DONE = "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
 
+/** Inline text link. Padded to a 44px tap area without moving the line. */
+const inlineLink =
+  "-my-3 inline-block py-3 text-[var(--ink-strong)] underline decoration-[var(--line)] underline-offset-4 transition-colors duration-300 hover:text-[var(--brand-accent)] hover:decoration-[var(--brand-accent)]"
+
 type CopyState = "idle" | "copied" | "failed"
 
 /**
@@ -161,6 +165,23 @@ function Hero() {
               {copyLabel(state)}
             </span>
           </div>
+
+          {/* One line of engineering, set small and muted so the page stays
+              about moderation. */}
+          <p className="measure flex flex-col gap-1.5 text-[14px] leading-relaxed text-[var(--ink-mute)] sm:flex-row sm:items-baseline sm:gap-4">
+            <span className="t-eyebrow shrink-0">Also builds</span>
+            <span>
+              Ships on-chain products too:{" "}
+              <a href="https://tabpay.si" target="_blank" rel="noreferrer" className={inlineLink}>
+                TAB
+              </a>{" "}
+              (Solana) and{" "}
+              <a href="https://veyroapi.com" target="_blank" rel="noreferrer" className={inlineLink}>
+                Veyro
+              </a>
+              , so bug reports and support answers come from someone who can read the code.
+            </span>
+          </p>
         </div>
       </div>
 

@@ -128,14 +128,32 @@ export function Toolkit() {
           <ul className="flex flex-wrap items-center gap-x-[clamp(22px,3.2vw,52px)] gap-y-6">
             {chains.map((chain) => {
               const Icon = chainIcons[chain.label]
+              // The primary chain is set a size up and in full ink, with a
+              // mono marker, so it reads as the main one rather than one of
+              // five equals. Same mark, same row, no new styling vocabulary.
               const body = (
                 <>
                   {Icon ? (
-                    <Icon className="h-6 w-6 shrink-0 text-[var(--ink)] transition-colors duration-500 group-hover/chain:text-[var(--brand-accent)]" />
+                    <Icon
+                      className={`shrink-0 transition-colors duration-500 group-hover/chain:text-[var(--brand-accent)] ${
+                        chain.primary ? "h-8 w-8 text-[var(--ink-strong)]" : "h-6 w-6 text-[var(--ink)]"
+                      }`}
+                    />
                   ) : null}
-                  <span className="text-[clamp(13px,1.15vw,16px)] text-[var(--ink)] transition-colors duration-500 group-hover/chain:text-[var(--ink-strong)]">
+                  <span
+                    className={`transition-colors duration-500 group-hover/chain:text-[var(--ink-strong)] ${
+                      chain.primary
+                        ? "font-[family-name:var(--font-display)] text-[clamp(24px,2.4vw,34px)] leading-none tracking-[-0.02em] text-[var(--ink-strong)]"
+                        : "text-[clamp(13px,1.15vw,16px)] text-[var(--ink)]"
+                    }`}
+                  >
                     {chain.label}
                   </span>
+                  {chain.primary ? (
+                    <span className="font-mono-ui text-[10px] uppercase tracking-[0.16em] text-[var(--brand-accent)]">
+                      Primary
+                    </span>
+                  ) : null}
                 </>
               )
               // py/-my pair expands the touch area to 44px without moving

@@ -83,7 +83,13 @@ export function Stats() {
     <section id="stats" className="section-shell !pt-0 !pb-[clamp(80px,10vw,140px)]">
       <FeaturedStat />
 
-      <div className="mt-[clamp(60px,9vw,140px)] grid gap-px overflow-hidden bg-[var(--line-soft)] sm:grid-cols-3">
+      {/* Columns follow the count. The 1px gaps are the background showing
+          through, so an empty third cell would render as a grey block. */}
+      <div
+        className={`mt-[clamp(60px,9vw,140px)] grid gap-px overflow-hidden bg-[var(--line-soft)] ${
+          stats.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"
+        }`}
+      >
         {stats.map((stat, i) => (
           <RevealOnScroll key={stat.label} className="bg-[var(--background)]">
             <div

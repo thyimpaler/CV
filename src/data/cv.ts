@@ -46,7 +46,33 @@ export type Experience = {
  */
 export const experiences: Experience[] = [
   {
-    role: "Founder & Engineer",
+    role: "Developer",
+    project: "TAB",
+    sub: "Agent payments · Solana",
+    href: "https://tabpay.si",
+    // Launch month (2026-10-08).
+    period: "Oct 2026 — Present",
+    status: "Active",
+    dev: true,
+    impact:
+      "Spending limits for AI agents: a capped, expiring, revocable USDC allowance the agent spends on APIs over x402, without ever holding the funds.",
+    tags: ["Solana", "x402", "USDC", "TypeScript", "PostgreSQL"],
+  },
+  {
+    role: "Developer",
+    project: "Veyro",
+    sub: "Control layer for AI",
+    href: "https://veyroapi.com",
+    period: "Sep 2026 — Present",
+    status: "Active",
+    dev: true,
+    impact:
+      "One provider key becomes revocable routes, each with a hard dollar limit, allowed models and an expiry. The key never leaves its source.",
+    tags: ["TypeScript", "React", "Three.js", "WalletConnect"],
+  },
+  {
+    // Was "Founder & Engineer". Wrong: a developer role, not a founder one.
+    role: "Head Developer",
     project: "KEYPASS",
     sub: "AI access gateway · Robinhood Chain",
     href: "https://keypass-gateway.vercel.app",
@@ -159,28 +185,31 @@ export type Stat = {
  * claiming it undercuts the numbers that are real.
  */
 /**
- * One figure is pulled out and given a screen of its own. It has to be an
- * outcome rather than a count, and it should be the outcome of the work being
- * applied for — so this is the split written into the Nest contracts, not the
- * $105K peak, which is a moderation result and now sits in the row below.
+ * One figure is pulled out and given a screen of its own.
+ *
+ * This used to be the 95% creator split from the Nest contracts, which made
+ * one project read as the headline of the whole CV. Nest is one project among
+ * many, so the screen now goes to the body of work instead.
  *
  * Keep the value to about five characters. It renders at
  * clamp(96px, 26vw, 400px) in Stats.tsx, and a longer string runs past the
  * section edge on desktop.
+ *
+ * The count is set below `projects`, from the projects themselves, so adding
+ * one cannot leave the number a commit behind.
  */
 export const featuredStat: Stat = {
-  value: "95%",
-  label: "Of primary mint revenue routed to creators by the contracts I shipped",
-  hint: "Nest — live on Robinhood Chain mainnet",
+  value: "",
+  label: "Products shipped, from AI access control to agent payments on Solana",
+  hint: "Selected work",
 }
 
 export const stats: Stat[] = [
-  { value: "12", label: "Products shipped and deployed", hint: "Selected work" },
   { value: "33K", label: "Members moderated", hint: "Klein Funding" },
   { value: "$105K", label: "All-time high held through the volatility", hint: "$HENNY" },
 ]
 
-export type Pill = { label: string; href?: string }
+export type Pill = { label: string; href?: string; primary?: boolean }
 
 /**
  * Chains only — things that have a real mark and a canonical home.
@@ -192,8 +221,10 @@ export type Pill = { label: string; href?: string }
  * so they are set as text below instead.
  */
 export const chains: Pill[] = [
+  // Primary: TAB runs on it, and $RIGGK before that. Toolkit sets it larger
+  // and first so it does not read as one equal item among five.
+  { label: "Solana", href: "https://solana.com", primary: true },
   { label: "Ethereum", href: "https://ethereum.org" },
-  { label: "Solana", href: "https://solana.com" },
   { label: "Base", href: "https://base.org" },
   { label: "BESC Hyperchain", href: "https://bescfinancial.com" },
   // No href and no mark: the only public surface is a Blockscout explorer,
@@ -234,7 +265,7 @@ export const codingStack = [
   },
   {
     title: "Web3",
-    pills: ["viem", "ethers.js", "@solana/web3.js", "WalletConnect", "Wallet auth (SIWE)", "Chain indexing", "IPFS / Pinata", "Seaport", "bs58"],
+    pills: ["@solana/web3.js", "x402", "USDC (SPL)", "viem", "ethers.js", "WalletConnect", "Wallet auth (SIWE)", "Chain indexing", "IPFS / Pinata", "Seaport", "bs58"],
   },
   {
     title: "Infrastructure",
@@ -320,6 +351,36 @@ export type Project = {
  * captures.
  */
 export const projects: Project[] = [
+  {
+    slug: "veyro",
+    name: "Veyro",
+    blurb:
+      "The control layer for AI: one provider key becomes revocable routes, each with a hard dollar limit, allowed models and an expiry.",
+    detail:
+      "Move access, not secrets. Veyro turns one provider key (Anthropic, OpenAI, Gemini or OpenRouter) into routes: access passes with a hard dollar spending limit, an allowed-model list and an expiry. Routes are revocable at any time, and the underlying provider key never leaves its source.",
+    language: "TypeScript",
+    stack: ["TypeScript", "React", "Vite", "Three.js", "GSAP", "WalletConnect"],
+    year: "2026",
+    status: "Shipped",
+    href: "https://github.com/thyimpaler",
+    live: "https://veyroapi.com",
+    shots: [{ src: "/shot-veyro.png", caption: "Live site" }],
+  },
+  {
+    slug: "tab",
+    name: "TAB",
+    blurb:
+      "Put your agent on a tab: capped, expiring, revocable USDC allowances for AI agents on Solana, spent on APIs over x402.",
+    detail:
+      "Put your agent on a tab. An agent gets a capped, expiring, revocable USDC allowance and pays for APIs over x402 without ever holding a wallet key. It is non-custodial: the funds stay in a token account owned by the user's wallet, and TAB only holds an SPL allowance capped at the limit, so it cannot spend past it. Agents pay through an SDK or an MCP server, and the test suite runs on a real Postgres with concurrency, crash-injection and replay cases.",
+    language: "TypeScript",
+    stack: ["TypeScript", "Solana", "@solana/web3.js", "SPL Token", "x402", "Hono", "PostgreSQL", "React", "Vitest"],
+    year: "2026",
+    status: "Shipped",
+    href: "https://github.com/thyimpaler",
+    live: "https://tabpay.si",
+    shots: [{ src: "/shot-tab.png", caption: "Live site" }],
+  },
   {
     slug: "keypass",
     name: "KEYPASS",
@@ -529,9 +590,16 @@ export const projects: Project[] = [
 
 export const projectBySlug = (slug: string) => projects.find((p) => p.slug === slug)
 
+// Shipped means out the door, including work that has since been archived.
+// "In progress" does not count.
+featuredStat.value = String(projects.filter((p) => p.status !== "In progress").length)
+
 export const githubUrl = "https://github.com/thyimpaler"
 
 export const tickerItems = [
+  "Solana",
+  "x402",
+  "AI Agent Payments",
   "Solidity",
   "Smart Contracts",
   "ERC-721",

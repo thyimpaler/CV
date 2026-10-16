@@ -147,7 +147,7 @@ export function Hero() {
           <div>
             <LineReveal
               as="p"
-              text="Full-stack & Smart Contract Engineer — Head of Development"
+              text="Full-stack & Smart Contract Engineer · Solana and EVM"
               className="t-eyebrow t-eyebrow--bright block"
               immediate
               stagger={0.018}
@@ -202,7 +202,7 @@ export function Hero() {
           {/* Supporting copy, brightening as it resolves */}
           <div className="lg:pt-[clamp(6px,2vw,28px)]">
             <ProgressiveText
-              text="I build the on-chain infrastructure other people launch on — ERC-721 factories, the indexers that keep them honest, and the front ends that make them usable. Currently head of development on Nest, an NFT launchpad live on Robinhood Chain."
+              text="I build the on-chain infrastructure other people launch on, and the front ends that make it usable. Lately that means payment and access-control infrastructure for AI agents on Solana, alongside NFT launch tooling on Robinhood Chain."
               className="t-lead measure text-[var(--ink)]"
               stagger={0.016}
               delay={0.7}
