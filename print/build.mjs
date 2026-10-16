@@ -61,6 +61,17 @@ for (const { query, out, label } of targets) {
   console.log(`${label.padEnd(6)} → ${out}`)
 }
 
+// The community CV, linked from mod.thyimpaler.xyz. Dark variant only.
+execFileSync(chrome, [
+  "--headless",
+  "--disable-gpu",
+  "--no-pdf-header-footer",
+  "--virtual-time-budget=8000",
+  `--print-to-pdf=${resolve(root, "public/ThyImpaler-Community-CV.pdf")}`,
+  fileUrl("cv-mod.html"),
+])
+console.log("mod    → public/ThyImpaler-Community-CV.pdf")
+
 // The share card. `--headless=new` because the old headless renders the card
 // before the 3D-free page has settled its web fonts, and a card that falls
 // back to Times is worse than no card.

@@ -13,8 +13,8 @@ export const EMAIL = "work@thyimpaler.xyz"
 export const DISCORD = "aswdftw_25881"
 export const TECH_SITE = "https://www.thyimpaler.xyz/"
 
-/** Swap for the real PDF path (e.g. "/ThyImpaler-Community-CV.pdf") once it is in public/. */
-export const CV_URL = ""
+/** Built from print/cv-mod.html by print/build.mjs. Empty renders a placeholder row. */
+export const CV_URL = "/ThyImpaler-Community-CV.pdf"
 
 export type Role = {
   org: string
