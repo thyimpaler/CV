@@ -74,3 +74,15 @@ execFileSync(chrome, [
   fileUrl("og.html"),
 ])
 console.log("og     → public/og.png")
+
+// The mod.thyimpaler.xyz share card, same template with that page's wording.
+execFileSync(chrome, [
+  "--headless=new",
+  "--disable-gpu",
+  "--hide-scrollbars",
+  "--window-size=1200,630",
+  "--virtual-time-budget=6000",
+  `--screenshot=${resolve(root, "public/og-mod.png")}`,
+  fileUrl("og-mod.html"),
+])
+console.log("og-mod → public/og-mod.png")

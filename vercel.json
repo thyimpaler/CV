@@ -3,8 +3,34 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/mod",
+      "has": [{ "type": "host", "value": "www.thyimpaler.xyz" }],
+      "destination": "https://mod.thyimpaler.xyz/",
+      "permanent": true
+    },
+    {
+      "source": "/mod/",
+      "has": [{ "type": "host", "value": "www.thyimpaler.xyz" }],
+      "destination": "https://mod.thyimpaler.xyz/",
+      "permanent": true
+    },
+    {
+      "source": "/mod/:path+",
+      "has": [{ "type": "host", "value": "www.thyimpaler.xyz" }],
+      "destination": "https://mod.thyimpaler.xyz/",
+      "permanent": true
+    },
+    { "source": "/cv.html", "destination": "https://www.thyimpaler.xyz/", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "mod.thyimpaler.xyz" }],
+      "destination": "/mod/index.html"
+    },
+    { "source": "/(.*)", "destination": "/cv.html" }
   ],
   "headers": [
     {

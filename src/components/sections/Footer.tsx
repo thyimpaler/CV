@@ -1,43 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { contacts } from "@/data/cv"
 import { LineReveal, RevealOnScroll } from "@/components/LineReveal"
+import { copyText } from "@/lib/clipboard"
 
 /** content_copy, and the tick that replaces it for two seconds after. */
 const ICON_COPY =
   "M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
 const ICON_DONE = "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
-
-/**
- * Copy `text`, with a fallback for browsers that will not hand over the async
- * clipboard. `navigator.clipboard` is undefined outside a secure context and
- * can reject outright when the permission is denied, so the deprecated
- * execCommand path stays — this is the site's primary call to action, and it
- * failing silently is the whole problem being fixed here.
- */
-async function copyText(text: string) {
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text)
-      return true
-    }
-  } catch {
-    // fall through
-  }
-  try {
-    const el = document.createElement("textarea")
-    el.value = text
-    el.setAttribute("readonly", "")
-    el.style.position = "fixed"
-    el.style.opacity = "0"
-    document.body.appendChild(el)
-    el.select()
-    const ok = document.execCommand("copy")
-    document.body.removeChild(el)
-    return ok
-  } catch {
-    return false
-  }
-}
 
 /**
  * Closing CTA at display scale.

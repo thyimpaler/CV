@@ -1,3 +1,4 @@
+import fs from "fs"
 import path from "path"
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -68,12 +69,53 @@ function seoFiles(): Plugin {
   }
 }
 
+/**
+ * Ship the CV page as `cv.html` rather than `index.html`.
+ *
+ * Vercel checks the filesystem before it applies `rewrites`, and `/` matches
+ * `index.html` as a directory index. So with an `index.html` in the output, a
+ * request for mod.thyimpaler.xyz/ was answered with the CV before the
+ * host-based rewrite in vercel.json ever ran. With no root index, `/` is not a
+ * file: the mod host rewrites to `/mod/index.html` and every other host falls
+ * through to the catch-all, which now points at `/cv.html`.
+ *
+ * Renamed after the bundle is written so dev (which serves the source
+ * index.html) is untouched. `vite preview` has no `/` as a result; open
+ * /cv.html there.
+ */
+function mainPageAsCv(): Plugin {
+  let outDir = "dist"
+  return {
+    name: "main-page-as-cv",
+    apply: "build",
+    configResolved(config) {
+      outDir = path.resolve(config.root, config.build.outDir)
+    },
+    writeBundle() {
+      const from = path.join(outDir, "index.html")
+      if (fs.existsSync(from)) fs.renameSync(from, path.join(outDir, "cv.html"))
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), seoFiles()],
+  plugins: [react(), tailwindcss(), seoFiles(), mainPageAsCv()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    // Two pages from one build. `mod/` is the community and moderation page,
+    // served at mod.thyimpaler.xyz by a host rewrite in vercel.json. Sharing
+    // the build keeps one copy of the tokens and components, and the page
+    // only pulls in the few components it imports.
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        mod: path.resolve(__dirname, "mod/index.html"),
+      },
     },
   },
   server: {

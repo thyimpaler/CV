@@ -68,15 +68,27 @@ export function Coda() {
 
           <Star className="hidden h-2.5 w-2.5 text-[var(--brand-accent)] sm:block" />
 
-          <a
-            href="#hero"
-            className="font-mono-ui group -my-3 inline-flex min-h-[44px] items-center gap-2 py-3 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
-          >
-            <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5">
-              ↑
-            </span>
-            Back to top
-          </a>
+          <div className="flex items-center gap-6">
+            {/* The community and moderation page, on its own subdomain. */}
+            <a
+              href="https://mod.thyimpaler.xyz/"
+              className="font-mono-ui group -my-3 inline-flex min-h-[44px] items-center gap-2 py-3 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+            >
+              Community work
+              <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+                ↗
+              </span>
+            </a>
+            <a
+              href="#hero"
+              className="font-mono-ui group -my-3 inline-flex min-h-[44px] items-center gap-2 py-3 text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)] transition-colors duration-300 hover:text-[var(--ink-strong)]"
+            >
+              <span className="transition-transform duration-500 [transition-timing-function:var(--ease-core)] group-hover:-translate-y-0.5">
+                ↑
+              </span>
+              Back to top
+            </a>
+          </div>
         </div>
       </div>
     </section>

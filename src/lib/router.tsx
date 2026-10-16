@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from "react"
  * of it: read the path, listen for back/forward, and expose a navigate that
  * pushes state and scrolls to top.
  *
- * Vercel already rewrites every path to index.html (see vercel.json), so deep
+ * Vercel already rewrites every path to the CV page (see vercel.json), so deep
  * links to /work/<slug> resolve on a hard refresh rather than 404ing.
  */
 

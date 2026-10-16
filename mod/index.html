@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Served at mod.thyimpaler.xyz by a host rewrite in vercel.json. This is
+         a second page of the same Vite build, not a route inside the CV app,
+         so it ships its own head: social crawlers do not run JavaScript, and a
+         page that borrowed the CV's tags would preview as the CV. -->
+    <title>ThyImpaler, Community Moderation and Growth</title>
+    <meta name="description" content="Community moderation and growth for trading and crypto communities. Discord setup, moderation and scam handling, announcements, X content, and bug escalation to product teams." />
+    <meta name="theme-color" content="#0A0708" />
+    <link rel="canonical" href="https://mod.thyimpaler.xyz/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/og-mod.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta property="og:title" content="ThyImpaler, Community Moderation and Growth" />
+    <meta property="og:description" content="Community moderation and growth for trading and crypto communities." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mod.thyimpaler.xyz/" />
+    <meta property="og:site_name" content="ThyImpaler" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://mod.thyimpaler.xyz/og-mod.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ThyImpaler. Community moderation and growth for trading and crypto communities." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ThyImpaler, Community Moderation and Growth" />
+    <meta name="twitter:description" content="Community moderation and growth for trading and crypto communities." />
+    <meta name="twitter:image" content="https://mod.thyimpaler.xyz/og-mod.png" />
+    <meta name="twitter:image:alt" content="ThyImpaler. Community moderation and growth for trading and crypto communities." />
+
+    <!-- Same Person entity as the CV, referenced by @id, so search engines
+         read the two sites as one person rather than two. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "@id": "https://mod.thyimpaler.xyz/#page",
+        "url": "https://mod.thyimpaler.xyz/",
+        "name": "ThyImpaler, Community Moderation and Growth",
+        "inLanguage": "en",
+        "about": { "@id": "https://www.thyimpaler.xyz/#person" },
+        "primaryImageOfPage": "https://mod.thyimpaler.xyz/og-mod.png"
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/mod/main.tsx"></script>
+  </body>
+</html>
